@@ -35,3 +35,10 @@ let extend = module.exports.extend = function(name, methods) {
   // Add a factory method for the new type.
   factory[name] = (document, root) => new ConcreteDocument(document, root);
 }
+
+// Add the JSON document type.
+extend('json', require('./json'));
+
+
+let json = factory.json({a: 1});
+console.log(json.value('a'));
