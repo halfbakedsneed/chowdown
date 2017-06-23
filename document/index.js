@@ -1,18 +1,16 @@
-// lodash imports
-const _ = require('lodash');
-const assignIn = _.assignIn;
+const { assignIn } = require('lodash');
 
 module.exports = {};
 
 /**
- * Holds a list of factory methods to create different types of documents.
+ * Holds a list of factory methods to create different document types.
  * 
  * @type {object}
  */
 let factory = module.exports.factory = {};
 
 /**
- * Creates and adds a new document subtype class to the factory.
+ * Creates and adds a a factory method for a type of document.
  * 
  * @param {string}  name    The name of the subtype.
  * @param {object}  methods The methods the class will have.
