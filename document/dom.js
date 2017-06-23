@@ -97,7 +97,7 @@ module.exports = {
    * @return {*}  The retrieved link.
    */
 	queryLink: function(path) {
-		return this.queryValue(path, ['@href', 'text()']);
+		return this.queryValue(path, 'href');
 	},
 
   /**
@@ -112,7 +112,7 @@ module.exports = {
    * @param  {string[]}         defaultAttrs  The fallback array of attributes to try for.
    * @return {*}  The retrieved value.
    */
-	queryValue: function(path, defaultAttrs=['text()']) {
+	queryValue: function(path, defaultAttrs=[]) {
     let value = this.query(path);
 
     if (!(value instanceof cheerio))
@@ -121,24 +121,18 @@ module.exports = {
     if (value.length === 0)
       return undefined;
 
-		let attrs = castArray(path[1] || defaultAttrs);
+    let attrs = castArray(path[1] || defaultAttrs);
 
-		for (let attr of attrs) {
-			if (attr.endsWith('()')) {
-        let fnName = attr.substr(0, attr.length - 2);
-				
-        if (isFunction(value[fnName])) {
-          let fnValue = value[fnName]();
-          
-          if (fnValue !== '')
-            return fnValue;
-        }
-			} else if (attr.startsWith('@')) {
-        let attrValue = value.attr(attr.substr(1));
+    if (attrs.length > 0) {
+      for (let attr of attrs) {
+        if (value.attr(attr) !== undefined)
+          return value.attr(attr);
+      }
 
-				if (attrValue !== undefined)
-          return attrValue;
-			}
-		}
+      return undefined;
+    }
+
+    if (value.text() !== '')
+      return value.text();
 	}
 }
