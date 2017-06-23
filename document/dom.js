@@ -114,22 +114,20 @@ module.exports = {
    */
 	queryValue: function(path, defaultAttrs=[]) {
     let value = this.query(path);
+    let attrs = castArray(path[1] || defaultAttrs);
 
     if (!(value instanceof cheerio))
       return value;
 
     if (value.length === 0)
-      return undefined;
+      return undefined;    
 
-    let attrs = castArray(path[1] || defaultAttrs);
-
-    if (attrs.length == 0 && value.text() !== '') {
+    if (attrs.length == 0 && value.text() !== '')
       return value.text();
-    }
       
     for (let attr of attrs) {
       if (value.attr(attr) !== undefined)
         return value.attr(attr);
-    }   
+    }
 	}
 }
