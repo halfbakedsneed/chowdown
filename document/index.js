@@ -38,3 +38,6 @@ let extend = module.exports.extend = function(name, methods) {
 
 // Add the JSON document type.
 extend('json', require('./json'));
+
+// Add the DOM document type;
+extend('dom', require('./dom'));
