@@ -123,16 +123,13 @@ module.exports = {
 
     let attrs = castArray(path[1] || defaultAttrs);
 
-    if (attrs.length > 0) {
-      for (let attr of attrs) {
-        if (value.attr(attr) !== undefined)
-          return value.attr(attr);
-      }
-
-      return undefined;
-    }
-
-    if (value.text() !== '')
+    if (attrs.length == 0 && value.text() !== '') {
       return value.text();
+    }
+      
+    for (let attr of attrs) {
+      if (value.attr(attr) !== undefined)
+        return value.attr(attr);
+    }   
 	}
 }
