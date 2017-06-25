@@ -11,7 +11,7 @@ class Element {
    * containing additional configuration options.
    * 
    * @param  {(string|function)}  path    A path to the element in a document.
-   * @param  {object}             options An objcet containing additional configuration options.
+   * @param  {object}             options An object containing additional configuration options.
    */
   constructor(path, options) {
     options = options || {};
