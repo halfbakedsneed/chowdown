@@ -4,24 +4,22 @@ const { mapValues, first } = require('lodash');
 const Element = require('./base');
 
 /**
- * A class respresenting an element that to an object.
+ * A class respresenting an element that resolves to an object.
  */
 class ObjectElement extends Element {
 
   /**
-   * Constructs an object element given a path to the container and
-   * properties to pick from this container.
+   * Constructs an ObjectElement given an object of properties to pick from the document.
    *
    * Also takes an object of additional configuration options.
    * 
-   * @param  {(string|function)}  path    The path to the object container.
    * @param  {object}             pick    An object of properties to pick from the container.
    * @param  {object}             options An object of additional configuration options.
    */
-  constructor(path, pick, options) {
+  constructor(pick, options) {
     options = options || {};
     options.pick = pick;
-    super(path, options);
+    super(undefined, options);
   }
 
   /**
@@ -50,8 +48,7 @@ class ObjectElement extends Element {
   }
 
   /**
-   * Finds the object container in the given document and attempts
-   * to pick properties from this container.
+   * Finds the properties in the document.
    *
    * Will return an object where each property value is a resolved element promise.
    * 
@@ -59,10 +56,7 @@ class ObjectElement extends Element {
    * @return {object} An object where each property value is a resolved element promise.
    */
   find(document) {
-    let object = first(document.children(this.options.path));
-
-    if (object !== undefined)
-      return mapValues(this.options.pick, (attr) => attr.from(object));
+    return mapValues(this.options.pick, (attr) => attr.from(document));
   }
 
   /**
