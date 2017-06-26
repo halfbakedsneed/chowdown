@@ -13,8 +13,7 @@ class Element {
    * @param  {(string|function)}  path    A path to the element in a document.
    * @param  {object}             options An object containing additional configuration options.
    */
-  constructor(path, options) {
-    options = options || {};
+  constructor(path, options={}) {
     options.path = path;
     this.configure(options);
   }

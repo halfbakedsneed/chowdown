@@ -19,8 +19,7 @@ class ObjectElement extends Element {
    * @param  {object}             pick    An object of properties to pick from the container.
    * @param  {object}             options An object of additional configuration options.
    */
-  constructor(pick, options) {
-    options = options || {};
+  constructor(pick, options={}) {
     options.pick = pick;
     super(undefined, options);
   }

@@ -20,8 +20,7 @@ class ScopeElement extends Element {
    * @param  {Element}            contents The inner element to resolve relative to the scope.
    * @param  {object}             options  An object of additional configuration options.
    */
-	constructor(path, contents, options) {
-    options = options || {};
+	constructor(path, contents, options={}) {
     options.contents = contents;
     super(path, options);
 	}

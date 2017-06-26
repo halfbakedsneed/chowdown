@@ -19,8 +19,7 @@ class ArrayElement extends Element {
    * @param  {(Element|*)}        pick    An element representing what to pick from the container.
    * @param  {object}             options An object of further configuration options.
    */
-  constructor(path, pick, options) {
-    options = options || {};
+  constructor(path, pick, options={}) {
     options.pick = pick;
     super(path, options);
   }
