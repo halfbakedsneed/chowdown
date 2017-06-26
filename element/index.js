@@ -50,7 +50,6 @@ let types = {
   string: require('./string'),
   number: require('./number'),
   object: require('./object'),
-  array: require('./array'),
   collection: require('./collection'),
   scope: require('./scope')
 };
