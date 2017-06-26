@@ -5,12 +5,12 @@ const Element = require('./base');
 const factory = require('./index').factory;
 
 /**
- * A class representing an array element.
+ * A class representing an element that resolves to an array of values.
  */
 class CollectionElement extends Element {
 
   /**
-   * Constructs an array element given a path to an array of containers
+   * Constructs a CollectionElement given a path to a list of containers
    * and an element that describes an item to pick from each container in the array.
    * 
    * Also takes an object of additional configuration options.
@@ -25,11 +25,11 @@ class CollectionElement extends Element {
   }
 
   /**
-   * Configures the ArrayElement given an object of configuration options.
+   * Configures the CollectionElement given an object of configuration options.
    * 
-   * By default, the default value an ArrayElement will resolve to is an empty array ([]).
+   * By default, the default value an CollectionElement will resolve to is an empty array ([]).
    * 
-   * The ArrayElement supports a filter option. This is expected to be a function that
+   * The CollectionElement supports a filter option. This is expected to be a function that
    * is called for every item in the array and where this function does not return
    * a truthy value, then the corresponding item is omitted 
    * 
