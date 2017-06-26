@@ -31,7 +31,7 @@ class StringElement extends Element {
   }
 
   /**
-   * Given a retrieved value, this function simply casts it to a String.
+   * Given the element's retrieved value, this method simply casts it to a String.
    * 
    * @param  {*}        string    The element's value retrieved from the document.
    * @param  {Document} document  The document the value was retrieved from.
