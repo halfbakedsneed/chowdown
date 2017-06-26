@@ -1,6 +1,9 @@
 const ArrayElement = require('./array');
 const ObjectElement = require('./object');
 
+// The element factory.
+const factory = require('./index').factory;
+
 /**
  * A class representing an element that resolves to an array of objects.
  */
@@ -16,10 +19,7 @@ class CollectionElement extends ArrayElement {
    * @param  {object}             options An object of further configuration options.
    */
   constructor(path, pick, options){
-    if (!(pick instanceof ObjectElement))
-      pick = new ObjectElement(pick);
-
-    super(path, pick, options);
+    super(path, factory.object(pick), options);
   }
 }
 

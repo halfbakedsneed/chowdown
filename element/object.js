@@ -3,6 +3,9 @@ const { mapValues, first } = require('lodash');
 
 const Element = require('./base');
 
+// The element factory.
+const factory = require('./index').factory;
+
 /**
  * A class respresenting an element that resolves to an object.
  */
@@ -38,13 +41,7 @@ class ObjectElement extends Element {
     if (!this.options.hasOwnProperty('default'))
       this.options.default = {};
 
-    this.options.pick =
-      mapValues(this.options.pick, (attr) => {
-        if (attr instanceof Element)
-          return attr;
-
-        return new Element(attr);
-      });
+    this.options.pick = mapValues(this.options.pick, factory);
   }
 
   /**

@@ -1,6 +1,9 @@
 const Element = require('./base');
 const { first } = require('lodash');
 
+// The element factory.
+const factory = require('./index').factory;
+
 /**
  * A class representing an element that encapsulates another element.
  * It resolves to the inner element relative to this element's path (hence scoped).
@@ -34,9 +37,7 @@ class ScopeElement extends Element {
    */
   configure(options) {
     super.configure(options);
-
-    if (!(this.options.contents instanceof Element))
-      this.options.contents = new Element(this.options.contents);
+    this.options.contents = factory(this.options.contents);
   }
 
   /**

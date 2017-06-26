@@ -1,6 +1,9 @@
 const Promise = require('bluebird');
 const Element = require('./base');
 
+// The element factory.
+const factory = require('./index').factory;
+
 /**
  * A class representing an array element.
  */
@@ -37,8 +40,7 @@ class ArrayElement extends Element {
   configure(options) {
     super.configure(options);
 
-    if (!(this.options.pick instanceof Element))
-      this.options.pick = new Element(this.options.pick);
+    this.options.pick = factory(this.options.pick);
 
     if (!this.options.hasOwnProperty('default'))
       this.options.default = [];
