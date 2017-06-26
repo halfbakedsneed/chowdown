@@ -18,7 +18,7 @@ class CollectionElement extends ArrayElement {
    * @param  {object}             pick    An object of properties to pick from the containers.
    * @param  {object}             options An object of further configuration options.
    */
-  constructor(path, pick, options){
+  constructor(path, pick, options) {
     super(path, factory.object(pick), options);
   }
 }
