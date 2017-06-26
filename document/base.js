@@ -18,7 +18,7 @@ class Document {
    * 
    * @param  {string} type      The type of the document e.g 'dom' or 'json'. 
    * @param  {*}      document  The raw document object.
-   * @param  {*}      [root]    The element of the document.
+   * @param  {*}      root      The element of the document.
    */
   constructor(type, document, root) {
     this.options = {};
