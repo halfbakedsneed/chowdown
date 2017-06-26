@@ -11,9 +11,9 @@ class NumberElement extends Element {
    * @param  {(string|function)}  path    The path to the number in a document.
    * @param  {object}             options An object of additional configuration options.
    */
-	constructor(path, options) {
+  constructor(path, options) {
     super(path, options);
-	}
+  }
 
   /**
    * Configures the NumberElement given an object of configuration options.

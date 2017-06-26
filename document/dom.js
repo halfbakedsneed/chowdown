@@ -16,9 +16,9 @@ module.exports = {
    * @param  {(string|cheerio)} data  The document data.
    * @return {cheerio}  The loaded cheerio document. 
    */
-	loadDocument: function(data) {
-		return cheerio.load(data);
-	},
+  loadDocument: function(data) {
+    return cheerio.load(data);
+  },
 
   /**
    * Loads the root of the document and wraps it in a cheerio instance.
@@ -27,12 +27,12 @@ module.exports = {
    * @param  {object}
    * @return {cheerio}
    */
-	loadRoot: function(root) {
+  loadRoot: function(root) {
     if (root === undefined)
       root = this.options.document.root();
 
-		return this.options.document(root);
-	},
+    return this.options.document(root);
+  },
 
   /**
    * Formats and prepares a path for a query.
@@ -42,15 +42,15 @@ module.exports = {
    * @param  {(string|function)}  path  A function or string to format.
    * @return {(array|function)}  The formatted path;
    */
-	formatPath: function(path) {
-		if (isString(path))
-			return path.split('/');
+  formatPath: function(path) {
+    if (isString(path))
+      return path.split('/');
 
     if (isFunction(path))
       return path;
 
-		return [''];
-	},
+    return [''];
+  },
 
   /**
    * Queries the cheerio document given a path.
@@ -61,15 +61,15 @@ module.exports = {
    * @param  {(array|function)} path  The path to query.
    * @return {*} The result of the query.
    */
-	query: function(path) {
+  query: function(path) {
     if (path[0] === '')
       return this.options.root;
 
-		if (isFunction(path))
-			return path(this.options.document, this.options.root);
+    if (isFunction(path))
+      return path(this.options.document, this.options.root);
 
     return this.options.document(path[0], this.options.root);
-	},
+  },
 
   /**
    * Queries the cheerio document for children given a path.
@@ -96,9 +96,9 @@ module.exports = {
    * @param  {(array|function)} path  The path to the link.
    * @return {*}  The retrieved link.
    */
-	queryLink: function(path) {
-		return this.queryValue(path, 'href');
-	},
+  queryLink: function(path) {
+    return this.queryValue(path, 'href');
+  },
 
   /**
    * Queries the document for an element and attempts to resolve an attribute from it.
@@ -112,7 +112,7 @@ module.exports = {
    * @param  {string[]}         defaultAttrs  The fallback array of attributes to try for.
    * @return {*}  The retrieved value.
    */
-	queryValue: function(path, defaultAttrs=[]) {
+  queryValue: function(path, defaultAttrs=[]) {
     let value = this.query(path);
     let attrs = castArray(path[1] || defaultAttrs);
 
@@ -129,5 +129,5 @@ module.exports = {
       if (value.attr(attr) !== undefined)
         return value.attr(attr);
     }
-	}
+  }
 }
