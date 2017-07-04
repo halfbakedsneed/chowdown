@@ -46,7 +46,7 @@ class ScopeQuery extends Query {
     let scope = first(document.children(this.options.path));
 
     if (scope !== undefined)
-      return this.options.contents.from(scope);
+      return this.options.contents.on(scope);
   }
 }
 

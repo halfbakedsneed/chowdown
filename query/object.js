@@ -49,7 +49,7 @@ class ObjectQuery extends Query {
    * @return {object} An object where each property value is a resolved query promise.
    */
   find(document) {
-    return mapValues(this.options.pick, (attr) => attr.from(document));
+    return mapValues(this.options.pick, (attr) => attr.on(document));
   }
 
   /**

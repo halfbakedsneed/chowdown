@@ -56,7 +56,7 @@ class CollectionQuery extends Query {
     let children = document.children(this.options.path);
 
     if (children !== undefined)
-      return children.map(child => this.options.pick.from(child));
+      return children.map(child => this.options.pick.on(child));
   }
 
   /**
