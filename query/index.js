@@ -88,13 +88,12 @@ class Query {
   }
 
   /**
-   * Retrieves this query from the given document and builds and formats it, returning a promise that
-   * resolves to this value.
+   * Executes this query on the given document.
    * 
-   * @param  {Document} The document to retrieve this query from.
+   * @param  {Document} The document to execute the query on.
    * @return {*}  A promise that resolves to the value of this query.
    */
-  from(document) {
+  on(document) {
     return Promise.resolve(document)
       .then((document) => Promise
         .resolve(this.find(document))
@@ -150,7 +149,7 @@ Query.factory = function(...args) {
  * If the first argument is already an Query, then the query
  * is returned and the consructor is not exectuted.
  */
-extendWith(Query.factory, children, (_, type) => (...args) => {
+extendWith(Query.factory, children, (_, type) => function(...args) {
   if (first(args) instanceof Query)
     return first(args);
 
