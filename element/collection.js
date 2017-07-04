@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const Element = require('./base');
+const Element = require('./');
 
 // The element factory.
 const factory = require('./index').factory;

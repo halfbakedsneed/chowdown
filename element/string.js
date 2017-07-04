@@ -1,4 +1,4 @@
-const Element = require('./base');
+const Element = require('./');
 
 /**
  * A class respresenting an element that resolves to a string.

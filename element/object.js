@@ -1,10 +1,7 @@
 const Promise = require('bluebird');
 const { mapValues, first } = require('lodash');
 
-const Element = require('./base');
-
-// The element factory.
-const factory = require('./index').factory;
+const Element = require('./');
 
 /**
  * A class respresenting an element that resolves to an object.
@@ -40,7 +37,7 @@ class ObjectElement extends Element {
     if (!this.options.hasOwnProperty('default'))
       this.options.default = {};
 
-    this.options.pick = mapValues(this.options.pick, factory);
+    this.options.pick = mapValues(this.options.pick, Element.factory);
   }
 
   /**

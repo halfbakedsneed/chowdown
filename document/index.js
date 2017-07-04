@@ -31,7 +31,7 @@ class Document {
    * @return {Document} The new child document.
    */
   create(root) {
-    return factory[this.options.type](this.options.document, root);
+    return Document.factory[this.options.type](this.options.document, root);
   }
 
   /**
