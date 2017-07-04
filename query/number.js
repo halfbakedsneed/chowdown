@@ -1,11 +1,11 @@
-const Element = require('./');
+const Query = require('./');
 
 /**
- * A class respresenting an element that resolves to a number.
+ * A class respresenting an query that resolves to a number.
  */
-class NumberElement extends Element {
+class NumberQuery extends Query {
   /**
-   * Constructs a NumberElement given a document path to the number and
+   * Constructs a NumberQuery given a document path to the number and
    * an object of additional configuration options.
    * 
    * @param  {(string|function)}  path    The path to the number in a document.
@@ -16,9 +16,9 @@ class NumberElement extends Element {
   }
 
   /**
-   * Configures the NumberElement given an object of configuration options.
+   * Configures the NumberQuery given an object of configuration options.
    *
-   * By default, the default value a NumberElement will resolve to is NaN (Number.NaN).
+   * By default, the default value a NumberQuery will resolve to is NaN (Number.NaN).
    * 
    * @param  {object}     options The object of configuration options.
    * @return {undefined}         
@@ -31,9 +31,9 @@ class NumberElement extends Element {
   }
 
   /**
-   * Given the element's retrieved value, this method simply casts it to a Number.
+   * Given the query's retrieved value, this method simply casts it to a Number.
    * 
-   * @param  {*}        number   The element's retreived value.
+   * @param  {*}        number   The query's retreived value.
    * @param  {Document} document The document the value was retrieved from.
    * @return {number} The resulting, casted number.
    */
@@ -42,4 +42,4 @@ class NumberElement extends Element {
   }
 }
 
-module.exports = NumberElement;
+module.exports = NumberQuery;

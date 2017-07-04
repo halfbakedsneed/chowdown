@@ -1,20 +1,20 @@
-const Element = require('./');
+const Query = require('./');
 const { first } = require('lodash');
 
 /**
- * A class representing an element that encapsulates another element.
- * It resolves to the inner element relative to this element's path (hence scoped).
+ * A class representing an query that encapsulates another query.
+ * It resolves to the inner query relative to this query's path (hence scoped).
  */
-class ScopeElement extends Element {
+class ScopeQuery extends Query {
 
   /**
-   * Constructs a ScopeElement given a path to the outer scope and
-   * the inner element that will be resolved relative to this scope.
+   * Constructs a ScopeQuery given a path to the outer scope and
+   * the inner query that will be resolved relative to this scope.
    *
    * Also takes an additional object of configuration options.
    * 
    * @param  {(string|function)}  path     The path to the outer scope.
-   * @param  {Element}            contents The inner element to resolve relative to the scope.
+   * @param  {Query}            contents The inner query to resolve relative to the scope.
    * @param  {object}             options  An object of additional configuration options.
    */
   constructor(path, contents, options={}) {
@@ -23,9 +23,9 @@ class ScopeElement extends Element {
   }
 
   /**
-   * Configures the ScopeElement given an object of configuration options.
+   * Configures the ScopeQuery given an object of configuration options.
    *
-   * If the inner contents of the scope is not already an Element, then one will
+   * If the inner contents of the scope is not already an Query, then one will
    * be constructed.
    * 
    * @param  {object}     options An object of configuration options.
@@ -33,7 +33,7 @@ class ScopeElement extends Element {
    */
   configure(options) {
     super.configure(options);
-    this.options.contents = Element.factory(this.options.contents);
+    this.options.contents = Query.factory(this.options.contents);
   }
 
   /**
@@ -50,4 +50,4 @@ class ScopeElement extends Element {
   }
 }
 
-module.exports = ScopeElement;
+module.exports = ScopeQuery;

@@ -1,11 +1,11 @@
-const Element = require('./');
+const Query = require('./');
 
 /**
- * A class respresenting an element that resolves to a string.
+ * A class respresenting an query that resolves to a string.
  */
-class StringElement extends Element {
+class StringQuery extends Query {
   /**
-   * Constructs a StringElement given a document path to the string
+   * Constructs a StringQuery given a document path to the string
    * and an object of additional configuration options.
    * 
    * @param  {(string|function)}  path    The path to the string in a document.
@@ -16,9 +16,9 @@ class StringElement extends Element {
   }
 
   /**
-   * Configures the StringElement given an object of configuration options.
+   * Configures the StringQuery given an object of configuration options.
    *
-   * By default, the default value a StringElement will resolve to is an empty string ('').
+   * By default, the default value a StringQuery will resolve to is an empty string ('').
    * 
    * @param  {object}     options An object of configuration options.
    * @return {undefined}
@@ -31,9 +31,9 @@ class StringElement extends Element {
   }
 
   /**
-   * Given the element's retrieved value, this method simply casts it to a String.
+   * Given the query's retrieved value, this method simply casts it to a String.
    * 
-   * @param  {*}        string    The element's value retrieved from the document.
+   * @param  {*}        string    The query's value retrieved from the document.
    * @param  {Document} document  The document the value was retrieved from.
    * @return {string} The resulting, casted string.
    */
@@ -42,4 +42,4 @@ class StringElement extends Element {
   }
 }
 
-module.exports = StringElement;
+module.exports = StringQuery;
