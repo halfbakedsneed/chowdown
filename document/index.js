@@ -70,6 +70,8 @@ class Document {
   }
 }
 
+module.exports = Document;
+
 /**
  * Set the child load methods to the identity function by default.
  */
@@ -121,8 +123,6 @@ Document.extend = function(name, methods) {
   // Add a factory method for the new type.
   Document.factory[name] = (document, root) => new ConcreteDocument(document, root);
 }
-
-module.exports = Document;
 
 // Add the JSON document type.
 Document.extend('json', require('./json'));
