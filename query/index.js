@@ -116,7 +116,8 @@ let children = {
   number: require('./number'),
   object: require('./object'),
   collection: require('./collection'),
-  scope: require('./scope')
+  context: require('./context'),
+  custom: require('./custom')
 };
 
 /**
@@ -134,6 +135,9 @@ Query.factory = function(...args) {
 
   if (isPlainObject(first(args)))
     return new children.object(...args);
+
+  if (isFunction(first(args)))
+    return new children.custom(...args);
 
   return new Query(...args);
 }
