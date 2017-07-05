@@ -108,7 +108,7 @@ Document.factory = {};
  * @param {string}  name    The name of the subtype.
  * @param {object}  methods The methods the class will have.
  */
-Document.extend = function(name, methods) {
+function add(name, methods) {
 
   // Create a container class that extends Document for our methods.
   class ConcreteDocument extends Document {
@@ -125,7 +125,7 @@ Document.extend = function(name, methods) {
 }
 
 // Add the JSON document type.
-Document.extend('json', require('./json'));
+add('json', require('./json'));
 
 // Add the DOM document type;
-Document.extend('dom', require('./dom'));
+add('dom', require('./dom'));
