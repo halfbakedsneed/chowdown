@@ -13,8 +13,8 @@ class ObjectQuery extends Query {
    *
    * Also takes an object of additional configuration options.
    * 
-   * @param  {object}             pick    An object of properties to pick from the container.
-   * @param  {object}             options An object of additional configuration options.
+   * @param  {object} pick    An object of properties to pick from the container.
+   * @param  {object} options An object of additional configuration options.
    */
   constructor(pick, options={}) {
     options.pick = pick;

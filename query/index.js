@@ -112,34 +112,41 @@ module.exports = Query;
  * @type {Object}
  */
 let children = {
+  base: Query,
   string: require('./string'),
   number: require('./number'),
   object: require('./object'),
   collection: require('./collection'),
   context: require('./context'),
-  custom: require('./custom')
+  custom: require('./custom'),
+  follow: require('./follow'),
+  link: require('./link')
 };
 
 /**
- * A function that when passed arguments, will determine what
- * type of query to create and create it.
+ * A function that when passed a path, will determine what
+ * type of query to create from that path and create it.
  *
  * If an existing Query is passed, then it will be returned.
+ *
+ * Accepts a default factory function (create) that will be called
+ * if no matching type is found.
  * 
- * @param  {array}    args The array of arguments.
+ * @param  {*}        path    The path to create a query for.
+ * @param  {function} create  A default factory function.
  * @return {Query}  The constructed query.
  */
-Query.factory = function(...args) {
-  if (first(args) instanceof Query)
-    return first(args);
+Query.factory = function(path, create=Query.factory.base) {
+  if (path instanceof Query)
+    return path;
 
-  if (isPlainObject(first(args))) 
-    return new children.object(...args);
+  if (isPlainObject(path)) 
+    return new children.object(path);
 
-  if (isFunction(first(args)))
-    return new children.custom(...args);
+  if (isFunction(path))
+    return new children.custom(path);
 
-  return new Query(...args);
+  return create(path);
 }
 
 

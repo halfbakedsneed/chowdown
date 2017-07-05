@@ -5,7 +5,6 @@ const { extendWith } = require('lodash');
  * and execution of different query types.
  */
 class Scope {
-
   /**
    * Constructs a Scope given a document to act as the root.
    * 

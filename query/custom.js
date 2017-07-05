@@ -25,7 +25,7 @@ class CustomQuery extends Query {
    * Finds the value of the inner function given the document.
    * Will create a Scope using this document and pass it to the inner function.
    * 
-   * @param  {Document}   document The document create a scope from.
+   * @param  {Document}   document The document to create a scope from.
    * @return {Promise<*>} A promise containing the result of the inner function.
    */
   find(document) {
