@@ -16,7 +16,7 @@ module.exports = {
    * Loads the document data.
    * If a string is provided, it will parse it as JSON.
    * 
-   * @param  {(data|object)}   data   The document data.
+   * @param  {(string|object)}  data   The document data.
    * @return {*}   The loaded document.
    */
   loadDocument: function(data) {
@@ -40,17 +40,26 @@ module.exports = {
    * If the provided path is a function, that function will be called instead.
    * The arguments this function takes are (root, document).
    * 
-   * @param  {(string|function)}   path   The path to use in the query.
+   * @param  {string}   path   The path to use in the query.
    * @return {*}   The result of the query.
    */
   query: function(path) {
     if (path === undefined || '')
       return this.options.root;
 
-    if (isFunction(path))
-      return path(this.options.root, this.options.document);
-
     return get(this.options.root, path);
+  },
+
+
+  /**
+   * Calls the given path function with the root of this document as the first
+   * parameter and the entire actual json object as the second parameter.
+   * 
+   * @param  {function} fn The path function to call.
+   * @return {*}  The result of the path function. 
+   */
+  queryRaw: function(fn) {
+    return fn(this.options.root, this.options.document);
   },
 
   /**
@@ -58,7 +67,7 @@ module.exports = {
    * If the result of the query is not an array or an object then the
    * method will return undefined.
    * 
-   * @param  {(string|function)}   path   The path to use in the query.
+   * @param  {string}   path   The path to use in the query.
    * @return {object[]} The children objects.
    */
   queryChildren: function(path) {

@@ -35,9 +35,21 @@ class Document {
   }
 
   /**
+   * Given a path function, this method attempts to call it
+   * with relevant parameters determined by the concrete type
+   * and returns the result.
+   * 
+   * @param  {function} fn The path function to call.
+   * @return {*}  The result of the path function.
+   */
+  raw(fn) {
+    return this.queryRaw(fn);
+  }
+
+  /**
    * Given a path, it attempts to resolve an array of child documents.
    * 
-   * @param  {(string|function)}  path  The path to to the children.
+   * @param  {string}  path  The path to to the children.
    * @return {Document[]} An array of child documents.
    */
   children(path) {
@@ -52,7 +64,7 @@ class Document {
   /**
    * Given a path, this method attempts to find a leaf value in the document.
    * 
-   * @param  {(string|function)}  path  The path to the value.
+   * @param  {string}  path  The path to the value.
    * @return {*}  The value of the resolved path.
    */
   value(path) {
@@ -62,7 +74,7 @@ class Document {
   /**
    * Given a path, this method attempts to resolve a link to another document.
    * 
-   * @param  {(string|function)}  path  The path to the link.
+   * @param  {string}  path  The path to the link.
    * @return {*}  The resolved link.
    */
   link(path) {

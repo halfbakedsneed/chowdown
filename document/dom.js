@@ -39,8 +39,8 @@ module.exports = {
    * The method expects either a string in a format
    * inspired by the XPath standard or a function.
    * 
-   * @param  {(string|function)}  path  A function or string to format.
-   * @return {(array|function)}  The formatted path;
+   * @param  {string}  path  A function or string to format.
+   * @return {array}  The formatted path;
    */
   formatPath: function(path) {
     if (isString(path))
@@ -58,17 +58,25 @@ module.exports = {
    * If the provided path is a function, it will simply call that function and pass the cheerio
    * document and the intended root of the document.
    * 
-   * @param  {(array|function)} path  The path to query.
+   * @param  {array} path  The path to query.
    * @return {*} The result of the query.
    */
   query: function(path) {
     if (path[0] === '')
-      return this.options.root;
-
-    if (isFunction(path))
-      return path(this.options.document, this.options.root);
+      return this.options.root;      
 
     return this.options.document(path[0], this.options.root);
+  },
+
+  /**
+   * Calls the given path function with the cheerio document as the first
+   * parameter and this document's root as the second parameter.
+   * 
+   * @param  {function} fn The path function to call.
+   * @return {*}  The result of the path function. 
+   */
+  queryRaw: function(fn) {
+    return fn(this.options.document, this.options.root);
   },
 
   /**
@@ -76,7 +84,7 @@ module.exports = {
    * If the result of the query is either not a cheerio result set or the set contains
    * no results, then undefined is returned.
    * 
-   * @param  {(array|function)} path  The path to query.
+   * @param  {array} path  The path to query.
    * @return {cheerio}  The children query set.
    */
   queryChildren: function(path) {
@@ -93,7 +101,7 @@ module.exports = {
    * Will attempt to grab the href attribute of a cheerio dom element if
    * no other attribute was specified in the path.
    *   
-   * @param  {(array|function)} path  The path to the link.
+   * @param  {array} path  The path to the link.
    * @return {*}  The retrieved link.
    */
   queryLink: function(path) {
@@ -108,7 +116,7 @@ module.exports = {
    *
    * If no attribute can be resolved from the result of the query, undefined is returned instead.
    * 
-   * @param  {(array|function)} path          The path used in the query.
+   * @param  {array} path          The path used in the query.
    * @param  {string[]}         defaultAttrs  The fallback array of attributes to try for.
    * @return {*}  The retrieved value.
    */

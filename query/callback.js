@@ -3,13 +3,12 @@ const Scope = require('../scope');
 const { first } = require('lodash');
 
 /**
- * A class representing a query that resolves with the
- * result of its inner function called with a Scope.
+ * A class representing a query that resolves to the
+ * result of an inner function called with a Scope.
  */
-class CustomQuery extends Query {
-
+class CallbackQuery extends Query {
   /**
-   * Constructs a CustomQuery given an inner function.
+   * Constructs a CallbackQuery given an inner function.
    *
    * Also takes an additional object of configuration options.
    * 
@@ -33,4 +32,4 @@ class CustomQuery extends Query {
   }
 }
 
-module.exports = CustomQuery;
+module.exports = CallbackQuery;

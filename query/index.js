@@ -119,7 +119,7 @@ let children = {
   object: require('./object'),
   collection: require('./collection'),
   context: require('./context'),
-  custom: require('./custom'),
+  callback: require('./callback'),
   follow: require('./follow'),
   link: require('./link')
 };
@@ -145,7 +145,7 @@ Query.factory = function(path, create=Query.factory.base) {
     return new children.object(path);
 
   if (isFunction(path))
-    return new children.custom(path);
+    return new children.callback(path);
 
   return create(path);
 }
