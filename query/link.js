@@ -9,7 +9,7 @@ class LinkQuery extends StringQuery {
    * Constructs a LinkQuery given a document path to the link
    * and an object of additional configuration options.
    * 
-   * @param  {(string|function)}  path    The path to the link in a document.
+   * @param  {string}  path    The path to the link in a document.
    * @param  {object}             options An object of additional configuration options.
    */
   constructor(path, base, options={}) {

@@ -13,7 +13,7 @@ class ContextQuery extends Query {
    *
    * Also takes an additional object of configuration options.
    * 
-   * @param  {(string|function)}  path     The path to the outer context.
+   * @param  {string}  path     The path to the outer context.
    * @param  {Query}              contents The inner query to resolve relative to the context.
    * @param  {object}             options  An object of additional configuration options.
    */

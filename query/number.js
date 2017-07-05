@@ -8,7 +8,7 @@ class NumberQuery extends Query {
    * Constructs a NumberQuery given a document path to the number and
    * an object of additional configuration options.
    * 
-   * @param  {(string|function)}  path    The path to the number in a document.
+   * @param  {(string|string)}  path    The path to the number in a document.
    * @param  {object}             options An object of additional configuration options.
    */
   constructor(path, options) {

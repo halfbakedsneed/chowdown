@@ -12,9 +12,9 @@ class CollectionQuery extends Query {
    * 
    * Also takes an object of additional configuration options.
    * 
-   * @param  {(string|function)}  path    The path to the array container.
-   * @param  {(Query|*)}        pick    An query representing what to pick from the container.
-   * @param  {object}             options An object of further configuration options.
+   * @param  {string} path    The path to the array container.
+   * @param  {Query}  pick    An query representing what to pick from the container.
+   * @param  {object} options An object of further configuration options.
    */
   constructor(path, pick, options={}) {
     options.pick = pick;

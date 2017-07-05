@@ -8,7 +8,7 @@ class StringQuery extends Query {
    * Constructs a StringQuery given a document path to the string
    * and an object of additional configuration options.
    * 
-   * @param  {(string|function)}  path    The path to the string in a document.
+   * @param  {string}  path    The path to the string in a document.
    * @param  {object}             options An object of additional configuration options.
    */
   constructor(path, options) {
