@@ -133,7 +133,7 @@ Query.factory = function(...args) {
   if (first(args) instanceof Query)
     return first(args);
 
-  if (isPlainObject(first(args)))
+  if (isPlainObject(first(args))) 
     return new children.object(...args);
 
   if (isFunction(first(args)))
@@ -157,5 +157,5 @@ extendWith(Query.factory, children, (_, type) => function(...args) {
   if (first(args) instanceof Query)
     return first(args);
 
-  return new type(args)
+  return new type(...args);
 });

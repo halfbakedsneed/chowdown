@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const { mapValues, first } = require('lodash');
+const { mapValues, first, ary } = require('lodash');
 
 const Query = require('./');
 
@@ -37,7 +37,7 @@ class ObjectQuery extends Query {
     if (!this.options.hasOwnProperty('default'))
       this.options.default = {};
 
-    this.options.pick = mapValues(this.options.pick, Query.factory);
+    this.options.pick = mapValues(this.options.pick, ary(Query.factory, 1));
   }
 
   /**
