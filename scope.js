@@ -16,9 +16,9 @@ class Scope {
   }
 
   /**
-   * Returns the inner Document used by this scope.
+   * Returns the inner Document used in this scope.
    * 
-   * @return {Document} The Document used by this scope.
+   * @return {Document} The Document used in this scope.
    */
   document() {
     return this.options.document;
@@ -28,7 +28,7 @@ class Scope {
    * Executes a given query within the context of this scope.
    * 
    * @param  {Query}  query  The query to execute.
-   * @return {*} The result of the query.
+   * @return {Promise<*>} The result of the query.
    */
   execute(query) {
     return query.on(this.options.document);
@@ -39,7 +39,7 @@ module.exports = Scope;
 
 /**
  * A factory function that creates a Scope given a Document.
- * If a Scope is passed instead of a document, it will simply
+ * If a Scope is passed instead of a document, then that will
  * be returned.
  * 
  * @param  {Document|Scope} document The document to wrap.
@@ -57,7 +57,7 @@ const Query = require('./query');
 
 /**
  * Create a method on the Scope class for each type of query that when called
- * will create and execute that query with the given parameters.
+ * will create and execute that query.
  */
 extendWith(Scope.prototype, Query.factory, (_, fn) => function(...args) {
   return this.execute(fn(...args));

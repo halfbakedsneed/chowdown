@@ -57,12 +57,10 @@ function configure(options) {
 }
 
 /**
- * Adds an endpoint to the library given the library function,
- * the name of the endpoint and the function.
+ * Wraps the given function such that its
+ * called with a configured options object.
  *
- * Wraps the given function such that the given function
- * is called with a configured options object when the corresponding
- * endpoint is called.
+ * @see configure
  * 
  * @param {object}   obj  The elicit library function to add the endpoint to.
  * @param {string}   name The name of the endpoint.
@@ -70,7 +68,7 @@ function configure(options) {
  */
 function wrap(fn) {
   return (...args) => {
-    configure(args[fn.length - 1] = (args[fn.length - 1] || {}));
+    args[fn.length - 1] = configure(args[fn.length - 1] || {});
     return fn(...args);
   }
 }

@@ -2,12 +2,12 @@ const Promise = require('bluebird');
 const { assignIn, castArray, identity, flow, extendWith, first, isPlainObject, isFunction } = require('lodash');
 
 /**
- * Class representing an query descriptor.
- * Given a document it can attempt to resolve itself.
+ * The ultimate class representing a document query.
+ * Given a document it will attempt to resolve itself.
  */
 class Query {
   /**
-   * Constructs an query given its document path and an object
+   * Constructs an query given a document path and an object
    * containing additional configuration options.
    * 
    * @param  {(string|function)}  path    A path to the query in a document.
@@ -19,7 +19,7 @@ class Query {
   }
 
   /**
-   * Configures the query given an object of configuration options.
+   * Configures this query given an object of configuration options.
    * 
    * @param  {options}  options The object of configuration options.
    * @return {undefined}
@@ -33,25 +33,23 @@ class Query {
   }
 
   /**
-   * Retrieves the query's raw value using it's path in the given document.
+   * Retrieves the a raw value from the document using the query's path.
    * 
-   * @param  {Document} document  The document to find the query in.
-   * @return {*}  The raw value of the query.
+   * @param  {Document} document  The document to query.
+   * @return {*}  The retrieved raw value.
    */
   find(document) {
     return document.value(this.options.path);
   }
 
   /**
-   * Filters the retrieved value such that if no value was retrieved, the query's
-   * default value will be returned instead.
+   * Determines if the query's default value should be used instead
+   * of the value that was retrieved from the document.
    * 
-   * In addition to this, if no value was retrieved and the throwOnMissing
+   * If no value was retrieved and the throwOnMissing
    * options is set to true, an error will be thrown.
-   *
-   * If a value WAS retrieved from the document, then this method simply returns it.
    * 
-   * @param  {*}        value     The query's value retreived from the document.
+   * @param  {*}        value     The value retreived from the document.
    * @param  {Document} document  The document the value was retrieved from.
    * @return {*}  The query's default value or the value retrieved from the document.
    */
@@ -66,18 +64,18 @@ class Query {
   }
 
   /**
-   * Builds the retrieved value such that it is ready for formatting.
+   * "Builds" the retrieved value such that it is ready for formatting.
    * 
    * @param  {*}        value     The query's value retrieved from the document. 
    * @param  {Document} document  The document the value was retrieved from.
-   * @return {*}  The prepared value.
+   * @return {*}  The built value.
    */
   build(value, document) {
     return value;
   }
 
   /**
-   * Formats the retrieved value by feeding it through the query's format functions.
+   * Formats the built value by feeding it through the query's format functions.
    * 
    * @param  {*}        value     The query's value.
    * @param  {Document} document  The document the value was retrieved from.
@@ -121,12 +119,13 @@ let children = {
   context: require('./context'),
   callback: require('./callback'),
   follow: require('./follow'),
-  link: require('./link')
+  link: require('./link'),
+  regex: require('./regex')
 };
 
 /**
  * A function that when passed a path, will determine what
- * type of query to create from that path and create it.
+ * type of query to create and create it.
  *
  * If an existing Query is passed, then it will be returned.
  *
@@ -152,13 +151,12 @@ Query.factory = function(path, create=Query.factory.base) {
 
 
 /**
- * Creates a method on the factory function for each type
- * of query.
+ * Creates a method on the factory function for each query subclass.
  *
  * Each method takes an arbitrary number of arguments that are
  * passed through to the respective query constructor.
  *
- * If the first argument is already an Query, then the query
+ * If the first argument is already an Query, then it's
  * is returned and the consructor is not exectuted.
  */
 extendWith(Query.factory, children, (_, type) => function(...args) {
