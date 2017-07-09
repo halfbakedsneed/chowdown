@@ -13,7 +13,7 @@ let retrieve = module.exports = {}
  *
  * @param  {(object|string)}  request  The request object.
  * @param  {object}           object   An object of options.
- * @return {Scope}  A Scope object that wraps the document created from response of the request.
+ * @return {Promise<Scope>}  A Scope object that wraps the document created from response of the request.
  */
 retrieve.request = wrap((request, options) =>
   options.client(request).then(body => retrieve.body(body, options))
@@ -25,7 +25,7 @@ retrieve.request = wrap((request, options) =>
  *
  * @param  {string} request  The path to the file.
  * @param  {object} object   An object of options.
- * @return {Scope}  A Scope object that wraps the document created from the contents of the file.
+ * @return {Promise<Scope>}  A Scope object that wraps the document created from the contents of the file.
  */
 retrieve.file = wrap((file, options) =>
   readFile(file).then(body => retrieve.body(body, options))
@@ -37,10 +37,10 @@ retrieve.file = wrap((file, options) =>
  *
  * @param  {*}      request  The document's body.
  * @param  {object} object   An object of options.
- * @return {Scope}  A Scope object that wraps the document created from the body.
+ * @return {Promise<Scope>}  A Scope object that wraps the document created from the body.
  */
 retrieve.body = wrap((body, options) =>
-  Document.factory[options.type](body)
+  Promise.resolve(Document.factory[options.type](body))
 );
 
 /**

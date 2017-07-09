@@ -138,13 +138,13 @@ let children = {
  */
 Query.factory = function(path, create=Query.factory.base) {
   if (path instanceof Query)
-    return path;
+    create = identity;
 
   if (isPlainObject(path)) 
-    return new children.object(path);
+    create = Query.factory.object; 
 
   if (isFunction(path))
-    return new children.callback(path);
+    create = Query.factory.callback;
 
   return create(path);
 }
