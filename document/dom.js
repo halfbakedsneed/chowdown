@@ -46,9 +46,6 @@ module.exports = {
     if (isString(path))
       return path.split('/');
 
-    if (isFunction(path))
-      return path;
-
     return [''];
   },
 

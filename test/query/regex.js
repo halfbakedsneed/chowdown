@@ -46,7 +46,7 @@ describe('regex query', () => {
 
   it('Returns default when group not matched', () => {
     let document = new Document();
-    let query = Query.factory.regex('path', /(match)_(me)/, 1, {
+    let query = Query.factory.regex('path', /(match)(me)/, 1, {
       default: 'default'
     });
 
@@ -55,6 +55,30 @@ describe('regex query', () => {
     return query.on(document)
       .then(result => expect(result).to.equal('default'));
   });
+
+  it('Returns default if no value returned from document', () => {
+    let document = new Document();
+    let query = Query.factory.regex('path', /(match)(me)/, 1, {
+      default: 'default'
+    });
+
+    sandbox.stub(document, 'value').returns(undefined);
+
+    return query.on(document)
+      .then(result => expect(result).to.equal('default'));
+  });
+
+  it('Defaults to the first group if none is specified', () => {
+    let document = new Document();
+    let query = Query.factory.regex('path', /(match)(me)/);
+
+    sandbox.stub(document, 'value').returns('matchme');
+
+    return query.on(document)
+      .then(result => expect(result).to.equal('match'));
+  });
+
+  
 
 });
 

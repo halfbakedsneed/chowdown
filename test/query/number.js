@@ -14,10 +14,23 @@ describe('number query', () => {
 
    sandbox.stub(document, 'value').returns('3');
 
-    let query = Query.factory.number('path');
+    let query = Query.factory.number('path', {
+      default: 0
+    });
 
     return query.on(document)
       .then(result => expect(result).to.equal(3))
+  });
+
+  it('Has NaN as a default value by default', () => {
+    let document = new Document();
+
+    sandbox.stub(document, 'value').returns(undefined);
+
+    let query = Query.factory.number('path');
+
+    return query.on(document)
+      .then(result => expect(result).to.eql(Number.NaN))
   });
 
   

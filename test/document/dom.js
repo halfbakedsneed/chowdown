@@ -54,6 +54,17 @@ describe('dom document', () => {
     assert(manipulator.withArgs('path').calledOnce);
   });
 
+  it('Uses the root if no path is given', () => {
+    let manipulator = sandbox.stub();
+    manipulator.withArgs('root').returns('root');
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    let document = Document.factory.dom('body', 'root');
+
+    expect(document.value(undefined)).to.equal('root');
+  });
+
   it('Can extract a value from the document (text)', () => {
     let manipulator = sandbox.stub();
     let element = createElement();
@@ -70,6 +81,20 @@ describe('dom document', () => {
     expect(document.value('path')).to.equal('result');
   });
 
+  it('Returns undefined if no element is found on a value query', () => {
+    let manipulator = sandbox.stub();
+    let element = createElement(0);
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    let document = Document.factory.dom('body', 'root');
+
+    expect(document.value('path')).to.equal(undefined);
+  });
+
   it('Can extract a value from the document (attr)', () => {
     let manipulator = sandbox.stub();
     let element = createElement();
@@ -84,6 +109,22 @@ describe('dom document', () => {
     let document = Document.factory.dom('body', 'root');
 
     expect(document.value('path/attr')).to.equal('result');
+  });
+
+  it('Returns undefined if the attr is not found on the element', () => {
+    let manipulator = sandbox.stub();
+    let element = createElement();
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+    sandbox.stub(element, 'attr').withArgs('attr').returns(undefined);
+
+    let document = Document.factory.dom('body', 'root');
+
+    expect(document.value('path/attr')).to.equal(undefined);
+
   });
 
   it('Can handle the execution of functions', () => {
@@ -136,6 +177,20 @@ describe('dom document', () => {
     expect(document.children('path')).to.eql(['a_doc', 'b_doc']);
     assert(factory.withArgs(manipulator, 'a').calledOnce);
     assert(factory.withArgs(manipulator, 'b').calledOnce);
+  });
+
+  it('Returns undefined if no children are found', () => {
+    let manipulator = sandbox.stub();
+    let element = createElement(0);
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    let document = Document.factory.dom('body', 'root');
+
+    expect(document.children('path')).to.equal(undefined);
   });
 
 

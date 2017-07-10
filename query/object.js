@@ -33,10 +33,6 @@ class ObjectQuery extends Query {
    */
   configure(options) {
     super.configure(options);
-
-    if (!this.options.hasOwnProperty('default'))
-      this.options.default = {};
-
     this.options.pick = mapValues(this.options.pick, ary(Query.factory, 1));
   }
 

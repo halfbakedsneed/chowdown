@@ -11,7 +11,9 @@ describe('collection query', () => {
 
   it('Creates a subquery', () => {
     let factory = sandbox.spy(Query, 'factory');
-    let query = Query.factory.collection('path', 'a');
+    let query = Query.factory.collection('path', 'a', {
+      default: undefined
+    });
 
     assert(factory.withArgs('a').calledOnce);
   });

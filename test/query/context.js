@@ -60,5 +60,21 @@ describe('context query', () => {
       .then(result => expect(result).to.equal('inner'));
   });
 
+  it('Returns default if no context found', () => {
+    let subQuery = Query.factory.base();
+    let document = new Document();
+
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document, 'children').withArgs('path').returns(undefined);
+
+    let query = Query.factory.context('path', 'sub', {
+      default: 'default'
+    });
+
+    return query.on(document)   
+      .then(result => expect(result).to.equal('default'));
+  });
+
+
 });
 

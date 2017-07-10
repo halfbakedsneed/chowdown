@@ -18,6 +18,16 @@ describe('json document', () => {
     expect(document.value('a')).to.equal('b');
   });
 
+  it('Returns the root if no path is given', () => {
+    let document = Document.factory.json('{"a": ["c"]}');
+    expect(document.value(undefined)).to.eql({a: ["c"]});
+  });
+
+  it('Uses the root instead of the document', () => {
+    let document = Document.factory.json({"a": ["c"]}, {"b": ["d"]});
+    expect(document.value('b')).to.eql(["d"]);
+  });
+
   it('Can extract children from the document', () => {
     let document = Document.factory.json('{"a": [{"b": "c"}]}');
 

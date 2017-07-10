@@ -137,9 +137,6 @@ let children = {
  * @return {Query}  The constructed query.
  */
 Query.factory = function(path, create=Query.factory.base) {
-  if (path instanceof Query)
-    create = identity;
-
   if (isPlainObject(path)) 
     create = Query.factory.object; 
 

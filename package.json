@@ -4,7 +4,7 @@
   "description": "A library to help quickly consume web pages and APIs",
   "main": "elicit.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --recursive"
+    "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --recursive"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "chai": "^4.0.2",
     "clear-require": "^2.0.0",
     "mocha": "^3.4.2",
+    "nyc": "^11.0.3",
     "proxyquire": "^1.8.0",
     "sinon": "^2.3.6"
   }
