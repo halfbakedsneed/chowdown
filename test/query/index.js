@@ -29,7 +29,7 @@ describe('base query', () => {
       .then(result => expect(result).to.equal('value'));      
   });
 
-  it('Formats the value', () => {
+  it('Formats the value with a single function', () => {
     let document = new Document();
     
     sandbox.stub(document, 'value').withArgs('path').returns('value'); 
@@ -41,6 +41,24 @@ describe('base query', () => {
 
     return query.on(document)
       .then(result => expect(result).to.equal('formatted'));
+  });
+
+  it('Formats the value with multiple functions', () => {
+    let document = new Document();
+    
+    sandbox.stub(document, 'value').withArgs('path').returns('value'); 
+
+    let format = [
+      sandbox.mock().once().withArgs('value').returns('formattedOnce'),
+      sandbox.mock().once().withArgs('formattedOnce').returns('formattedTwice')
+    ];
+
+    let query = Query.factory.base('path',{
+      format: format
+    });
+
+    return query.on(document)
+      .then(result => expect(result).to.equal('formattedTwice'));
   });
 
   it('Uses the default value if no value is found', () => {
