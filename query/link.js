@@ -1,4 +1,4 @@
-const { URL } = require('url');
+const url = require('url');
 const StringQuery = require('./string');
 
 /**
@@ -37,7 +37,7 @@ class LinkQuery extends StringQuery {
    * @return {string} The resulting, uri coerced to a string.
    */
   build(string, document) {
-    return (new URL(string, this.options.base)).toString();
+    return url.resolve(this.options.base || '', string);
   }
 }
 
