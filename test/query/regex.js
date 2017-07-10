@@ -2,52 +2,58 @@ const helper = require('../helper');
 const { cloneDeep, assignIn } = require('lodash');
 const Query = require('../../query');
 const Document = require('../../document');
-const originalFactory = Query.factory;
+const sandbox = sinon.sandbox.create();
 
 
 describe('regex query', () => {
 
-  let doc;
-
-  beforeEach(() => {
-    doc = new Document();
-  });
+  afterEach(() => sandbox.verifyAndRestore());
 
   it('Finds string in document', () => {
+    let document = new Document();
     let query = Query.factory.regex('path', /(.*)/, 1);
 
-    let expDoc = sinon.mock(doc).expects('value').once().withArgs('path').returns('value');
+    sandbox.mock(document).expects('value').once().withArgs('path').returns('value');
 
-    return query
-      .on(doc)
-      .then(_ => expDoc.verify());
+    return query.on(document);
   });
 
   it('Returns correct group from regex match', () => {
-    let query = Query.factory.regex('path', /(match)_(me)/, 1);
+    let document = new Document();
 
-    sinon.stub(doc, 'value').returns('match_me');
+    let queryOne = Query.factory.regex('path', /(match)(me)/, 1);
+    let queryTwo = Query.factory.regex('path', /(match)(me)/, 2);
 
-    return query
-      .on(doc)
+    sandbox.stub(document, 'value').returns('matchme');
+
+    return queryOne.on(document)
       .then(result => expect(result).to.equal('match'))
-      .then(query = Query.factory.regex('path', /(match)_(me)/, 2))
-      .then(query
-        .on(doc)
-        .then(result => expect(result).to.equal('me'))
-      ); 
+      .then(_ => queryTwo.on(document))
+      .then(result => expect(result).to.equal('me'));
   });
 
-  it('Returns default / missing when group not found', () => {
-    let query = Query.factory.regex('path', /(match)_(me)/, 1, {
-      default: 'cool'
+  it('Returns default when group not found', () => {
+    let document = new Document();
+    let query = Query.factory.regex('path', /(match)(me)/, 3, {
+      default: 'default'
     });
 
-    sinon.stub(doc, 'value').returns('not here');
+    sandbox.stub(document, 'value').returns('matchme');
 
-    return query
-      .on(doc)
-      .then(result => expect(result).to.equal('cool'));
+    return query.on(document)
+      .then(result => expect(result).to.equal('default'));
+  });
+
+  it('Returns default when group not matched', () => {
+    let document = new Document();
+    let query = Query.factory.regex('path', /(match)_(me)/, 1, {
+      default: 'default'
+    });
+
+    sandbox.stub(document, 'value').returns('matchhim');
+
+    return query.on(document)
+      .then(result => expect(result).to.equal('default'));
   });
 
 });

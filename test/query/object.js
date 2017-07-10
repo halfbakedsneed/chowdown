@@ -1,67 +1,67 @@
 const helper = require('../helper');
 const { cloneDeep, assignIn } = require('lodash');
 const Query = require('../../query');
-const originalFactory = Query.factory;
+const sandbox = sinon.sandbox.create();
 
 
 describe('object query', () => {
-
-  let subOne, subTwo;
-
-  beforeEach(() => {
-    subOne = Query.factory.base('path');
-    subTwo = Query.factory.base('path');
-  });
   
-  afterEach(() => Query.factory = originalFactory);
+  afterEach(() => sandbox.verifyAndRestore());
 
   it('Creates subqueries', () => {
-    Query.factory = assignIn(sinon.spy(), Query.factory)
+    let factory = sandbox.spy(Query, 'factory');
 
     let query = Query.factory.object({
       a: 'a',
       b: 'b'
     });
 
-    assert(Query.factory.withArgs('a').calledOnce);
-    assert(Query.factory.withArgs('b').calledOnce);
+    assert(factory.withArgs('a').calledOnce);
+    assert(factory.withArgs('b').calledOnce);
   });
 
   it('Executes subqueries correctly', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.withArgs('a').returns(subOne);
-    Query.factory.withArgs('b').returns(subTwo);
+    let subQueryOne = Query.factory.base();
+    let subQueryTwo = Query.factory.base();
 
-    let expSubOne = sinon.mock(subOne).expects('on').once().withArgs('document');
-    let expSubTwo = sinon.mock(subTwo).expects('on').once().withArgs('document');
+    let factory = sandbox.stub(Query, 'factory');
+
+    factory.withArgs('a').returns(subQueryOne);
+    factory.withArgs('b').returns(subQueryTwo);
+
+    sandbox.mock(subQueryOne).expects('on').once().withArgs('document');
+    sandbox.mock(subQueryTwo).expects('on').once().withArgs('document');
 
     let query = Query.factory.object({
       a: 'a',
       b: 'b'
     });
 
-    return query
-      .on('document')
-      .then(_ => expSubOne.verify())
-      .then(_ => expSubTwo.verify());
+    return query.on('document');
   });
 
   it('Constructs an object correctly', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory)
-    Query.factory.withArgs('a').returns(subOne);
-    Query.factory.withArgs('b').returns(subTwo);
+    let subQueryOne = Query.factory.base();
+    let subQueryTwo = Query.factory.base();
 
-    sinon.stub(subOne, 'on').returns('a');
-    sinon.stub(subTwo, 'on').returns('b');
+    let factory = sandbox.stub(Query, 'factory');
+
+    factory.withArgs('a').returns(subQueryOne);
+    factory.withArgs('b').returns(subQueryTwo);
+
+    sandbox.stub(subQueryOne, 'on').returns('a_res');
+    sandbox.stub(subQueryTwo, 'on').returns('b_res');
 
     let query = Query.factory.object({
       a: 'a',
       b: 'b'
     });
 
-    return query
-      .on('document')
-      .then(result => expect(result).to.eql({a: 'a', b: 'b'}));
+    return query.on('document')
+      .then(result => expect(result).to.eql({
+        a: 'a_res',
+        b: 'b_res'
+      }));
   });
 
 });

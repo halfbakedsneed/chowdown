@@ -3,108 +3,111 @@ const { cloneDeep, assignIn } = require('lodash');
 const retrieve = require('../../retrieve');
 const Query = require('../../query');
 const Document = require('../../document');
-const originalFactory = Query.factory;
+const sandbox = sinon.sandbox.create();
 
 
 describe('follow query', () => {
 
-  let retrieveMock, doc, uri, sub;
-
-  beforeEach(() => {
-    retrieveMock = sinon.mock(retrieve);
-    doc = new Document();
-    uri = Query.factory.base('path');
-    sub = Query.factory.base('path');
-  });
-
-  afterEach(() => Query.factory = originalFactory);
+  afterEach(() => sandbox.verifyAndRestore());
 
   it('Creates the subqueries correctly', () => {
-    Query.factory = assignIn(sinon.spy(), Query.factory);
+    let factory = sandbox.spy(Query, 'factory');
     Query.factory.follow('uri', 'sub');
 
-    assert(Query.factory.withArgs('sub').calledOnce);
-    assert(Query.factory.withArgs('uri', Query.factory.link).calledOnce);
+    assert(factory.withArgs('sub').calledOnce);
+    assert(factory.withArgs('uri', Query.factory.link).calledOnce);
   });
 
   it('Attempts to find the uri', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
+    let factory = sandbox.stub(Query, 'factory');
 
-    Query.factory.withArgs('uri').returns(uri);
-    Query.factory.withArgs('sub').returns(sub);
+    let uriQuery = Query.factory.base();
+    let subQuery = Query.factory.base();
 
-    let expUri = sinon.mock(uri).expects('on').once().withArgs('document').resolves('uri');
-    sinon.stub(sub, 'on').resolves('result');
+    factory.withArgs('uri').returns(uriQuery);
+    factory.withArgs('sub').returns(subQuery);
 
-    let retrieveStub = sinon.stub(retrieve, 'request').returns('document');    
+    sandbox.stub(subQuery, 'on').resolves('inner');
+    sandbox.stub(retrieve, 'request').resolves('other document');
 
-    return Query.factory.follow('uri', 'sub')
-      .on('document')
-      .then(_ => expUri.verify())
-      .then(_ => retrieveStub.restore());
+    sandbox.mock(uriQuery).expects('on').once().withArgs('document').resolves('uri');
+
+    let query = Query.factory.follow('uri', 'sub');
+    
+    return query.on('document');
   });
 
   it('Passes the uri and options to the retrieve method', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
+    let factory = sandbox.stub(Query, 'factory');
 
-    Query.factory.withArgs('uri').returns(uri);
-    Query.factory.withArgs('sub').returns(sub);
+    let uriQuery = Query.factory.base();
+    let subQuery = Query.factory.base();
 
-    sinon.stub(uri, 'on').resolves('uri');
-    sinon.stub(sub, 'on').resolves('result');
+    factory.withArgs('uri').returns(uriQuery);
+    factory.withArgs('sub').returns(subQuery);
 
-    let retrieveMock = sinon.mock(retrieve);
-    let expRetrieve = retrieveMock.expects('request')
+    sandbox.stub(subQuery, 'on').resolves('inner');
+    sandbox.stub(uriQuery, 'on').resolves('uri');
+
+    sandbox.mock(retrieve)
+      .expects('request')
       .once()
       .withArgs({
-        uri: 'uri' 
+        uri: 'uri',
+        method: 'method'
       }, sinon.match({
+        type: 'type',
         client: 'client'
       }))
-      .returns('result');
+      .resolves('other document');
 
-    return Query.factory.follow('uri', 'sub', {
+    let query = Query.factory.follow('uri', 'sub', {
+      request: {
+        method: 'method'
+      },
+      type: 'type',
       client: 'client'
-    })
-      .on('document')
-      .then(_ => expRetrieve.verify())
-      .then(_ => retrieveMock.restore());
+    });
+
+    return query.on('document');
   });
 
-  it('Attempts to execute the subquery', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
+  it('Attempts to execute and returns the subquery', () => {
+    let factory = sandbox.stub(Query, 'factory');
 
-    Query.factory.withArgs('uri').returns(uri);
-    Query.factory.withArgs('sub').returns(sub);
+    let uriQuery = Query.factory.base();
+    let subQuery = Query.factory.base();
 
-    sinon.stub(uri, 'on').resolves('uri');
-    let expSub = sinon.mock(sub).expects('on').once().withArgs('document').resolves('result');
+    factory.withArgs('uri').returns(uriQuery);
+    factory.withArgs('sub').returns(subQuery);
 
-    let retrieveStub = sinon.stub(retrieve, 'request').returns('document');    
+    sandbox.stub(uriQuery, 'on').resolves('uri');
+    sandbox.stub(retrieve, 'request').resolves('other document');
 
-    return Query.factory.follow('uri', 'sub')
-      .on('document')
-      .then(_ => expSub.verify())
-      .then(_ => retrieveStub.restore());
+    sandbox.mock(subQuery).expects('on').once().withArgs('other document').resolves('inner');
+
+    let query = Query.factory.follow('uri', 'sub');
+    
+    return query.on('document')
+      .then(result => expect(result).to.equal('inner'));
   });
 
   it('Returns the default value if an error is thrown', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
+    let factory = sandbox.stub(Query, 'factory');
 
-    Query.factory.withArgs('uri').returns(uri);
-    Query.factory.withArgs('sub').returns(sub);
+    let uriQuery = Query.factory.base();
+    let subQuery = Query.factory.base();
 
-    sinon.stub(uri, 'on').resolves('uri');
-    sinon.stub(sub, 'on').resolves('result');
+    factory.withArgs('uri').returns(uriQuery);
+    factory.withArgs('sub').returns(subQuery);
 
-    let retrieveStub = sinon.stub(retrieve, 'request').rejects('document');    
+    sandbox.stub(subQuery, 'on').resolves('inner');
+    sandbox.stub(retrieve, 'request').rejects('error');
 
-    return Query.factory.follow('uri', 'sub', {
-      default: 'def'
-    })
-      .on('document')
-      .then(result => expect(result).to.equal('def'))
-      .then(_ => retrieveStub.restore());
+    let query = Query.factory.follow('uri', 'sub');
+    
+    return query.on('document')
+      .then(result => expect(result).to.equal(undefined));
   });
 
 });

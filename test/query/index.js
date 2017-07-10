@@ -1,69 +1,71 @@
 const helper = require('../helper');
 const Query = require('../../query');
 const Document = require('../../document');
+const sandbox = sinon.sandbox.create();
 
 
 describe('base query', () => {
 
-  let doc;
-
-  beforeEach(() => {
-    doc = new Document();
-  });
+  beforeEach(() => sandbox.verifyAndRestore());
 
   it('Queries the document for the path', () => {
-    let query = Query.factory.base('path');
-    let expDoc = sinon.mock(doc).expects('value').once().withArgs('path');
+    let document = new Document();
+    
+    sandbox.mock(document).expects('value').once().withArgs('path');
 
-    return query
-      .on(doc)
-      .then(_ => expDoc.verify());
+    let query = Query.factory.base('path');
+
+    return query.on(document);
   });
 
   it('Returns the correct value when executed', () => {
-    let query = Query.factory.base('path');
-    sinon.stub(doc, 'value').returns('value');
+    let document = new Document();
+    
+    sandbox.stub(document, 'value').withArgs('path').returns('value');
 
-    return query
-      .on(doc)
-      .then(result => expect(result).to.equal('value'));
+    let query = Query.factory.base('path');
+
+    return query.on(document)
+      .then(result => expect(result).to.equal('value'));      
   });
 
   it('Formats the value', () => {
-    let expFormat = sinon.mock().once().withArgs('value').returns('formatted');
-    let query = Query.factory.base('path', {
-      format: expFormat
+    let document = new Document();
+    
+    sandbox.stub(document, 'value').withArgs('path').returns('value'); 
+
+    let format = sandbox.mock().once().withArgs('value').returns('formatted');
+    let query = Query.factory.base('path',{
+      format: format
     });
 
-    sinon.stub(doc, 'value').returns('value');
-
-    return query
-      .on(doc)
-      .then(result => expect(result).to.equal('formatted'))
-      .then(_ => expFormat.verify());
+    return query.on(document)
+      .then(result => expect(result).to.equal('formatted'));
   });
 
   it('Uses the default value if no value is found', () => {
+    let document = new Document();
+    
+    sandbox.stub(document, 'value').returns(undefined);
+
     let query = Query.factory.base('path', {
       default: 'default'
     });
 
-    sinon.stub(doc, 'value').returns(undefined);
-
-    return query
-      .on(doc)
+    return query.on(document)
       .then(result => expect(result).to.equal('default'));
   });
 
   it('Throws an error if the value is missing', () => {
+    let document = new Document();
+    
+    sandbox.stub(document, 'value').returns(undefined);
+
     let query = Query.factory.base('path', {
       throwOnMissing: true
     });
 
-    sinon.stub(doc, 'value').returns(undefined);
-
-    return query
-      .on(doc)
+    return query.on(document)
       .catch(result => expect(result).to.be.an.instanceof(Error));
   });
 
@@ -91,45 +93,33 @@ describe('base query', () => {
 
   it('Returns a query if one is passed', () => {
     let query = Query.factory('path');
-
     expect(Query.factory(query)).to.equal(query);
   });
 
   it('Creates an object query given a plain object', () => {
-    let objFactoryMock = sinon.mock(Query.factory);
-
-    objFactoryMock.expects('object').once().withArgs({
+    sandbox.mock(Query.factory).expects('object').once().withArgs({
       a: 'a'
-    }).returns('object');
+    }).returns('objectQuery');
 
     expect(Query.factory({
       a: 'a'
-    })).to.equal('object');
-
-    objFactoryMock.verify();
-    objFactoryMock.restore();
+    })).to.equal('objectQuery');
   });
 
   it('Creates a callback query if a function is passed', () => {
-    let objFactoryMock = sinon.mock(Query.factory);
-
     let fn = () => 'a';
-
-    objFactoryMock.expects('callback').once().withArgs(fn).returns('callback');
-
-    expect(Query.factory(fn)).to.equal('callback');
-
-    objFactoryMock.verify();
-    objFactoryMock.restore();
+    
+    sandbox.mock(Query.factory).expects('callback').once().withArgs(fn).returns('callbackQuery');
+    
+    expect(Query.factory(fn)).to.equal('callbackQuery');
   });
 
   it('Fallsback to the passed factory function if no type is guessed', () => {
-    let mockFactory = sinon.mock();
-    mockFactory.once().withArgs('a').returns('query');
+    let factory = sandbox.mock();
 
-    expect(Query.factory('a', mockFactory)).to.equal('query');
+    factory.once().withArgs('a').returns('query');
 
-    mockFactory.verify();
+    expect(Query.factory('a', factory)).to.equal('query');
   });
 
 

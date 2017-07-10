@@ -2,67 +2,61 @@ const helper = require('../helper');
 const { cloneDeep, assignIn } = require('lodash');
 const Query = require('../../query');
 const Document = require('../../document');
-const originalFactory = Query.factory;
+const sandbox = sinon.sandbox.create();
 
 
 describe('context query', () => {
-
-  let sub, doc;
-
-  beforeEach(() => {
-    sub = Query.factory.base('path');
-    doc = new Document();
-  });
   
-  afterEach(() => Query.factory = originalFactory);
+  afterEach(() => sandbox.verifyAndRestore());
 
   it('Creates a subquery', () => {
-    Query.factory = assignIn(sinon.spy(), Query.factory);
-
+    let factory = sandbox.spy(Query, 'factory');
     let query = Query.factory.context('path', 'sub');
 
-    assert(Query.factory.withArgs('sub').calledOnce);
+    assert(factory.withArgs('sub').calledOnce);
   });
 
   it('Finds context in document', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = new Document();
 
-    sinon.stub(sub, 'on');
-    let expDoc = sinon.mock(doc).expects('children').once().withArgs('path').returns('context');
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(subQuery, 'on');
+
+    sandbox.mock(document).expects('children').once().withArgs('path').returns(['context']);
 
     let query = Query.factory.context('path', 'sub');
 
-    return query
-      .on(doc)
-      .then(_ => expDoc.verify());
+    return query.on(document);
   });
 
   it('Executes subquery within context', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = new Document();
 
-    sinon.stub(doc, 'children').returns(['context']);
-    let expSub = sinon.mock(sub).expects('on').once().withArgs('context').returns('inner');
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document, 'children').returns(['context']);
+
+    sandbox.mock(subQuery).expects('on').once().withArgs('context').returns('inner');
 
     let query = Query.factory.context('path', 'sub');
 
-    return query
-      .on(doc)
-      .then(_ => expSub.verify())
+    return query.on(document);
   });
 
   it('Returns subquery result', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = new Document();
 
-    sinon.stub(doc, 'children').returns(['context']);
-    
-    let expSub = sinon.mock(sub).expects('on').once().withArgs('context').returns('inner');
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document, 'children').returns(['context']);
+
+    sandbox.mock(subQuery).expects('on').once().withArgs('context').returns('inner');
+
     let query = Query.factory.context('path', 'sub');
 
     return query
-      .on(doc)
+      .on(document)
       .then(result => expect(result).to.equal('inner'));
   });
 

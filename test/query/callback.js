@@ -1,42 +1,38 @@
 const helper = require('../helper');
-const { cloneDeep, assignIn } = require('lodash');
 const Query = require('../../query');
 const Scope = require('../../scope');
-
+const sandbox = sinon.sandbox.create();
 
 describe('callback query', () => {
 
-  it('Creates a scope with the given document', () => {
-    let scopeMock = sinon.mock(Scope);
-    let expScope = scopeMock.expects('factory').once().withArgs('document').returns('scope');
+  afterEach(() => {
+    sandbox.verifyAndRestore();
+  });
 
-    return Query.factory.callback(sinon.stub())
-      .on('document')
-      .then(_ => expScope.verify())
-      .then(_ => scopeMock.restore());
+  it('Creates a scope with the given document', () => {
+    sandbox.mock(Scope).expects('factory').once().withArgs('document').returns('scope');
+
+    return Query.factory.callback(sandbox.stub())
+      .on('document');
   });
 
   it('Calls the callback with the created scope', () => {
-    let stub = sinon.stub(Scope, 'factory').returns('scope');
+    sandbox.stub(Scope, 'factory').returns('scope');
 
-    let callbackSpy = sinon.spy();
+    let callback = sandbox.spy();
 
-    return Query.factory.callback(callbackSpy)
+    return Query.factory.callback(callback)
       .on('document')
-      .then(_ => callbackSpy.withArgs('scope').calledOnce)
-      .then(_ => stub.restore());
+      .then(_ => callback.withArgs('scope').calledOnce);
   });
 
   it('Returns the result of the callback', () => {
-    let stub = sinon.stub(Scope, 'factory').returns('scope');
+    sandbox.stub(Scope, 'factory').returns('scope');
 
-    return Query.factory.callback(sinon.stub().returns('result'))
+    return Query.factory.callback(sandbox.stub().returns('result'))
       .on('document')
-      .then(result => expect(result).to.equal('result'))
-      .then(_ => stub.restore());
+      .then(result => expect(result).to.equal('result'));
   });
 
-
-  
 });
 

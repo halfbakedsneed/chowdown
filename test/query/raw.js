@@ -2,18 +2,22 @@ const helper = require('../helper');
 const { cloneDeep, assignIn } = require('lodash');
 const Query = require('../../query');
 const Document = require('../../document');
+const sandbox = sinon.sandbox.create();
 
 
 describe('raw query', () => {
 
+  afterEach(() => sandbox.verifyAndRestore());
+
   it('Queries the document with the function', () => {
-    let doc = new Document();
+    let document = new Document();
 
-    let expDoc = sinon.mock(doc).expects('raw').once().withArgs('fn').returns('result');
+    sandbox.mock(document).expects('raw').once().withArgs('fn').returns('result');
 
-    return Query.factory.raw('fn')
-      .on(doc)
-      .then(_ => expDoc.verify())
+    let query = Query.factory.raw('fn');
+
+    return query.on(document)
+      .then(result => expect(result).to.equal(result));
   });
 
   

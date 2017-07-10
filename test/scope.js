@@ -1,24 +1,12 @@
 const helper = require('./helper');
+
+const Scope = require('../scope');
 const Query = require('../query');
-const originalFactory = Query.factory;
+const sandbox = sinon.sandbox.create();
 
 describe('scope', () => {
 
-  let Scope, queryMock;
-
-  beforeEach(() => {
-    Query.factory = {};
-
-    for (let type in originalFactory) {
-      Query.factory[type] = sinon.mock();
-    }
-
-    Scope = proxyquire('../scope', {
-      './query': Query
-    });
-  });
-
-  afterEach(() => Query.factory = originalFactory);
+  afterEach(() => sandbox.verifyAndRestore());
 
   it('Creates a scope given a document', () => {
     let scope = Scope.factory('document');
@@ -38,11 +26,10 @@ describe('scope', () => {
 
   it('Correctly executes a given query', () => {
     let scope = Scope.factory('document');
-    let query = originalFactory.base('path');
-    let expOn = sinon.mock(query).expects('on').once().withArgs('document').returns('result');
-    
+    let query = Query.factory.base('path');
+
+    sandbox.mock(query).expects('on').once().withArgs('document').returns('result');
     expect(scope.execute(query)).to.equal('result');
-    expOn.verify();
   });
 
   it('Has methods to generate and execute all query types', () => {
@@ -54,17 +41,28 @@ describe('scope', () => {
   });
 
   it('Correctly generates and executes all query types', () => {
-    let scope = Scope.factory('document');
+    let query = Query.factory.base('path');
+    let options = {};
+    let count = 0;
 
     for (let type in Query.factory) {
-      let options = {};
-      let query = originalFactory.base('path');
-      let expOn = sinon.mock(query).expects('on').once().withArgs('document').returns('result');
-      Query.factory[type].once().withArgs('path', options).returns(query);
+      count++;
+      sandbox.mock(Query.factory).expects(type).once().withArgs('path', options).returns(query);
+    }
+
+    sandbox.mock(query).expects('on').exactly(count).withArgs('document').returns('result');
+
+    let Scope = proxyquire('../scope', {
+      './query': Query
+    });
+
+    let scope = Scope.factory('document');
+    
+    for (let type in Query.factory) {
       expect(scope[type]('path', options)).to.equal('result');
-      Query.factory[type].verify();
     }
   }); 
 
 });
+
 

@@ -2,97 +2,113 @@ const helper = require('../helper');
 const { cloneDeep, assignIn } = require('lodash');
 const Query = require('../../query');
 const Document = require('../../document');
-const originalFactory = Query.factory;
+const sandbox = sinon.sandbox.create();
 
 
 describe('collection query', () => {
-
-  let sub, docA, docB;
-
-  beforeEach(() => {
-    sub = Query.factory.base('path');
-    docA = new Document();
-    docB = new Document();
-  });
   
-  afterEach(() => Query.factory = originalFactory);
+  afterEach(() => sandbox.verifyAndRestore());
 
   it('Creates a subquery', () => {
-    Query.factory = assignIn(sinon.spy(), Query.factory);
-
+    let factory = sandbox.spy(Query, 'factory');
     let query = Query.factory.collection('path', 'a');
 
-    assert(Query.factory.withArgs('a').calledOnce);
+    assert(factory.withArgs('a').calledOnce);
   });
 
   it('Correctly queries the document for children', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = new Document();
 
-    let docAExp = sinon.mock(docA).expects('children').once().withArgs('path').returns([]);
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.mock(document).expects('children').once().withArgs('path').returns([]);
+    sandbox.stub(subQuery, 'on');
+
     let query = Query.factory.collection('path', 'a');
 
-    return query
-      .on(docA)
-      .then(_ => docAExp.verify());
+    return query.on(document);
   });
 
   it('Executes the subquery correctly', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = [new Document(), new Document(), new Document()];
 
-    sinon.stub(docA, 'children').returns([docA, docB]);
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document[0], 'children').returns([document[1], document[2]]);
 
-    let subExp = sinon.mock(sub).expects('on').twice().withExactArgs(docA).withExactArgs(docB);
-    let query = Query.factory.collection('path', 'a');
+    let onStub = sandbox.stub(subQuery, 'on');
+
+    onStub.withArgs(document[1]).returns('b');
+    onStub.withArgs(document[2]).returns('c');
+
+    let query = Query.factory.collection('path');
 
     return query
-      .on(docA)
-      .then(_ => subExp.verify());
+      .on(document[0])
+      .then(_ => assert(onStub.calledWith(document[1])))
+      .then(_ => assert(onStub.calledWith(document[2])));
   });
 
   it('Constructs an array correctly', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = [new Document(), new Document(), new Document()];
 
-    sinon.stub(docA, 'children').returns([docA, docB]);
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document[0], 'children').returns([document[1], document[2]]);
 
-    let onStub = sinon.stub(sub, 'on');
+    let onStub = sandbox.stub(subQuery, 'on');
 
-    onStub.onFirstCall().returns('a');
-    onStub.onSecondCall().returns('b');    
+    onStub.onCall(0).returns('b');
+    onStub.onCall(1).returns('c');
 
-    let query = Query.factory.collection('path', 'a');
+    let query = Query.factory.collection('path');
 
     return query
-      .on(docA)
-      .then(result => expect(result).to.eql(['a', 'b']));
+      .on(document[0])
+      .then(result => expect(result).to.eql(['b', 'c']));
   });
 
   it('Can filter an array correctly', () => {
-    Query.factory = assignIn(sinon.stub(), Query.factory);
-    Query.factory.returns(sub);
+    let subQuery = Query.factory.base();
+    let document = [new Document(), new Document(), new Document()];
 
-    sinon.stub(docA, 'children').returns([docA, docB]);
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document[0], 'children').returns([document[1], document[2]]);
 
-    let onStub = sinon.stub(sub, 'on');
+    let onStub = sandbox.stub(subQuery, 'on');
 
-    onStub.onFirstCall().returns('a');
-    onStub.onSecondCall().returns('b');
+    onStub.onCall(0).returns('b');
+    onStub.onCall(1).returns('c');
 
-    let filter = sinon.mock().twice();
+    let filter = sinon.stub();
 
-    filter.onFirstCall().returns(false);
-    filter.onSecondCall().returns(true);
+    filter.withArgs('b').returns(false);
+    filter.withArgs('c').returns(true);
 
-    let query = Query.factory.collection('path', 'a', {
+    let query = Query.factory.collection('path', undefined, {
       filter: filter
     });
 
     return query
-      .on(docA)
-      .then(result => expect(result).to.eql(['b']))
-      .then(_ => filter.verify());
+      .on(document[0])
+      .then(result => expect(result).to.eql(['c']))
+      .then(_ => assert(filter.withArgs('b').calledOnce))
+      .then(_ => assert(filter.withArgs('c').calledOnce));
+  });
+
+
+  it('Has a default value of an empty array', () => {
+    let subQuery = Query.factory.base();
+    let document = [new Document(), new Document(), new Document()];
+
+    sandbox.stub(Query, 'factory').returns(subQuery);
+    sandbox.stub(document[0], 'children').returns(undefined);
+
+    let query = Query.factory.collection('path', undefined);
+
+    return query
+      .on(document[0])
+      .then(result => expect(result).to.eql([]));
   });
 
 });

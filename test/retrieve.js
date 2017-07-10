@@ -1,63 +1,58 @@
 const helper = require('./helper');
+
+const retrieve = require('../retrieve');
 const Document = require('../document');
 const fs = require('fs');
+const sandbox = sinon.sandbox.create();
 
 describe('retrieve', () => {
 
-  let retrieve, documentMock, fsMock, expRp, expReadFile;
-
-  beforeEach(() => {
-    expRp = sinon.mock();
-    documentFactoryMock = sinon.mock(Document.factory);
-    fsMock = sinon.mock(fs);
-    expReadFile = fsMock.expects('readFile');
-
-    retrieve = proxyquire('../retrieve', {
-      'request-promise': expRp
-    });
-  });
-
-
   afterEach(() => {
-    documentFactoryMock.restore();
-    fsMock.restore();
+    sandbox.verifyAndRestore();
   });
 
   it('should use the default client for a request if none is provided', () => {
-    expRp.once().withArgs('request').returns({ promise: () => Promise.resolve() });
-    documentFactoryMock.expects('dom').returns('document');
-    return retrieve
-      .request('request')
-      .then(_ => expRp.verify());
+    let retrieve = proxyquire('../retrieve', {
+      'request-promise': sandbox
+        .mock()
+        .once()
+        .withArgs('request')
+        .returns({ promise: () => Promise.resolve() })
+    });
+
+    sandbox.stub(Document.factory, 'dom');
+
+    return retrieve.request('request');
   });
 
   it('should use the default document type if none is provided', () => {
-    let expDom = documentFactoryMock.expects('dom').once().withArgs('body').returns('document');
-    return retrieve
-      .body('body')
-      .then(_ => expDom.verify());
+    sandbox.mock(Document.factory).expects('dom').once().withArgs('body');
+
+    return retrieve.body('body')
   });
 
   it('should provide the client with the correct request', () => {
-    let expClient = sinon.mock().once().withArgs('request').resolves('body');
-    documentFactoryMock.expects('dom').returns('document');
-    return retrieve
-      .request('request', {
-        client: expClient
-      })
-      .then(_ => expClient.verify());
+    sandbox.stub(Document.factory, 'dom');
+
+    return retrieve.request('request', {
+      client: sandbox.mock().once().withArgs('request').resolves()
+    });
   });
 
   it('should read the correct file', () => {
-    expReadFile.once().withArgs('file').callsArgWith(1, null, 'body');
-    documentFactoryMock.expects('dom').returns('document');
-    return retrieve
-      .file('file')
-      .then(_ => expReadFile.verify());
+    sandbox.stub(Document.factory, 'dom');
+    sandbox.mock(fs).expects('readFile').once().withArgs('file').callsArgWith(1, null, 'body');
+
+    let retrieve = proxyquire('../retrieve', {
+      'fs': fs
+    });
+
+    return retrieve.file('file');
   });
 
   it('should create a document with the correct body', () => {
-    let expJson = documentFactoryMock.expects('json').once().withArgs('body').returns('document');
+    sandbox.mock(Document.factory).expects('json').once().withArgs('body').returns('document');
+
     return retrieve
       .body('body', {
         type: 'json'
@@ -66,8 +61,13 @@ describe('retrieve', () => {
   });
 
   it('should create a document with the correct file contents', () => {
-    let expJson = documentFactoryMock.expects('json').once().withArgs('body').returns('document');
-    expReadFile.withArgs('file').callsArgWith(1, null, 'body');
+    sandbox.mock(Document.factory).expects('json').once().withArgs('body').returns('document');
+    sandbox.stub(fs, 'readFile').callsArgWith(1, null, 'body');
+
+    let retrieve = proxyquire('../retrieve', {
+      'fs': fs
+    });
+
     return retrieve
       .file('file', {
         type: 'json'
@@ -76,10 +76,11 @@ describe('retrieve', () => {
   });
 
   it('should create the document with the correct request response', () => {
-    let expJson = documentFactoryMock.expects('json').once().withArgs('body').returns('document');
+    sandbox.mock(Document.factory).expects('json').once().withArgs('body').returns('document');
+
     return retrieve
       .request('request', {
-        client: sinon.stub().resolves('body'),
+        client: sandbox.stub().resolves('body'),
         type: 'json'
       })
       .then(result => expect(result).to.equal('document'));

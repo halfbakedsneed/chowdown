@@ -1,131 +1,141 @@
 const helper = require('../helper');
 const Document = require('../../document');
 const cheerio = require('cheerio');
+const sandbox = sinon.sandbox.create();
 
 describe('dom document', () => {
 
-  let cheerioMock, expManipulator;
+  afterEach(() => sandbox.verifyAndRestore());
 
-  beforeEach(() => {
-    cheerioMock = sinon.mock(cheerio);
-    expManipulator = sinon.mock();
+  let createElement = (length=1) => {
+    let element = cheerio();
+    element.length = length;
+
+    return element;
+  }
+
+  it('Loads the body correctly from a string', () => {
+    let manipulator = sandbox.stub();
+
+    sandbox.mock(cheerio).expects('load').once().withArgs('body').returns(manipulator);
+    
+    let document = Document.factory.dom('body', 'root');
   });
 
-  afterEach(() => {
-    cheerioMock.restore();
+  it('Loads the body correctly from a cheerio instance', () => {
+    let manipulator = sandbox.stub();
+    let body = sinon.createStubInstance(cheerio);
+
+    sandbox.mock(cheerio).expects('load').once().withArgs(body).returns(manipulator);
+    
+    let document = Document.factory.dom(body, 'root');
   });
 
-  it('Loads itself correctly', () => {
-    let expLoad = cheerioMock.expects('load').once().withArgs('body').returns(
-      expManipulator
+  it('Loads the root correctly', () => {
+    sandbox.stub(cheerio, 'load').returns(
+      sandbox.mock().once().withArgs('root')
     );
 
-    expManipulator.once().withArgs('root').returns('root');
+    let document = Document.factory.dom('body', 'root');
+  });
 
-    Document.factory.dom('body', 'root');
+  it('Correctly queries using cheerio', () => {
+    let manipulator = sandbox.stub();
 
-    expManipulator.verify();
-    expLoad.verify();
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns('result');
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    let document = Document.factory.dom('body', 'root');
+
+    document.value('path');
+
+    assert(manipulator.withArgs('path').calledOnce);
   });
 
   it('Can extract a value from the document (text)', () => {
-    cheerioMock.expects('load').returns(expManipulator);
-    expManipulator.withArgs('root').returns('root');
+    let manipulator = sandbox.stub();
+    let element = createElement();
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    sandbox.mock(element).expects('text').atLeast(1).returns('result');
 
     let document = Document.factory.dom('body', 'root');
 
-    let element = cheerio();
-    element.length = 1;
-
-    let elementMock = sinon.mock(element);
-    let expElement = elementMock.expects('text').atLeast(1).returns('value');
-    
-    expManipulator.reset();
-    expManipulator.withArgs('path', 'root').returns(element);
-
-    expect(document.value('path')).to.equal('value');
-
-    expManipulator.verify();
-    expElement.verify();
+    expect(document.value('path')).to.equal('result');
   });
 
   it('Can extract a value from the document (attr)', () => {
-    cheerioMock.expects('load').returns(expManipulator);
-    expManipulator.withArgs('root').returns('root');
+    let manipulator = sandbox.stub();
+    let element = createElement();
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    sandbox.mock(element).expects('attr').withArgs('attr').atLeast(1).returns('result');
 
     let document = Document.factory.dom('body', 'root');
 
-    let element = cheerio();
-    element.length = 1;
-
-    let elementMock = sinon.mock(element);
-    let expElement = elementMock.expects('attr').atLeast(1).withArgs('attr').returns('value');
-    
-    expManipulator.reset();
-    expManipulator.withArgs('path', 'root').returns(element);
-
-    expect(document.value('path/attr')).to.equal('value');
-
-    expManipulator.verify();
-    expElement.verify();
+    expect(document.value('path/attr')).to.equal('result');
   });
 
   it('Can handle the execution of functions', () => {
-    cheerioMock.expects('load').returns(expManipulator);
-    expManipulator.withArgs('root').returns('root');
+    let manipulator = sandbox.stub();
+    manipulator.withArgs('root').returns('root');
 
+    let fn = sandbox.mock();
+    fn.once().withArgs(manipulator, 'root').returns('result');
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+    
     let document = Document.factory.dom('body', 'root');
 
-    let rawSpy = sinon.spy();
-
-    document.raw(rawSpy);
-
-    assert(rawSpy.withArgs(expManipulator, 'root').calledOnce);
+    expect(document.raw(fn)).to.equal('result');
   });
 
   it('Extracts a link from the document', () => {
-    cheerioMock.expects('load').returns(expManipulator);
-    expManipulator.withArgs('root').returns('root');
+    let manipulator = sandbox.stub();
+    let element = createElement();
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+
+    sandbox.mock(element).expects('attr').withArgs('href').atLeast(1).returns('result');
 
     let document = Document.factory.dom('body', 'root');
 
-    let element = cheerio();
-    element.length = 1;
-
-    let elementMock = sinon.mock(element);
-    let expElement = elementMock.expects('attr').atLeast(1).withArgs('href').returns('link');
-
-    expManipulator.reset();
-    expManipulator.withArgs('path', 'root').returns(element);
-
-    expect(document.link('path')).to.equal('link');
-
-    expElement.verify();
+    expect(document.link('path')).to.equal('result');
   });
 
   it('Extracts children from the document', () => {
-    cheerioMock.expects('load').returns(expManipulator);
-    expManipulator.withArgs('root').returns('root');
+    let manipulator = sandbox.stub();
+    let element = createElement();
+
+    manipulator.withArgs('root').returns('root');
+    manipulator.withArgs('path').returns(element);
+
+    sandbox.stub(cheerio, 'load').returns(manipulator);
+    sandbox.stub(element, 'toArray').returns(['a', 'b']);
 
     let document = Document.factory.dom('body', 'root');
 
-    let factoryMock = sinon.mock(Document.factory);
-    let expDom = factoryMock.expects('dom').once().withArgs(expManipulator, 'element').returns('child');
+    let factory = sandbox.stub(Document.factory, 'dom');
 
-    let element = cheerio();
-    element.length = 1;
+    factory.withArgs(manipulator, 'a').returns('a_doc');
+    factory.withArgs(manipulator, 'b').returns('b_doc');
 
-    let elementMock = sinon.mock(element);
-    let expElement = elementMock.expects('toArray').returns(['element']);
-
-    expManipulator.reset();
-    expManipulator.withArgs('path', 'root').returns(element);
-
-    expect(document.children('path')).to.eql(['child']);
-
-    expElement.verify();
-    expDom.verify();
-    factoryMock.restore();
+    expect(document.children('path')).to.eql(['a_doc', 'b_doc']);
+    assert(factory.withArgs(manipulator, 'a').calledOnce);
+    assert(factory.withArgs(manipulator, 'b').calledOnce);
   });
 
 
