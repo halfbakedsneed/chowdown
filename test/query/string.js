@@ -20,5 +20,16 @@ describe('string query', () => {
       .then(result => expect(result).to.equal('3'))
   });
 
+  it('Has an empty string as a default value by default', () => {
+    let document = new Document();
+
+    sandbox.stub(document, 'value').returns(undefined);
+
+    let query = Query.factory.string('path');
+
+    return query.on(document)
+      .then(result => expect(result).to.equal(''))
+  });
+
 });
 
