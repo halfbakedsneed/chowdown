@@ -2,22 +2,27 @@ const Promise = require('bluebird');
 const Query = require('./');
 
 /**
- * A class representing an query that resolves to an array of values.
+ * When executed, this query will return a promise resolving to
+ * an array of values such that each value is the result of the inner query
+ * executed on each context.
+ *
+ * @class CollectionQuery
+ * @extends Query
  */
 class CollectionQuery extends Query {
-
   /**
-   * Constructs a CollectionQuery given a path to a list of containers
-   * and an query that describes an item to pick from each container in the array.
+   * Constructs a CollectionQuery given a path to a list of contexts
+   * and an inner query that describes a value to pick from each context.
    * 
    * Also takes an object of additional configuration options.
    * 
-   * @param  {string} path    The path to the array container.
-   * @param  {Query}  pick    An query representing what to pick from the container.
-   * @param  {object} options An object of further configuration options.
+   * @param  {string} path             The path to the contexts in the document.
+   * @param  {Query}  inner            A query representing what to pick from each context.
+   * @param  {object} [options]        An object of further configuration options.
+   * @param  {filter} [options.filter] A function used to filter the resulting array.
    */
-  constructor(path, pick, options={}) {
-    options.pick = pick;
+  constructor(path, inner, options={}) {
+    options.inner = inner;
     super(path, options);
   }
 
@@ -28,15 +33,16 @@ class CollectionQuery extends Query {
    * 
    * The CollectionQuery supports a filter option. This is expected to be a function that
    * is called for every item in the array and where this function does not return
-   * a truthy value, then the corresponding item is omitted 
+   * a truthy value, then the corresponding item is omitted.
    * 
-   * @param  {options} options  An object of configuration options.
-   * @return {undefined}
+   * @param  {object}   options          An object of further configuration options.
+   * @param  {Query}    options.inner    The inner query representing what to pick from each context.
+   * @param  {function} [options.filter] A function used to filter the resulting array.
    */
   configure(options) {
     super.configure(options);
 
-    this.options.pick = Query.factory(this.options.pick);
+    this.options.inner = Query.factory(this.options.inner);
 
     if (!this.options.hasOwnProperty('default'))
       this.options.default = [];
@@ -47,25 +53,25 @@ class CollectionQuery extends Query {
 
   /**
    * Locates the array of containers in the given document and attempts to
-   * 'pick' an inner query from each container.
+   * execute the inner query on each container.
    * 
-   * @param  {Document} document  The document to locate the array of containers in.
-   * @return {array} An array of promises resolving to inner querys picked from each container.
+   * @param  {Document}       document  The document to locate the array of containers in.
+   * @return {Promise<any>[]} An array of promises resolving to inner querys picked from each container.
    */
   find(document) {
     let children = document.children(this.options.path);
 
     if (children !== undefined)
-      return children.map(child => this.options.pick.on(child));
+      return children.map(child => this.options.inner.on(child));
   }
 
   /**
-   * Given an array of promises, this method simply returns a promise that when resolved
-   * will ensure all promises contained in the array have been fulfilled.
+   * Given an array of promises, this method simply returns a promise that is
+   * fulfilled when all promises in the array have been fulfilled.
    *   
-   * @param  {array}    array    An array of resolved query promises.
-   * @param  {Document} document The document the array was retrieved from.
-   * @return {Promise}  A promise that is fulfilled when all the items in the array are fulfilled.
+   * @param  {Promise<any>[]} array An array of inner query promises.
+   * @param  {Document}       document The document the containers were retrieved from.
+   * @return {Promise}        A promise that is fulfilled when all the items in the array are fulfilled.
    */
   build(array, document) {
     return Promise.all(array);

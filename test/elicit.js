@@ -1,6 +1,6 @@
 const helper = require('./helper');
 
-const elicit = require('../');
+const elicit = require('../elicit');
 const Scope = require('../scope');
 const retrieve = require('../retrieve');
 const sandbox = sinon.sandbox.create();

@@ -1,17 +1,27 @@
 const Promise = require('bluebird');
-const { assignIn, castArray, identity, flow, extendWith, first, isPlainObject, isFunction } = require('lodash');
+const { 
+  assignIn, castArray, identity, flow,
+  extendWith, first, isPlainObject, isFunction
+} = require('lodash');
 
 /**
- * The ultimate class representing a document query.
- * Given a document it will attempt to resolve itself.
+ * The ultimate class representing a query.
+ * 
+ * When executed, this query will find a value inside a given
+ * document and return it.
+ *
+ * @class Query
  */
 class Query {
   /**
    * Constructs an query given a document path and an object
    * containing additional configuration options.
    * 
-   * @param  {(string|function)}  path    A path to the query in a document.
-   * @param  {object}             options An object containing additional configuration options.
+   * @param  {string}     path                           A path to this query's value in a document.
+   * @param  {object}     [options]                      An object containing additional configuration options.
+   * @param  {any}        [options.default]              The default valuye to return if no value is found.
+   * @param  {boolean}    [options.throwOnMissing=false] Whether or not to throw an error if no value is found.
+   * @param  {function[]} [options.format=[]]            The functions used to format the value.
    */
   constructor(path, options={}) {
     options.path = path;
@@ -20,23 +30,28 @@ class Query {
 
   /**
    * Configures this query given an object of configuration options.
+   *
+   * By default, throwOnMissing will be set to false and no format functions will
+   * be set.
    * 
-   * @param  {options}  options The object of configuration options.
-   * @return {undefined}
+   * @param  {options}    options                        The object of configuration options.
+   * @param  {any}        [options.default]              The default valuye to return if no value is found.
+   * @param  {boolean}    [options.throwOnMissing=false] Whether or not to throw an error if no value is found.
+   * @param  {function[]} [options.format=[]]            The functions used to format the value.
    */
   configure(options) {
     this.options = assignIn(this.options, options);
-    this.options.format = castArray(this.options.format || identity);
+    this.options.format = castArray(this.options.format || []);
 
     if (this.options.throwOnMissing === undefined)
       this.options.throwOnMissing = false;
   }
 
   /**
-   * Retrieves the a raw value from the document using the query's path.
+   * Retrieves a raw value from the document using the query's path.
    * 
-   * @param  {Document} document  The document to query.
-   * @return {*}  The retrieved raw value.
+   * @param  {Document} document  The document to retrieve the value from.
+   * @return {any}      The retrieved value.
    */
   find(document) {
     return document.value(this.options.path);
@@ -49,9 +64,9 @@ class Query {
    * If no value was retrieved and the throwOnMissing
    * options is set to true, an error will be thrown.
    * 
-   * @param  {*}        value     The value retreived from the document.
+   * @param  {any}      value     The value retreived from the document.
    * @param  {Document} document  The document the value was retrieved from.
-   * @return {*}  The query's default value or the value retrieved from the document.
+   * @return {any}      The query's default value or the value retrieved from the document.
    */
   default(value, document) {
     if (value !== undefined)
@@ -66,9 +81,9 @@ class Query {
   /**
    * "Builds" the retrieved value such that it is ready for formatting.
    * 
-   * @param  {*}        value     The query's value retrieved from the document. 
+   * @param  {any}      value     The query's value retrieved from the document. 
    * @param  {Document} document  The document the value was retrieved from.
-   * @return {*}  The built value.
+   * @return {any}      The built value.
    */
   build(value, document) {
     return value;
@@ -77,9 +92,9 @@ class Query {
   /**
    * Formats the built value by feeding it through the query's format functions.
    * 
-   * @param  {*}        value     The query's value.
+   * @param  {any}      value     The query's value.
    * @param  {Document} document  The document the value was retrieved from.
-   * @return {*}  The formatted value.
+   * @return {any}      The formatted value.
    */
   format(value, document) {
     return flow(this.options.format)(value);
@@ -88,8 +103,8 @@ class Query {
   /**
    * Executes this query on the given document.
    * 
-   * @param  {Document} The document to execute the query on.
-   * @return {*}  A promise that resolves to the value of this query.
+   * @param  {Document} The document to execute this query on.
+   * @return {any}      A promise that resolves to the value of this query.
    */
   on(document) {
     return Promise.resolve(document)
@@ -107,7 +122,7 @@ module.exports = Query;
 /**
  * An object that maps query subclass names to their respective classes.
  * 
- * @type {Object}
+ * @type {object}
  */
 let children = {
   base: Query,
@@ -124,7 +139,7 @@ let children = {
 };
 
 /**
- * A function that when passed a path, will determine what
+ * A function that when passed a "path", will determine what
  * type of query to create and create it.
  *
  * If an existing Query is passed, then it will be returned.
@@ -132,9 +147,9 @@ let children = {
  * Accepts a default factory function (create) that will be called
  * if no matching type is found.
  * 
- * @param  {*}        path    The path to create a query for.
+ * @param  {any}      path    The path to create a query for.
  * @param  {function} create  A default factory function.
- * @return {Query}  The constructed query.
+ * @return {Query}    The constructed query.
  */
 Query.factory = function(path, create=Query.factory.base) {
   if (isPlainObject(path)) 
@@ -145,7 +160,6 @@ Query.factory = function(path, create=Query.factory.base) {
 
   return create(path);
 }
-
 
 /**
  * Creates a method on the factory function for each query subclass.

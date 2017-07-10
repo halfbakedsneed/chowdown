@@ -3,18 +3,19 @@ const Scope = require('../scope');
 const { first } = require('lodash');
 
 /**
- * A class representing a query that when executed
- * will return a promise resolving to the
- * result of an inner function being passed a Scope.
+ * When executed, this query will return a promise resolving to the
+ * result of it's inner function being passed a Scope.
+ *
+ * @class CallbackQuery
+ * @extends Query
  */
 class CallbackQuery extends Query {
   /**
-   * Constructs a CallbackQuery given an inner function.
+   * Constructs a CallbackQuery given an inner function and an additional
+   * object of configuration options.
    *
-   * Also takes an additional object of configuration options.
-   * 
    * @param  {function} fn        The inner function.
-   * @param  {object}   options   An object of additional configuration options.
+   * @param  {object}   [options] An object of additional configuration options.
    */
   constructor(fn, options={}) {
     options.fn = fn;
@@ -25,8 +26,8 @@ class CallbackQuery extends Query {
    * Finds the value of the inner function given the document.
    * Will create a Scope using this document and pass it to the inner function.
    * 
-   * @param  {Document}   document The document to create a scope from.
-   * @return {Promise<*>} A promise containing the result of the inner function.
+   * @param  {Document}     document The document to create a scope from.
+   * @return {Promise<any>} A promise containing the result of the inner function.
    */
   find(document) {
     return this.options.fn(Scope.factory(document));
