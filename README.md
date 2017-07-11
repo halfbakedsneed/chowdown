@@ -1,7 +1,7 @@
 # elicit
 
 Elicit is a JavaScript library intended to speed up the consumption
-of HTML pages by allowing for it's quick transform into more usable formats.
+of DOM pages by allowing for their quick transform into more usable formats.
 
 ## Installation
 
@@ -56,14 +56,14 @@ Output:
 ```js
 [
   { name: 'Dennis Reynolds', age: '41'},
-  { name: 'Stephen King', age: '69'},
+  { name: 'Stephen King', age: '69'}
 ]
 ```
 
 ### Attributes
 
 Elicit is built on top of [cheerio](https://github.com/cheeriojs/cheerio) and hence it uses the familiar jQuery selector format. 
-However, it's also possible to get an element's attribute by appending it's name to the end of a selector after a `/`.
+However, it's also possible to get an element's attribute by appending the attribute's name to the end of a selector (following a `/`).
 
 This makes getting the `src` attribute of each author's image easy:
 
@@ -81,7 +81,7 @@ Output:
 ```js
 [
   { name: 'Dennis Reynolds', age: '41', image: 'dennis.jpg'},
-  { name: 'Stephen King', age: '69', image: 'stephen.jpg'},
+  { name: 'Stephen King', age: '69', image: 'stephen.jpg'}
 ]
 ```
 
@@ -132,17 +132,17 @@ Output:
         year: 1990
       }
     ]
-  },
+  }
 ]
 ```
 
-Every callback is passed a [`Scope`](#scope) object (the same object that is returned from the main `elicit` function)
-that has methods allowing for the execution of different queries relative to
+Every callback is passed a [`Scope`](#using-scopes) object (the same object that is returned from the main `elicit` function).
+It has methods allowing you to query the document for different things within a context.
 
-## Document Retrieval
+## Loading a Document
 
-The library's main function has three functions hanging off of it which
-allow for the creation of [`Scope`](#scope) objects in different ways:
+The library's main function is actually an alias for `elicit.request`; this is one of three functions which
+allow for the creation of [`Scope`](#using-scopes) objects in different ways:
 
 ### `elicit.request(request, [options])`
 
@@ -153,20 +153,20 @@ request object or uri string.
 - `request` *`string|object`* Either a uri or a request object that will be passed to `request-promise`. 
 - `[options]` *`object`* An object of configuration options.
   - `[client]` *`function`* A client function to use in place of `request-promise`. It will be passed
-  a request object or uri and should return a promise that resolves to the body of a page.
+  a request object or uri and should return a promise that resolves to a `string` or `cheerio` object.
 
 #### Returns
-- [*`Scope`*](#scope) A scope wrapping the response of the request.
+- [*`Scope`*](#using-scopes) A scope wrapping the response of the request.
 
 ### `elicit.file(file)`
 
 Reads from the file located at the given filename.
 
 #### Parameters
-- `file` *`string`* The filename. 
+- `file` *`{string}`* The filename. 
 
 #### Returns
-- [*`Scope`*](#scope) A scope wrapping the file's contents.
+- [*`Scope`*](#using-scopes) A scope wrapping the file's contents.
 
 ### `elicit.body(body)`
 
@@ -177,12 +177,52 @@ Load a DOM document directly from a cheerio document or string.
 or a DOM string. 
 
 #### Returns
-- [*`Scope`*](#scope) A scope wrapping the body.
+- [*`Scope`*](#using-scopes) A scope wrapping the body.
 
-## Scope
+## Using Scopes
 
+A Scope is an object with methods that allow you to query a document or part of a document for different types of values:
 
+- [`scope.string`](#string)
+- [`scope.number`](#number)
+- [`scope.collection`](#collection)
+- [`scope.object`](#object)
+- [`scope.raw`](#raw)
+- [`scope.regex`](#regex)
+- [`scope.context`](#context)
+- [`scope.link`](#link)
+- [`scope.follow`](#follow)
 
+All of the following examples will be using the same sample markup as before.
+
+### `scope.string(selector, [options])`
+
+Queries the document for a `string` using the given jQuery style selector.
+Any non-string retrieved value will be coerced into a `string`.
+
+#### Parameters
+- `selector` *`{string}`* A selector to find the string in the document.
+- `options` *`{object}`* An object of configuration options.
+  - `default` *`{string}`* The default value to return if no string is found.
+  - `throwOnMissing` *`{boolean}`* A flag that dictates whether or not to throw an error if no string is found.
+  - `format` *`{function|function[]}`* A function or array of functions used to format the retrieved string.
+
+#### Returns
+- *`Promise<string>`* A promise that resolves to the string.
+
+#### Example
+
+```js
+let scope = elicit.request('http://somewebpage.com');
+
+scope.string('.author:nth-child(1) .name');
+```
+
+Output:
+
+```js
+'Dennis Reynolds'
+```
 
 
 
