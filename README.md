@@ -173,7 +173,7 @@ Reads from the file located at the given filename.
 Load a DOM document directly from a cheerio document or string.
 
 #### Parameters
-- `body` `{cheerio|string}` Either an existing cheerio document
+- `body` *`{cheerio|string}`* Either an existing cheerio document
 or a DOM string. 
 
 #### Returns
