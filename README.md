@@ -15,18 +15,18 @@ markup:
 
 ```html
 <html>
-	<div>
-		<a href='http://link1.com'>link1 text</a>
-	</div>
-	<div>
-		<a href='http://link2.com'>link2 text</a>
-	</div>
-	<div>
-		<a href='http://link3.com'>link3 text</a>
-	</div>
-	<div>
-		<a href='http://link4.com'>link4 text</a>
-	</div>
+  <div>
+    <a href='http://link1.com'>link1 text</a>
+  </div>
+  <div>
+    <a href='http://link2.com'>link2 text</a>
+  </div>
+  <div>
+    <a href='http://link3.com'>link3 text</a>
+  </div>
+  <div>
+    <a href='http://link4.com'>link4 text</a>
+  </div>
 </html>
 ```
 
@@ -36,11 +36,11 @@ To pull out all of these links in a useful format, we can do the following:
 const elicit = require('elicitjs');
 
 elicit('http://somewebpage.com')
-	.collection('div', {
-		title: 'a',
-		href: 'a/href'
-	})
-	.tap(console.log)
+  .collection('div', {
+    title: 'a',
+    href: 'a/href'
+  })
+  .tap(console.log)
 
 /**
  * [
