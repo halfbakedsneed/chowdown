@@ -46,6 +46,14 @@ describe('base document', () => {
     document.link('linkPath');
   });
 
+  it('Throws an error when queried because it\'s an abstract class', () => {
+    let document = new Document();
+
+    expect(() => document.children('path')).to.throw();
+    expect(() => document.value('path')).to.throw();
+    expect(() => document.link('path')).to.throw();
+  });
+
   it('Has factory methods for all document types', () => {
     let types = [
       'dom',

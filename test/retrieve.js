@@ -25,10 +25,12 @@ describe('retrieve', () => {
     return retrieve.request('request');
   });
 
-  it('should use the default document type if none is provided', () => {
+  it('should always use the dom document type', () => {
     sandbox.mock(Document.factory).expects('dom').once().withArgs('body');
 
-    return retrieve.body('body')
+    return retrieve.body('body', {
+      type: 'json'
+    });
   });
 
   it('should provide the client with the correct request', () => {
@@ -51,17 +53,15 @@ describe('retrieve', () => {
   });
 
   it('should create a document with the correct body', () => {
-    sandbox.mock(Document.factory).expects('json').once().withArgs('body').returns('document');
+    sandbox.mock(Document.factory).expects('dom').once().withArgs('body').returns('document');
 
     return retrieve
-      .body('body', {
-        type: 'json'
-      })
+      .body('body')
       .then(result => expect(result).to.equal('document'));
   });
 
   it('should create a document with the correct file contents', () => {
-    sandbox.mock(Document.factory).expects('json').once().withArgs('body').returns('document');
+    sandbox.mock(Document.factory).expects('dom').once().withArgs('body').returns('document');
     sandbox.stub(fs, 'readFile').callsArgWith(1, null, 'body');
 
     let retrieve = proxyquire('../retrieve', {
@@ -69,19 +69,16 @@ describe('retrieve', () => {
     });
 
     return retrieve
-      .file('file', {
-        type: 'json'
-      })
+      .file('file')
       .then(result => expect(result).to.equal('document'));
   });
 
   it('should create the document with the correct request response', () => {
-    sandbox.mock(Document.factory).expects('json').once().withArgs('body').returns('document');
+    sandbox.mock(Document.factory).expects('dom').once().withArgs('body').returns('document');
 
     return retrieve
       .request('request', {
-        client: sandbox.stub().resolves('body'),
-        type: 'json'
+        client: sandbox.stub().resolves('body')
       })
       .then(result => expect(result).to.equal('document'));
   });

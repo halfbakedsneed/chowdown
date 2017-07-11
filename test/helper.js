@@ -2,8 +2,6 @@ const chai = require('chai');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const Promise = require('bluebird');
-const { assignIn } = require('lodash');
-
 
 global.assert = chai.assert;
 global.expect = chai.expect;
