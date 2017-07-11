@@ -44,6 +44,7 @@ array of objects, we can do the following:
 ```js
 const elicit = require('elicitjs');
 
+// Returns a promise
 elicit('http://somewebpage.com')
   .collection('.author', {
     name: '.name',
@@ -51,7 +52,7 @@ elicit('http://somewebpage.com')
   });
 ```
 
-Output:
+Resolves to:
 
 ```js
 [
@@ -59,6 +60,8 @@ Output:
   { name: 'Stephen King', age: '69'}
 ]
 ```
+
+All elicit queries return [bluebird Promises](https://github.com/petkaantonov/bluebird).
 
 ### Attributes
 
@@ -76,7 +79,7 @@ elicit('http://somewebpage.com')
   });
 ```
 
-Output:
+Resolves to:
 
 ```js
 [
@@ -89,7 +92,7 @@ Output:
 
 Using elicit, we can construct much more complex queries. By passing
 a callback in place of a selector, we have the ability to customise and
-nest queries.
+describe inner queries.
 
 Let's say we also want to retrieve each of the author's books:
 
@@ -105,7 +108,7 @@ elicit('http://somewebpage.com')
   });
 ```
 
-Output:
+Resolves to:
 
 ```js
 [
@@ -139,6 +142,35 @@ Output:
 Every callback is passed a [`Scope`](#using-scopes) object (the same object that is returned from the main `elicit` function).
 It has methods allowing you to query the document for different things within a context.
 
+### Implicit Inner Query Creation
+
+As seen above, it's possible to take shortcuts to describe queries.
+
+Anywhere a string is found in place of an inner query, it will be used as the `selector` parameter in a string query:
+
+```js
+let scope = elicit('http://somewebpage.com');
+
+scope.collection('.author', '.name')
+// => ['Dennis Reynolds', 'Stephen King']
+
+scope.collection('.author', (author) => author.string('.name'))
+// => ['Dennis Reynolds', 'Stephen King']
+```
+
+Likewise, anywhere an object is found in place of an inner query, it will be used as the `pick`
+parameter in a object query.
+
+```js
+let scope = elicit('http://somewebpage.com');
+
+scope.collection('.author', {name: '.name'})
+// => [{name: 'Dennis Reynolds'}, {name: 'Stephen King'}]
+
+scope.collection('.author', (author) => author.object({name: '.name'}))
+// => [{name: 'Dennis Reynolds'}, {name: 'Stephen King'}]
+```
+
 ## Loading a Document
 
 The library's main function is actually an alias for `elicit.request`; this is one of three functions which
@@ -170,10 +202,10 @@ Reads from the file located at the given filename.
 
 ### `elicit.body(body)`
 
-Load a DOM document directly from a cheerio document or string.
+Load a DOM document directly from a cheerio object or string.
 
 #### Parameters
-- `body` *`{cheerio|string}`* Either an existing cheerio document
+- `body` *`{cheerio|string}`* Either an existing cheerio object
 or a DOM string. 
 
 #### Returns
@@ -181,7 +213,7 @@ or a DOM string.
 
 ## Using Scopes
 
-A Scope is an object with methods that allow you to query a document or part of a document for different types of values:
+A Scope is an object that wraps a document (or part of a document) and allows you to query the document for different types of values:
 
 - [`scope.string`](#string)
 - [`scope.number`](#number)
@@ -197,18 +229,18 @@ All of the following examples will be using the same sample markup as before.
 
 ### `scope.string(selector, [options])`
 
-Queries the document for a `string` using the given jQuery style selector.
-Any non-string retrieved value will be coerced into a `string`.
+Queries the document for a `string` using the given selector.
+Any retrieved non-string value will be coerced into a `string`.
 
 #### Parameters
 - `selector` *`{string}`* A selector to find the string in the document.
-- `options` *`{object}`* An object of configuration options.
-  - `default` *`{string}`* The default value to return if no string is found.
-  - `throwOnMissing` *`{boolean}`* A flag that dictates whether or not to throw an error if no string is found.
-  - `format` *`{function|function[]}`* A function or array of functions used to format the retrieved string.
+- `[options]` *`{object}`* An object of configuration options.
+  - `[default='']` *`{string}`* The default value to return if no string is found.
+  - `[throwOnMissing=false]` *`{boolean}`* A flag that dictates whether or not to throw an error if no string is found.
+  - `[format=[]]` *`{function|function[]}`* A function or array of functions used to format the retrieved string.
 
 #### Returns
-- *`Promise<string>`* A promise that resolves to the string.
+- *`Promise<string>`* A promise that resolves to a string.
 
 #### Example
 
@@ -224,5 +256,93 @@ Output:
 'Dennis Reynolds'
 ```
 
+### `scope.number(selector, [options])`
 
+Queries the document for a `number` using the given selector.
+Any retrieved non-number value will be coerced into a `number`.
 
+#### Parameters
+- `selector` *`{string}`* A selector to find the number in the document.
+- `[options]` *`{object}`* An object of configuration options.
+  - `[default=NaN]` *`{number}`* The default value to return if no number is found.
+
+#### Returns
+- *`Promise<number>`* A promise that resolves to a number.
+
+#### Example
+
+```js
+let scope = elicit.request('http://somewebpage.com');
+
+scope.number('.author:nth-child(1) .age');
+```
+
+Output:
+
+```js
+41
+```
+
+### `scope.collection(selector, inner, [options])`
+
+This will query the document for an `array` of values such that each value is the result of an inner query
+executed on a child document.
+
+The set of child documents is pointed to by the `selector` parameter.
+
+#### Parameters
+- `selector` *`{string}`* A selector to find the number in the document.
+- `inner` *`{string|object|function}`* The inner query.
+- `[options]` *`{object}`* An object of configuration options.
+  - `[default=[]]` *`{any[]}`* The default value to return if no child documents are found.
+  - `[filter]` *`{function}`* A function used to filter the resulting array. Every item in the array
+  is passed through this function and the values for which the function is truthy are kept.
+
+#### Returns
+- *`Promise<array<any>>`* A promise that resolves to the collection.
+
+#### Example
+
+```js
+let scope = elicit.request('http://somewebpage.com');
+
+scope.collection('.author', (author) => author.number('.age'));
+```
+
+Resolves to:
+
+```js
+[41, 69]
+```
+
+### `scope.object(pick, [options])`
+
+This will map the inner query values in the `pick` parameter to their results
+and return a promise that resolves to the mapped `object`.
+
+#### Parameters
+- `pick` *`{object}`* The object of queries to map.
+- `[options]` *`{object}`* An object of configuration options.
+
+#### Returns
+- *`Promise<object>`* A promise that resolves to the collection.
+
+#### Example
+
+```js
+let scope = elicit.request('http://somewebpage.com');
+
+scope.object({
+  name: (document) => document.string('.author:nth-child(1) .name')
+  age: (document) => document.number('.author:nth-child(1) .age')
+});
+```
+
+Resolves to:
+
+```js
+{
+  name: 'Dennis Reynolds',
+  age: 41
+}
+```
