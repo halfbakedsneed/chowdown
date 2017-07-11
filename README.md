@@ -91,8 +91,7 @@ Resolves to:
 ### Nesting
 
 Using elicit, we can construct much more complex queries. By passing
-a callback in place of a selector, we have the ability to customise and
-describe inner queries.
+a callback in place of a selector, we have the ability to customise inner queries.
 
 Let's say we also want to retrieve each of the author's books:
 
@@ -140,9 +139,9 @@ Resolves to:
 ```
 
 Every callback is passed a [`Scope`](#using-scopes) object (the same object that is returned from the main `elicit` function).
-It has methods allowing you to query the document for different things within a context.
+It has methods allowing you to query the document (relative to the scope) for different things.
 
-### Implicit Inner Query Creation
+### Implicit query creation
 
 As seen above, it's possible to take shortcuts to describe queries.
 
@@ -171,10 +170,10 @@ scope.collection('.author', (author) => author.object({name: '.name'}))
 // => [{name: 'Dennis Reynolds'}, {name: 'Stephen King'}]
 ```
 
-## Loading a Document
+## Creating a scope
 
-The library's main function is actually an alias for `elicit.request`; this is one of three functions which
-allow for the creation of [`Scope`](#using-scopes) objects in different ways:
+The library's main function is actually an alias for `elicit.request`; this is one of three functions that
+allow for the creation of [`Scope`](#using-scopes) objects:
 
 ### `elicit.request(request, [options])`
 
@@ -250,7 +249,7 @@ let scope = elicit.request('http://somewebpage.com');
 scope.string('.author:nth-child(1) .name');
 ```
 
-Output:
+Resolves to:
 
 ```js
 'Dennis Reynolds'
@@ -277,7 +276,7 @@ let scope = elicit.request('http://somewebpage.com');
 scope.number('.author:nth-child(1) .age');
 ```
 
-Output:
+Resolves to:
 
 ```js
 41
@@ -285,7 +284,7 @@ Output:
 
 ### `scope.collection(selector, inner, [options])`
 
-This will query the document for an `array` of values such that each value is the result of an inner query
+This will query the document for an `array` of values such that each value is the result of the `inner` query
 executed on a child document.
 
 The set of child documents is pointed to by the `selector` parameter.
@@ -299,7 +298,7 @@ The set of child documents is pointed to by the `selector` parameter.
   is passed through this function and the values for which the function is truthy are kept.
 
 #### Returns
-- *`Promise<array<any>>`* A promise that resolves to the collection.
+- *`Promise<any[]>`* A promise resolving to an array of the inner query results.
 
 #### Example
 
@@ -317,7 +316,7 @@ Resolves to:
 
 ### `scope.object(pick, [options])`
 
-This will map the inner query values in the `pick` parameter to their results
+This will map the values (inner queries) in the `pick` parameter to their results
 and return a promise that resolves to the mapped `object`.
 
 #### Parameters
@@ -345,4 +344,30 @@ Resolves to:
   name: 'Dennis Reynolds',
   age: 41
 }
+```
+
+### `scope.raw(fn, [options])`
+
+This will call the given function with the cheerio document object
+and the intended context. It will return a promise resolving to this function's result.
+
+#### Parameters
+- `fn` *`{function}`* The raw function to execute.
+- `[options]` *`{object}`* An object of configuration options.
+
+#### Returns
+- *`Promise<any>`* A promise that resolves to the result of the raw function.
+
+#### Example
+
+```js
+let scope = elicit.request('http://somewebpage.com');
+
+scope.raw(($, context) => $('.author:nth-child(2) .name').text());
+```
+
+Resolves to:
+
+```js
+'Stephen King'
 ```
