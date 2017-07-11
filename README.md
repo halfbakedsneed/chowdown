@@ -1,7 +1,7 @@
 # elicit
 
 Elicit is a JavaScript library intended to speed up the consumption
-of HTML pages by allowing for their quick transform into usable formats.
+of HTML pages by allowing for it's quick transform into more usable formats.
 
 ## Installation
 
@@ -42,6 +42,8 @@ To quickly pull out the name and age of each author into an
 array of objects, we can do the following:
 
 ```js
+const elicit = require('elicitjs');
+
 elicit('http://somewebpage.com')
   .collection('.author', {
     name: '.name',
@@ -60,9 +62,8 @@ Output:
 
 ### Attributes
 
-Elicit is built on top of cheerio and hence uses the familiar jQuery selector format. 
-However, similar to the way that the XPath standard handles attributes, it's possible to
-get an element's attribute by appending it to the end of a selector after a `/`.
+Elicit is built on top of [cheerio](https://github.com/cheeriojs/cheerio) and hence it uses the familiar jQuery selector format. 
+However, it's also possible to get an element's attribute by appending it's name to the end of a selector after a `/`.
 
 This makes getting the `src` attribute of each author's image easy:
 
@@ -70,7 +71,7 @@ This makes getting the `src` attribute of each author's image easy:
 elicit('http://somewebpage.com')
   .collection('.author', {
     name: '.name',
-    age: (author) => author.number('.age'),
+    age: '.age',
     image: 'img/src'
   });
 ```
@@ -79,8 +80,8 @@ Output:
 
 ```js
 [
-  { name: 'Dennis Reynolds', age: 41, image: 'dennis.jpg'},
-  { name: 'Stephen King', age: 69, image: 'stephen.jpg'},
+  { name: 'Dennis Reynolds', age: '41', image: 'dennis.jpg'},
+  { name: 'Stephen King', age: '69', image: 'stephen.jpg'},
 ]
 ```
 
@@ -134,4 +135,28 @@ Output:
   },
 ]
 ```
+
+Every callback is passed a [`Scope`](#scope) object (the same object that is returned from the main `elicit` function)
+that has methods allowing for the execution of different queries relative to
+
+### Document Retrieval
+
+The library's main function has three functions hanging off of it which
+allow for the creation of [`Scope`](#scope) objects in different ways:
+
+#### elicit.request(request, [options])
+
+Issues a request using ['request-promise'](http://github.com/) with the given
+request object or uri string and returns a [`Scope`](#scope) that wraps it's response.
+
+##### Parameters
+
+- [options] {object}
+  An object of configuration options.
+  - [client] {function}
+    A client function to use instead of `request-promise`. It should return a promise
+    that resolves to the body of a page.
+
+
+
 
