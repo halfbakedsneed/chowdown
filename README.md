@@ -163,7 +163,7 @@ request object or uri string.
 Reads from the file located at the given filename.
 
 #### Parameters
-- `file` `*string*` The filename. 
+- `file` *`string`* The filename. 
 
 #### Returns
 - [*`Scope`*](#scope) A scope wrapping the file's contents.
