@@ -1,15 +1,23 @@
 const Query = require('./');
 
 /**
- * A class respresenting an query that resolves to a string.
+ * When executed, this query will return a promise resolving to
+ * a string found inside a document.
+ *
+ * If the value found within the document is not a string, it will be
+ * coerced into one.
+ *
+ * @class StringQuery
+ * @extends Query
  */
 class StringQuery extends Query {
   /**
-   * Constructs a StringQuery given a document path to the string
+   * Constructs a StringQuery given a path to the string in a document
    * and an object of additional configuration options.
    * 
-   * @param  {string}  path    The path to the string in a document.
-   * @param  {object}             options An object of additional configuration options.
+   * @param  {string} path                 The path to the string in a document.
+   * @param  {object} [options]            An object of additional configuration options.
+   * @param  {object} [options.default=''] The default value this query will resolve to.
    */
   constructor(path, options) {
     super(path, options);
@@ -17,11 +25,10 @@ class StringQuery extends Query {
 
   /**
    * Configures the StringQuery given an object of configuration options.
-   *
    * By default, the default value a StringQuery will resolve to is an empty string ('').
    * 
-   * @param  {object}     options An object of configuration options.
-   * @return {undefined}
+   * @param  {object} options              An object of additional configuration options.
+   * @param  {object} [options.default=''] The default value this query will resolve to.
    */
   configure(options) {
     super.configure(options);
@@ -31,14 +38,14 @@ class StringQuery extends Query {
   }
 
   /**
-   * Given the query's retrieved value, this method simply casts it to a String.
+   * Given the retrieved value, this method simply coerces it into a String.
    * 
-   * @param  {*}        string    The query's value retrieved from the document.
-   * @param  {Document} document  The document the value was retrieved from.
-   * @return {string} The resulting, casted string.
+   * @param  {any}      value    The query's value retrieved from the document.
+   * @param  {Document} document The document the value was retrieved from.
+   * @return {string}            The resulting, casted string.
    */
-  build(string, document) {
-    return String(string);
+  build(value, document) {
+    return String(value);
   }
 }
 

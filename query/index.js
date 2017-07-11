@@ -7,8 +7,8 @@ const {
 /**
  * The ultimate class representing a query.
  * 
- * When executed, this query will find a value inside a given
- * document and return it.
+ * When executed, this query will find attempt to find a value inside a given
+ * document and return a promise resolving to it.
  *
  * @class Query
  */
@@ -35,6 +35,7 @@ class Query {
    * be set.
    * 
    * @param  {options}    options                        The object of configuration options.
+   * @param  {string}     options.path                   A path to this query's value in a document.
    * @param  {any}        [options.default]              The default valuye to return if no value is found.
    * @param  {boolean}    [options.throwOnMissing=false] Whether or not to throw an error if no value is found.
    * @param  {function[]} [options.format=[]]            The functions used to format the value.

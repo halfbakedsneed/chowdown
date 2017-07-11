@@ -2,21 +2,24 @@ const Query = require('./');
 const StringQuery = require('./string');
 
 /**
- * A class respresenting a query that resolves to a regex match
- * on a string.
+ * When executed, this query will return a promise resolving to
+ * a regex match on a string retrieved from a given document.
+ *
+ * @class RegexQuery
+ * @extends StringQuery
  */
 class RegexQuery extends StringQuery {
   /**
-   * Constructs a RegexQuery given a document path to the string,
+   * Constructs a RegexQuery given a path to the string in a document,
    * the regular expression pattern to match on and a regular expression
    * group to choose from the match.
    * 
    * Also takes an object of additional configuration options.
    * 
-   * @param  {string}  path     The path to the string in a document.
-   * @param  {RegExp}  pattern  The regular expression pattern to match on.
-   * @param  {number}  group    The group number to select.
-   * @param  {object}  options  An object of additional configuration options.
+   * @param  {string} path      The path to the string in a document.
+   * @param  {RegExp} pattern   The regular expression pattern to match on.
+   * @param  {number} [group=1] The group number to select.
+   * @param  {object} [options] An object of additional configuration options.
    */
   constructor(path, pattern, group, options={}) {
     options.pattern = pattern;
@@ -26,11 +29,10 @@ class RegexQuery extends StringQuery {
 
   /**
    * Configures the RegexQuery given an object of configuration options.
-   *
-   * By default, the group to take will be the first.
+   * By default, the matched regex group to return will be the first one.
    * 
-   * @param  {object}     options An object of configuration options.
-   * @return {undefined}
+   * @param  {object} options           An object of configuration options.
+   * @param  {number} [options.group=1] The regex group number to select.
    */
   configure(options) {
     super.configure(options);
@@ -40,8 +42,8 @@ class RegexQuery extends StringQuery {
   }
 
   /**
-   * Finds the string and does a regex match on it using the
-   * query's pattern. It will take the group specified in the options..
+   * Finds the string in the given document and does a regex match on it using the
+   * query's pattern. It will take the group specified in the options.
    * 
    * @param  {Document} document The document to search for the string in.
    * @return {string} The matched group.

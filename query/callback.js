@@ -4,7 +4,7 @@ const { first } = require('lodash');
 
 /**
  * When executed, this query will return a promise resolving to the
- * result of it's inner function being passed a Scope.
+ * result of it's inner function being passed a Scope of a given document.
  *
  * @class CallbackQuery
  * @extends Query

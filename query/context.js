@@ -3,15 +3,15 @@ const { first } = require('lodash');
 
 /**
  * When executed, this query will return a promise resolving to
- * the result of the inner query executed within a context.
+ * the result of the inner query executed within the context of a child document.
  *
  * @class ContextQuery
  * @extends Query
  */
 class ContextQuery extends Query {
   /**
-   * Constructs a ContextQuery given a path to the outer context and
-   * an inner query that will be resolved relative to this context.
+   * Constructs a ContextQuery given a path to the outer context document and
+   * an inner query that will be resolved relative to this documentt.
    *
    * Also takes an additional object of configuration options.
    * 
@@ -39,9 +39,10 @@ class ContextQuery extends Query {
   }
 
   /**
-   * Finds the context in the given document and resolves the inner query relative to this context.
+   * Finds the context child document in the given document and resolves the inner query
+   * relative to this child document.
    * 
-   * @param  {Document}     document The document to retrieve the context from.
+   * @param  {Document}     document The document to retrieve the child document from.
    * @return {Promise<any>} A promise containing the resolved value of the inner query.
    */
   find(document) {
