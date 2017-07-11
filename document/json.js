@@ -65,8 +65,8 @@ module.exports = {
    * If the children are not an arrays or an objects then the
    * method will return undefined.
    * 
-   * @param  {string}   path The path to use in the query.
-   * @return {object[]} The child objects.
+   * @param  {string}             path The path to use in the query.
+   * @return {(object[]|array[])} The child objects or arrays.
    */
   queryChildren: function(path) {
     let result = castArray(this.query(path));
