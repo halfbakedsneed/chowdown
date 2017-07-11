@@ -144,41 +144,40 @@ that has methods allowing for the execution of different queries relative to
 The library's main function has three functions hanging off of it which
 allow for the creation of [`Scope`](#scope) objects in different ways:
 
-### elicit.request(request, [options])
+### `elicit.request(request, [options])`
 
 Issues a request using ['request-promise'](http://github.com/) with the given
-request object or uri string and returns a [`Scope`](#scope) that wraps it's response.
+request object or uri string.
 
 #### Parameters
-- `request` `string|object` Either a uri or a request object that will be passed to `request-promise`. 
-- `[options]` `object` An object of configuration options.
-  - `[client]` `function` A client function to in place of `request-promise`. It will be passed
+- `request` `{string|object}` Either a uri or a request object that will be passed to `request-promise`. 
+- `[options]` `{object}` An object of configuration options.
+  - `[client]` `{function}` A client function to in place of `request-promise`. It will be passed
   a request object or uri and should return a promise that resolves to the body of a page.
 
 #### Returns
-- [`Scope`](#scope) A scope wrapping the response of the request.
+- [`{Scope}`](#scope) A scope wrapping the response of the request.
 
-### elicit.file(file)
+### `elicit.file(file)`
 
-Reads from the file located at the given filename
-and returns a [`Scope`](#scope) that wraps it's contents.
+Reads from the file located at the given filename.
 
 #### Parameters
-- `file` `string` The filename. 
+- `file` `{string}` The filename. 
 
 #### Returns
-- [`Scope`](#scope) A scope wrapping the file's contents.
+- [`{Scope}`](#scope) A scope wrapping the file's contents.
 
-### elicit.body(body)
+### `elicit.body(body)`
 
-Returns a [`Scope`](#scope) that wraps the given body.
+Load a DOM document directly from a cheerio document or string.
 
 #### Parameters
-- `body` `cheerio|string` Either an existing cheerio document
+- `body` `{cheerio|string}` Either an existing cheerio document
 or a DOM string. 
 
 #### Returns
-- [`Scope`](#scope) A scope wrapping the body.
+- [`{Scope}`](#scope) A scope wrapping the body.
 
 ## Scope
 
