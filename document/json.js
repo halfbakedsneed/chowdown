@@ -7,17 +7,19 @@ const {
 
 
 /**
- * Methods to allow for the manipulation of JSON objects.
- * 
- * @type {object}
+ * Methods to handle the manipulation of JSON documents.
+ * Uses lodash under the hood.
+ *
+ * @class JSONDocument
+ * @extends Document
  */
 module.exports = {
   /**
-   * Loads the document data.
-   * If a string is provided, it will parse it as JSON.
+   * Loads the document body.
+   * If a string is provided, it will be parsed as JSON.
    * 
-   * @param  {(string|object)}  data   The document data.
-   * @return {*}   The loaded document.
+   * @param  {(string|object|array)} data The document data.
+   * @return {any}                   The loaded document.
    */
   loadDocument: function(data) {
     return (isString(data)) ? JSON.parse(data) : data;
@@ -27,21 +29,18 @@ module.exports = {
    * Loads the root of the document.
    * Returns the document itself if no root is specified.
    * 
-   * @param  {object}
-   * @return {object}
+   * @param  {(object|array)} root The intended root of the document.
+   * @return {(object|array)} The root of the document.
    */
   loadRoot: function(root) {
     return (root !== undefined) ? root : this.options.document;
   },
 
   /**
-   * Queries the document with the path provided.
-   * Uses the lodash get function.
-   * If the provided path is a function, that function will be called instead.
-   * The arguments this function takes are (root, document).
+   * Queries the document with the path provided using the lodash get function.
    * 
-   * @param  {string}   path   The path to use in the query.
-   * @return {*}   The result of the query.
+   * @param  {string} path The path to use in the query.
+   * @return {any}    The result of the query.
    */
   query: function(path) {
     if (path === undefined || '')
@@ -50,13 +49,12 @@ module.exports = {
     return get(this.options.root, path);
   },
 
-
   /**
-   * Calls the given path function with the root of this document as the first
-   * parameter and the entire actual json object as the second parameter.
+   * Calls the given document function with the root of this document as the first
+   * parameter and the entire actual document object as the second parameter.
    * 
-   * @param  {function} fn The path function to call.
-   * @return {*}  The result of the path function. 
+   * @param  {function} fn The document function to call.
+   * @return {any}      The result of the document function. 
    */
   queryRaw: function(fn) {
     return fn(this.options.root, this.options.document);
@@ -64,11 +62,11 @@ module.exports = {
 
   /**
    * Queries the document for children with the path provided.
-   * If the result of the query is not an array or an object then the
+   * If the children are not an arrays or an objects then the
    * method will return undefined.
    * 
-   * @param  {string}   path   The path to use in the query.
-   * @return {object[]} The children objects.
+   * @param  {string}   path The path to use in the query.
+   * @return {object[]} The child objects.
    */
   queryChildren: function(path) {
     let result = castArray(this.query(path));

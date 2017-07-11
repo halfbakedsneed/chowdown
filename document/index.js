@@ -3,23 +3,25 @@ const {
 } = require('lodash');
 
 /**
- * Abstract class representing a document.
- * Can be queried to retrieve values and children.
+ * An abstract class representing a document.
+ * Can be queried to retrieve values, links and child documents.
  *
- * Only child classes should be instantiated.
+ * @class Document
+ * @abstract
  */
 class Document {
 
   /**
-   * Builds a document instance.
+   * Builds a document instance given the type of document (i.e dom), the
+   * body of the whole doocument and a root allowing queries to be relative.
    * 
-   * @param  {string} type      The type of the document e.g 'dom' or 'json'. 
-   * @param  {*}      document  The raw document object.
-   * @param  {*}      root      The element of the document.
+   * @param  {string} type     The type of the document e.g 'dom' or 'json'. 
+   * @param  {any}    document The raw document object.
+   * @param  {any}    [root]   The root of the document.
    */
   constructor(type, document, root) {
     this.options = {};
-    this.options.type = type;   
+    this.options.type = type;
     this.options.document = this.loadDocument(document);
     this.options.root = this.loadRoot(root);
   }
@@ -27,7 +29,7 @@ class Document {
   /**
    * Creates a child document of the same type given a new root.
    * 
-   * @param  {*}  root  The root of the new child document.
+   * @param  {any}      root The root of the new child document.
    * @return {Document} The new child document.
    */
   create(root) {
@@ -35,12 +37,12 @@ class Document {
   }
 
   /**
-   * Given a path function, this method attempts to call it
+   * Given a function, this method attempts to call it
    * with relevant parameters determined by the concrete type
    * and returns the result.
    * 
-   * @param  {function} fn The path function to call.
-   * @return {*}  The result of the path function.
+   * @param  {function} fn The raw document function to call.
+   * @return {any}      The result of the path function.
    */
   raw(fn) {
     return this.queryRaw(fn);
@@ -49,7 +51,7 @@ class Document {
   /**
    * Given a path, it attempts to resolve an array of child documents.
    * 
-   * @param  {string}  path  The path to to the children.
+   * @param  {string}     path The path to to the children.
    * @return {Document[]} An array of child documents.
    */
   children(path) {
@@ -64,8 +66,8 @@ class Document {
   /**
    * Given a path, this method attempts to find a leaf value in the document.
    * 
-   * @param  {string}  path  The path to the value.
-   * @return {*}  The value of the resolved path.
+   * @param  {string}  path The path to the value.
+   * @return {any}     The value of the resolved path.
    */
   value(path) {
     return this.queryValue(this.formatPath(path));
@@ -74,11 +76,22 @@ class Document {
   /**
    * Given a path, this method attempts to resolve a link to another document.
    * 
-   * @param  {string}  path  The path to the link.
-   * @return {*}  The resolved link.
+   * @param  {string} path The path to the link.
+   * @return {any}    The resolved link.
    */
   link(path) {
     return this.queryLink(this.formatPath(path));
+  }
+
+  /**
+   * An abstract method that handles the querying of values within the document.
+   * 
+   * @param  {string} path The path to the value.
+   * @return {any} The value rettrieved.
+   * @abstract
+   */
+  query(path) {
+    throw new Error('the query method must be implemented by the subclass');
   }
 }
 
@@ -115,10 +128,10 @@ for (let suffix of ['link', 'value', 'children']) {
 Document.factory = {};
 
 /**
- * Creates and adds a a factory method for a type of document.
+ * Creates and adds a a factory method for a new subtype of document.
  * 
- * @param {string}  name    The name of the subtype.
- * @param {object}  methods The methods the class will have.
+ * @param {string} name    The name of the subtype.
+ * @param {object} methods The methods the class will have.
  */
 function add(name, methods) {
 
