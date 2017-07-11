@@ -88,6 +88,9 @@ Resolves to:
 ]
 ```
 
+When querying for simple types of values (`string`s and `number`s),
+if no attribute is specified in the selector then elicit will automatically grab the element's inner text.
+
 ### Nesting
 
 Using elicit, we can construct much more complex queries. By passing
@@ -348,11 +351,11 @@ Resolves to:
 
 ### `scope.raw(fn, [options])`
 
-This will call the given function with the cheerio document object
-and the intended context. It will return a promise resolving to this function's result.
+This will call the `fn` with the underlying cheerio object
+and the intended cheerio context. It will return a promise resolving to this function's result.
 
 #### Parameters
-- `fn` *`{function}`* The raw function to execute.
+- `fn` *`{function}`* The raw function to be called and passed the cheerio instance.
 - `[options]` *`{object}`* An object of configuration options.
 
 #### Returns
