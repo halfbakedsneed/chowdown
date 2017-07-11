@@ -139,23 +139,50 @@ Output:
 Every callback is passed a [`Scope`](#scope) object (the same object that is returned from the main `elicit` function)
 that has methods allowing for the execution of different queries relative to
 
-### Document Retrieval
+## Document Retrieval
 
 The library's main function has three functions hanging off of it which
 allow for the creation of [`Scope`](#scope) objects in different ways:
 
-#### elicit.request(request, [options])
+### elicit.request(request, [options])
 
 Issues a request using ['request-promise'](http://github.com/) with the given
 request object or uri string and returns a [`Scope`](#scope) that wraps it's response.
 
-##### Parameters
+#### Parameters
+- `request` `string|object` Either a uri or a request object that will be passed to `request-promise`. 
+- `[options]` `object` An object of configuration options.
+  - `[client]` `function` A client function to in place of `request-promise`. It will be passed
+  a request object or uri and should return a promise that resolves to the body of a page.
 
-- [options] {object}
-  An object of configuration options.
-  - [client] {function}
-    A client function to use instead of `request-promise`. It should return a promise
-    that resolves to the body of a page.
+#### Returns
+- [`Scope`](#scope) A scope wrapping the response of the request.
+
+### elicit.file(file)
+
+Reads from the file located at the given filename
+and returns a [`Scope`](#scope) that wraps it's contents.
+
+#### Parameters
+- `file` `string` The filename. 
+
+#### Returns
+- [`Scope`](#scope) A scope wrapping the file's contents.
+
+### elicit.body(body)
+
+Returns a [`Scope`](#scope) that wraps the given body.
+
+#### Parameters
+- `body` `cheerio|string` Either an existing cheerio document
+or a DOM string. 
+
+#### Returns
+- [`Scope`](#scope) A scope wrapping the body.
+
+## Scope
+
+
 
 
 
