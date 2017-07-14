@@ -1,8 +1,8 @@
 const helper = require('../helper');
 const { cloneDeep, assignIn } = require('lodash');
-const retrieve = require('../../retrieve');
-const Query = require('../../query');
-const Document = require('../../document');
+const retrieve = require('../../src/retrieve');
+const Query = require('../../src/query');
+const Document = require('../../src/document');
 const sandbox = sinon.sandbox.create();
 
 

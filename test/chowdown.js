@@ -1,17 +1,12 @@
 const helper = require('./helper');
 
-const chowdown = require('../chowdown');
-const Scope = require('../scope');
-const retrieve = require('../retrieve');
+const chowdown = require('../src/chowdown');
+const Scope = require('../src/scope');
+const retrieve = require('../src/retrieve');
 const sandbox = sinon.sandbox.create();
 
 
 describe('chowdown', () => {
-
-  beforeEach(() => {
-    scopeMock = sinon.mock(Scope);
-    retrieveMock = sinon.mock(retrieve);
-  });
 
   afterEach(() => {
     sandbox.verifyAndRestore();

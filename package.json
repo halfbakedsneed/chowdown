@@ -2,9 +2,12 @@
   "name": "chowdown",
   "version": "1.0.0",
   "description": "A library to help quickly transform DOM documents into usable formats",
-  "main": "chowdown.js",
+  "main": "./dist/chowdown.js",
   "scripts": {
-    "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --recursive"
+    "test": "cross-env NODE_ENV=test nyc mocha --recursive",
+    "clean": "rm -rf ./dist",
+    "build": "babel ./src/ --out-dir ./dist/",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,10 +27,26 @@
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1",
     "chai": "^4.0.2",
+    "cross-env": "^5.0.1",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
     "proxyquire": "^1.8.0",
     "sinon": "^2.3.6"
+  },
+  "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

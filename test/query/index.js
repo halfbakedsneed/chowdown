@@ -1,6 +1,6 @@
 const helper = require('../helper');
-const Query = require('../../query');
-const Document = require('../../document');
+const Query = require('../../src/query');
+const Document = require('../../src/document');
 const sandbox = sinon.sandbox.create();
 
 

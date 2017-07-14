@@ -1,5 +1,5 @@
 const helper = require('../helper');
-const Document = require('../../document');
+const Document = require('../../src/document');
 const cheerio = require('cheerio');
 const sandbox = sinon.sandbox.create();
 

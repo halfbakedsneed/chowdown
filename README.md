@@ -573,7 +573,7 @@ To run the tests included with chowdown, run the following
 from the root of the package:
 
 ```shell
-$ npm test
+$ npm run test
 ```
 
 ## <a name="License"></a> License (ISC)

@@ -1,7 +1,7 @@
 const helper = require('./helper');
 
-const retrieve = require('../retrieve');
-const Document = require('../document');
+const retrieve = require('../src/retrieve');
+const Document = require('../src/document');
 const fs = require('fs');
 const sandbox = sinon.sandbox.create();
 
@@ -12,7 +12,7 @@ describe('retrieve', () => {
   });
 
   it('should use the default client for a request if none is provided', () => {
-    let retrieve = proxyquire('../retrieve', {
+    let retrieve = proxyquire('../src/retrieve', {
       'request-promise': sandbox
         .mock()
         .once()
@@ -45,7 +45,7 @@ describe('retrieve', () => {
     sandbox.stub(Document.factory, 'dom');
     sandbox.mock(fs).expects('readFile').once().withArgs('file').callsArgWith(1, null, 'body');
 
-    let retrieve = proxyquire('../retrieve', {
+    let retrieve = proxyquire('../src/retrieve', {
       'fs': fs
     });
 
@@ -64,7 +64,7 @@ describe('retrieve', () => {
     sandbox.mock(Document.factory).expects('dom').once().withArgs('body').returns('document');
     sandbox.stub(fs, 'readFile').callsArgWith(1, null, 'body');
 
-    let retrieve = proxyquire('../retrieve', {
+    let retrieve = proxyquire('../src/retrieve', {
       'fs': fs
     });
 

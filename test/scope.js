@@ -1,6 +1,6 @@
 const helper = require('./helper');
-const Scope = require('../scope');
-const Query = require('../query');
+const Scope = require('../src/scope');
+const Query = require('../src/query');
 const { omit, functions } = require('lodash'); 
 const sandbox = sinon.sandbox.create();
 
@@ -52,7 +52,7 @@ describe('scope', () => {
 
     sandbox.mock(query).expects('on').exactly(queryTypes.length).withArgs('document').returns('result');
 
-    let Scope = proxyquire('../scope', {
+    let Scope = proxyquire('../src/scope', {
       './query': Query
     });
 

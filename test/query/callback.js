@@ -1,6 +1,6 @@
 const helper = require('../helper');
-const Query = require('../../query');
-const Scope = require('../../scope');
+const Query = require('../../src/query');
+const Scope = require('../../src/scope');
 const sandbox = sinon.sandbox.create();
 
 describe('callback query', () => {
