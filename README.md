@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/halfbakedsneed/chowdown.svg?branch=master)](https://travis-ci.org/halfbakedsneed/chowdown)
 [![Dependencies](https://david-dm.org/halfbakedsneed/chowdown.svg)](https://david-dm.org/halfbakedsneed/chowdown)
+[![Coverage Status](https://coveralls.io/repos/github/halfbakedsneed/chowdown/badge.svg?branch=master)](https://coveralls.io/github/halfbakedsneed/chowdown?branch=master)
 
 Chowdown is a JavaScript library that allows for the quick
 transformation of DOM documents into more usable formats.
