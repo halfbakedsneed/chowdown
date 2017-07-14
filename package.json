@@ -5,6 +5,7 @@
   "main": "./dist/chowdown.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc mocha --recursive",
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls"
     "clean": "rm -rf ./dist",
     "build": "babel ./src/ --out-dir ./dist/",
     "prepublish": "npm run build"
@@ -32,6 +33,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.24.1",
     "chai": "^4.0.2",
+    "coveralls": "^2.13.1",
     "cross-env": "^5.0.1",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
@@ -41,10 +43,6 @@
   "nyc": {
     "require": [
       "babel-register"
-    ],
-    "reporter": [
-      "lcov",
-      "text"
     ],
     "sourceMap": false,
     "instrument": false
