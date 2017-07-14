@@ -1,7 +1,7 @@
-# elicit
+# chowdown
 
-Elicit is a JavaScript library intended to speed up the consumption
-of DOM pages by allowing for their quick transform into more usable formats.
+Chowdown is a JavaScript library that allows for the quick
+transformation of DOM documents into more usable formats.
 
 ## <a name="table-of-contents"></a> Table of Contents
 
@@ -11,9 +11,9 @@ of DOM pages by allowing for their quick transform into more usable formats.
   - [Nesting](#nesting)
   - [Querying](#querying)
 - [Creating Scopes](#creating-scopes)
-  - [`elicit.request`](#request)
-  - [`elicit.file`](#file)
-  - [`elicit.body`](#body)
+  - [`chowdown.request`](#request)
+  - [`chowdown.file`](#file)
+  - [`chowdown.body`](#body)
 - [Using Scopes](#using-scopes)
   - [`scope.string`](#string)
   - [`scope.number`](#number)
@@ -28,7 +28,7 @@ of DOM pages by allowing for their quick transform into more usable formats.
 ## <a name="installation"></a> Installation
 
 ```shell
-$ npm install elicitjs
+$ npm install chowdown
 ```
 ## <a name="basic-usage"></a> Basic Usage
 
@@ -66,10 +66,10 @@ To quickly pull out the name and age of each author into an
 array of objects, we can do the following:
 
 ```js
-const elicit = require('elicitjs');
+const chowdown = require('chowdown');
 
 // Returns a promise
-elicit('http://somewebpage.com')
+chowdown('http://somewebpage.com')
   .collection('.author', {
     name: '.name',
     age: '.age'
@@ -85,17 +85,17 @@ This will resolve to:
 ]
 ```
 
-All elicit queries return an instance of a [bluebird](https://github.com/petkaantonov/bluebird) Promise.
+All chowdown queries return an instance of a [bluebird](https://github.com/petkaantonov/bluebird) Promise.
 
 ### <a name="attributes"></a> Attributes
 
-Elicit is built on top of [cheerio](https://github.com/cheeriojs/cheerio) and hence it uses the familiar jQuery selector format. 
-However, elicit's selectors make it possible to get a DOM element's attribute by appending the attribute's name to the end of a selector (following a `/`).
+Chowdown is built on top of [cheerio](https://github.com/cheeriojs/cheerio) and hence it uses the familiar jQuery selector format. 
+However, chowdown's selectors also make it possible to get a DOM element's attribute by appending the attribute's name to the end of a selector (following a `/`).
 
 This makes getting the `src` attribute of each author's image easy:
 
 ```js
-elicit('http://somewebpage.com')
+chowdown('http://somewebpage.com')
   .collection('.author', {
     name: '.name',
     age: '.age',
@@ -112,17 +112,17 @@ This will resolve to:
 ]
 ```
 
-If no attribute is specified in the selector when querying for simple types of values (i.e a `string` or a `number`), then elicit will automatically grab the element's inner text.
+If no attribute is specified in the selector when querying for simple types of values (i.e a `string` or a `number`), then chowdown will automatically grab the element's inner text.
 
 ### <a name="nesting"></a> Nesting
 
-Using elicit, we can construct much more complex queries. By passing
+Using chowdown, we can construct much more complex queries. By passing
 a callback in place of a selector, we have the ability to customise inner queries.
 
 If we wanted to retrieve each of the author's books, we could do the following:
 
 ```js
-elicit('http://somewebpage.com')
+chowdown('http://somewebpage.com')
   .collection('.author', {
     name: '.name',
     age: '.age',
@@ -164,17 +164,16 @@ This will resolve to:
 ]
 ```
 
-Every callback is passed a [`Scope`](#using-scopes) object (the same type of object that is returned from the main `elicit` function).
+Every callback is passed a [`Scope`](#using-scopes) object (the same type of object that is returned from the main `chowdown` function).
 It has methods allowing you to query the document (relative to a context) for different things.
 
 ### <a name="querying"></a> Querying
 
-As seen above, it's possible to take shortcuts to describe queries.
-
-Anywhere a string is found in place of a function, it will be used as the `selector` parameter in a string query:
+As seen above, it's possible to take shortcuts to describe queries. Anywhere a
+string is found in place of a function, it will be used as the `selector` parameter in a [string query](#string):
 
 ```js
-let scope = elicit('http://somewebpage.com');
+let scope = chowdown('http://somewebpage.com');
 
 scope.collection('.author', '.name')
 // => Resolves to: ['Dennis Reynolds', 'Stephen King']
@@ -184,10 +183,10 @@ scope.collection('.author', (author) => author.string('.name'))
 ```
 
 Likewise, anywhere an object is found in place of a function, it will be used as the `pick`
-parameter in an object query.
+parameter in an [object query](#object).
 
 ```js
-let scope = elicit('http://somewebpage.com');
+let scope = chowdown('http://somewebpage.com');
 
 scope.collection('.author', {name: '.name'})
 // => Resolves to: [{name: 'Dennis Reynolds'}, {name: 'Stephen King'}]
@@ -198,13 +197,13 @@ scope.collection('.author', (author) => author.object({name: '.name'}))
 
 ## <a name="creating-scopes"></a> Creating Scopes
 
-The library's main function is actually an alias for `elicit.request`; this is one of three functions that
+The library's main function is actually an alias for `chowdown.request`; this is one of three functions that
 allow for the creation of [`Scope`](#using-scopes) objects:
 
-### <a name="request"></a> `elicit.request(request, [options])`
+### <a name="request"></a> `chowdown.request(request, [options])`
 
 Issues a request using [`request-promise`](https://github.com/request/request-promise) with the given
-request object or uri string and creates a [`Scope`](#using-scopes) from the response.
+request object or uri string and returns a [`Scope`](#using-scopes) created from the response.
 
 #### Parameters
 - `request` `{string|object}` Either a uri or a request object that will be passed to `request-promise`. 
@@ -215,10 +214,10 @@ request object or uri string and creates a [`Scope`](#using-scopes) from the res
 #### Returns
 - [`Scope`](#using-scopes) A scope wrapping the response of the request.
 
-### <a name="file"></a> `elicit.file(file)`
+### <a name="file"></a> `chowdown.file(file)`
 
-Reads from the file located at the given filename and creates a [`Scope`](#using-scopes)
-with the contents of the file.
+Reads from the file located at `file` and returns a [`Scope`](#using-scopes)
+created from the contents of the file.
 
 #### Parameters
 - `file` `{string}` The filename. 
@@ -226,10 +225,10 @@ with the contents of the file.
 #### Returns
 - [`Scope`](#using-scopes) A scope wrapping the file's contents.
 
-### <a name="body"></a> `elicit.body(body)`
+### <a name="body"></a> `chowdown.body(body)`
 
-Load a DOM document directly from a cheerio object or string and wraps it in
-a [`Scope`](#using-scopes).
+Load a DOM document directly from a cheerio object or string and returns
+a [`Scope`](#using-scopes) created from this document.
 
 #### Parameters
 - `body` `{cheerio|string}` Either an existing cheerio object
@@ -272,7 +271,7 @@ Any retrieved non-string value will be coerced into a `string`.
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.string('.author:nth-child(1) .name');
 ```
@@ -300,7 +299,7 @@ Any retrieved non-number value will be coerced into a `number`.
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.number('.author:nth-child(1) .age');
 ```
@@ -331,7 +330,7 @@ executed on a child document. The set of child documents is pointed to by the `s
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.collection('.author', (author) => author.number('.age'));
 ```
@@ -358,7 +357,7 @@ corresponding keys.
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.object({
   name: (document) => document.string('.author:nth-child(1) .name')
@@ -391,7 +390,7 @@ and a cheerio context. It will return a promise that resolves to the result of t
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.raw(($, context) => $('.author:nth-child(2) .name').text());
 ```
@@ -420,7 +419,7 @@ perform a regex match on it using `pattern`.
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.regex('.author:nth-child(2)', /(Stephen) (.)/);
 ```
@@ -461,7 +460,7 @@ executed on the child document.
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.context('.author:nth-child(1) .book:nth-child(1)', (book) =>
   book.object({
@@ -498,7 +497,7 @@ element specified by `selector`.
 #### Example
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.uri('.author:nth-child(1) .name', 'http://somewebpage.com');
 ```
@@ -538,7 +537,7 @@ Let's assume the markup at this uri is as follows:
 We can use a follow query to read such important information like this:
 
 ```js
-let scope = elicit.request('http://somewebpage.com');
+let scope = chowdown.request('http://somewebpage.com');
 
 scope.follow(
   (doc) => doc.uri('.author:nth-child(1) .name'),
@@ -554,7 +553,7 @@ This will resolve to:
 
 ## <a name="testing"></a> Testing
 
-To run the tests included with elicit, run the following
+To run the tests included with chowdown, run the following
 from the root of the package:
 
 ```shell

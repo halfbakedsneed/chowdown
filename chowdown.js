@@ -3,12 +3,12 @@ const retrieve = require('./retrieve');
 
 /**
  * The main library function.
- * Simply an alias for elicit.request.
+ * Simply an alias for chowdown.request.
  * 
- * @see elicit.request
+ * @see chowdown.request
  */
-let elicit = module.exports = function(request, options) {
-  return elicit.request(request, options);
+let chowdown = module.exports = function(request, options) {
+  return chowdown.request(request, options);
 };
 
 /**
@@ -20,7 +20,7 @@ let elicit = module.exports = function(request, options) {
  * @param  {function}        [options.client] The client function to use to resolve the request.
  * @return {Scope}           A Scope object that wraps the document created from response of the request.
  */
-elicit.request = function(request, options) { 
+chowdown.request = function(request, options) { 
   return Scope.factory(retrieve.request(request, options));
 };
 
@@ -32,7 +32,7 @@ elicit.request = function(request, options) {
  * @param  {object} [options] An object of options.
  * @return {Scope}  A Scope object that wraps the document created from the contents of the file.
  */
-elicit.file = function(file, options) { 
+chowdown.file = function(file, options) { 
   return Scope.factory(retrieve.file(file, options));
 };
 
@@ -44,6 +44,6 @@ elicit.file = function(file, options) {
  * @param  {object}           [options] An object of options.
  * @return {Scope}            A Scope object that wraps the document created from the body.
  */
-elicit.body = function(body, options) { 
+chowdown.body = function(body, options) { 
   return Scope.factory(retrieve.body(body, options));
 };

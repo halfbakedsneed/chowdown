@@ -1,21 +1,21 @@
 {
-  "name": "elicitjs",
+  "name": "chowdown",
   "version": "1.0.0",
-  "description": "A library to help quickly consume web pages and APIs",
+  "description": "A library to help quickly transform DOM documents into usable formats",
   "main": "elicit.js",
   "scripts": {
     "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --recursive"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/halfbakedsneed/elicitjs.git"
+    "url": "git+https://github.com/halfbakedsneed/chowdown.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/halfbakedsneed/elicitjs/issues"
+    "url": "https://github.com/halfbakedsneed/chowdown/issues"
   },
-  "homepage": "https://github.com/halfbakedsneed/elicitjs#readme",
+  "homepage": "https://github.com/halfbakedsneed/chowdown#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
     "cheerio": "^1.0.0-rc.1",
@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "chai": "^4.0.2",
-    "clear-require": "^2.0.0",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
     "proxyquire": "^1.8.0",
