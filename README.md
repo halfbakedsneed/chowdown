@@ -9,8 +9,8 @@ of DOM pages by allowing for their quick transform into more usable formats.
 - [Basic Usage](#basic-usage)
   - [Attributes](#attributes)
   - [Nesting](#nesting)
-  - [Implicit query creation](#implicit-query-creation)
-- [Creating a Scope](#creating-a-scope)
+  - [Querying](#querying)
+- [Creating Scopes](#creating-scopes)
   - [`elicit.request`](#request)
   - [`elicit.file`](#file)
   - [`elicit.body`](#body)
@@ -34,6 +34,8 @@ $ npm install elicitjs
 
 Let's suppose there's a webpage, `http://somewebpage.com` with the following
 markup:
+
+<a name="sample-markup"></a>
 
 ```html
 <div class="author">
@@ -165,7 +167,7 @@ This will resolve to:
 Every callback is passed a [`Scope`](#using-scopes) object (the same type of object that is returned from the main `elicit` function).
 It has methods allowing you to query the document (relative to a context) for different things.
 
-### <a name="implicit-query-creation"></a> Implicit query creation
+### <a name="querying"></a> Querying
 
 As seen above, it's possible to take shortcuts to describe queries.
 
@@ -194,7 +196,7 @@ scope.collection('.author', (author) => author.object({name: '.name'}))
 // => Resolves to: [{name: 'Dennis Reynolds'}, {name: 'Stephen King'}]
 ```
 
-## <a name="creating-a-scope"></a> Creating a Scope
+## <a name="creating-scopes"></a> Creating Scopes
 
 The library's main function is actually an alias for `elicit.request`; this is one of three functions that
 allow for the creation of [`Scope`](#using-scopes) objects:
@@ -250,7 +252,7 @@ A Scope is an object that wraps a document (or part of a document) and allows fo
 - [`scope.link`](#link)
 - [`scope.follow`](#follow)
 
-__All of the following examples use the same sample uri and markup as before.__
+__All of the following examples use the same sample uri and markup as [before](#sample-markup).__
 
 ### <a name="string"></a> `scope.string(selector, [options])`
 
@@ -516,7 +518,7 @@ on the document at this uri.
 - `uri` `{string|object|function}` A query to find the uri.
 - `inner` `{string|object|function}` A query to execute on the documet at the uri.
 - `[options]` `{object}` An object of configuration options.
-  - `[client=rp]` `function` A client function to use in place of `request-promise`. It will be passed
+  - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
   a request object or uri and should return a promise that resolves to a `string` or `cheerio` object.
   - `[request]` `{object}` An object of other request options to pass to `client`.
   - See [`scope.string`](#string) for other possible options.
@@ -526,7 +528,7 @@ on the document at this uri.
 
 #### Example
 
-In the sample markup (located at `http://somewebpage.com`), we can see the first author `div` contains a link to `http://somewebpage.com/dennis`.
+In the [sample markup](#sample-markup) (for the uri `http://somewebpage.com`), we can see the first author's `div` contains a link to `http://somewebpage.com/dennis`.
 Let's assume the markup at this uri is as follows:
 
 ```html
@@ -561,4 +563,4 @@ $ npm test
 
 ## <a name="License"></a> License (ISC)
 
-See the [LICENSE](LICENSE) file for details.
+See the [LICENSE file](LICENSE) for details.
