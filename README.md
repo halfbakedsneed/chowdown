@@ -390,7 +390,8 @@ and a cheerio context. It will return a promise that resolves to the result of t
 #### Parameters
 - `fn` `{function}` The raw function to be called and passed the cheerio instance.
 - `[options]` `{object}` An object of configuration options.
-  - See [scope.string](#string) for possible options.
+  - `[default=undefined]` `{any}` The default value to return if undefined is returned from the function.
+  - See [scope.string](#string) for other possible options.
 
 #### Returns
 - `Promise<any>` A promise that resolves to the result of the raw function.
@@ -420,7 +421,8 @@ perform a regex match on it using `pattern`.
 - `pattern` `{RegExp}` The pattern used to match on the retrieved string.
 - `[group]` `{number}` The number of a matched group to return.
 - `[options]` `{object}` An object of configuration options.
-  - See [scope.string](#string) for possible options.
+  - `[default=[]]` `{any[]}` The default value to return if no matches are made.
+  - See [scope.string](#string) for other possible options.
 
 #### Returns
 - `Promise<string|string[]>` A promise that resolves to the matched group(s).
@@ -461,7 +463,8 @@ return the result of the `inner` query executed on this child document.
 - `selector` `{string}` A selector to find the child document.
 - `inner` `{string|object|function}` The inner query to execute on the child document.
 - `[options]` `{object}` An object of configuration options.
-  - See [scope.string](#string) for possible options.
+  - `[default=undefined]` `{any}` The default value to return if the context can't be found.
+  - See [scope.string](#string) for other possible options.
 
 #### Returns
 - `Promise<any>` A promise that resolves to the result of the `inner` query
@@ -529,6 +532,7 @@ on the document at this uri.
 - `uri` `{string|object|function}` A query to find the uri.
 - `inner` `{string|object|function}` A query to execute on the documet at the uri.
 - `[options]` `{object}` An object of configuration options.
+  - `[default=undefined]` `{any}` The default value to return if there's an error accessing the page.
   - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
   a request object or uri and should return a promise that resolves to a `string` or `cheerio` object.
   - `[request]` `{object}` An object of other request options to pass to `client`.
