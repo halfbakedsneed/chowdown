@@ -109,12 +109,10 @@ class Query {
    */
   on(document) {
     return Promise.resolve(document)
-      .then((document) => Promise
-        .resolve(this.find(document))
-        .then((value) => this.default(value, document))
-        .then((value) => this.build(value, document))
-        .then((value) => this.format(value, document))
-      );      
+      .then((document) => this.find(document))
+      .then((value) => this.default(value, document))
+      .then((value) => this.build(value, document))
+      .then((value) => this.format(value, document));      
   }
 }
 
