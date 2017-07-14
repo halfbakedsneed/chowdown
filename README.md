@@ -11,19 +11,19 @@ transformation of DOM documents into more usable formats.
   - [Nesting](#nesting)
   - [Querying](#querying)
 - [Creating Scopes](#creating-scopes)
-  - [`chowdown.request`](#request)
-  - [`chowdown.file`](#file)
-  - [`chowdown.body`](#body)
+  - [chowdown.request](#request)
+  - [chowdown.file](#file)
+  - [chowdown.body](#body)
 - [Using Scopes](#using-scopes)
-  - [`scope.string`](#string)
-  - [`scope.number`](#number)
-  - [`scope.collection`](#collection)
-  - [`scope.object`](#object)
-  - [`scope.raw`](#raw)
-  - [`scope.regex`](#regex)
-  - [`scope.context`](#context)
-  - [`scope.link`](#link)
-  - [`scope.follow`](#follow)
+  - [scope.string](#string)
+  - [scope.number](#number)
+  - [scope.collection](#collection)
+  - [scope.object](#object)
+  - [scope.raw](#raw)
+  - [scope.regex](#regex)
+  - [scope.context](#context)
+  - [scope.link](#link)
+  - [scope.follow](#follow)
 
 ## <a name="installation"></a> Installation
 
@@ -291,7 +291,7 @@ Any retrieved non-number value will be coerced into a `number`.
 - `selector` `{string}` A selector to find the number in the document.
 - `[options]` `{object}` An object of configuration options.
   - `[default=NaN]` `{number}` The default value to return if no number is found.
-  - See [`scope.string`](#string) for other possible options.
+  - See [scope.string](#string) for other possible options.
 
 #### Returns
 - `Promise<number>` A promise that resolves to a number.
@@ -322,7 +322,7 @@ executed on a child document. The set of child documents is pointed to by the `s
   - `[default=[]]` `{any[]}` The default value to return if no child documents are found.
   - `[filter]` `{function}` A function used to filter the resulting array. Every item in the array
   is passed through this function and the values for which the function is truthy are kept.
-  - See [`scope.string`](#string) for other possible options.
+  - See [scope.string](#string) for other possible options.
 
 #### Returns
 - `Promise<any[]>` A promise resolving to an array of the inner query results.
@@ -349,7 +349,7 @@ corresponding keys.
 #### Parameters
 - `pick` `{object}` The object of queries to map.
 - `[options]` `{object}` An object of configuration options.
-  - See [`scope.string`](#string) for possible options.
+  - See [scope.string](#string) for possible options.
 
 #### Returns
 - `Promise<object>` A promise that resolves to the collection.
@@ -382,7 +382,7 @@ and a cheerio context. It will return a promise that resolves to the result of t
 #### Parameters
 - `fn` `{function}` The raw function to be called and passed the cheerio instance.
 - `[options]` `{object}` An object of configuration options.
-  - See [`scope.string`](#string) for possible options.
+  - See [scope.string](#string) for possible options.
 
 #### Returns
 - `Promise<any>` A promise that resolves to the result of the raw function.
@@ -411,7 +411,7 @@ perform a regex match on it using `pattern`.
 - `pattern` `{RegExp}` The pattern used to match on the retrieved string.
 - `[group]` `{number}` The number of a matched group to return.
 - `[options]` `{object}` An object of configuration options.
-  - See [`scope.string`](#string) for possible options.
+  - See [scope.string](#string) for possible options.
 
 #### Returns
 - `Promise<string|string[]>` A promise that resolves to the matched group(s).
@@ -451,7 +451,7 @@ return the result of the `inner` query executed on this child document.
 - `selector` `{string}` A selector to find the child document.
 - `inner` `{string|object|function}` The inner query to execute on the child document.
 - `[options]` `{object}` An object of configuration options.
-  - See [`scope.string`](#string) for possible options.
+  - See [scope.string](#string) for possible options.
 
 #### Returns
 - `Promise<any>` A promise that resolves to the result of the `inner` query
@@ -489,7 +489,7 @@ element specified by `selector`.
 - `selector` `{string}` A selector to find the uri.
 - `[base]` `{string}` The base uri for the retrieved uri.
 - `[options]` `{object}` An object of configuration options.
-  - See [`scope.string`](#string) for possible options.
+  - See [scope.string](#string) for possible options.
 
 #### Returns
 - `Promise<any>` A promise that resolves to the constructed uri.
@@ -520,7 +520,7 @@ on the document at this uri.
   - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
   a request object or uri and should return a promise that resolves to a `string` or `cheerio` object.
   - `[request]` `{object}` An object of other request options to pass to `client`.
-  - See [`scope.string`](#string) for other possible options.
+  - See [scope.string](#string) for other possible options.
 
 #### Returns
 - `Promise<any>` The result of the `inner` query executed on the document at `uri`.
