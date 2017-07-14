@@ -1,7 +1,7 @@
 {
   "name": "chowdown",
   "version": "1.0.0",
-  "description": "A library to help quickly transform DOM documents into usable formats",
+  "description": "A JavaScript library that allows for the quick transformation of DOM documents into useful formats.",
   "main": "./dist/chowdown.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc mocha --recursive",

@@ -4,8 +4,7 @@
 [![Dependencies](https://david-dm.org/halfbakedsneed/chowdown.svg)](https://david-dm.org/halfbakedsneed/chowdown)
 [![Coverage](https://coveralls.io/repos/github/halfbakedsneed/chowdown/badge.svg?branch=master)](https://coveralls.io/github/halfbakedsneed/chowdown?branch=master)
 
-Chowdown is a JavaScript library that allows for the quick
-transformation of DOM documents into more usable formats.
+A JavaScript library that allows for the quick transformation of DOM documents into useful formats.
 
 ## <a name="table-of-contents"></a> Table of Contents
 
