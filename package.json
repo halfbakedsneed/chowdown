@@ -6,7 +6,6 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc mocha --recursive",
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls",
-
     "clean": "rm -rf ./dist",
     "build": "babel ./src/ --out-dir ./dist/",
     "prepublish": "npm run build"
@@ -15,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/halfbakedsneed/chowdown.git"
   },
-  "author": "",
+  "author": "Jayden Park <jayden.park.personal@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/halfbakedsneed/chowdown/issues"
