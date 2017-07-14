@@ -68,14 +68,14 @@ describe('regex query', () => {
       .then(result => expect(result).to.equal('default'));
   });
 
-  it('Defaults to the first group if none is specified', () => {
+  it('Defaults to all groups if none are specified', () => {
     let document = new Document();
     let query = Query.factory.regex('selector', /(match)(me)/);
 
     sandbox.stub(document, 'value').returns('matchme');
 
     return query.on(document)
-      .then(result => expect(result).to.equal('match'));
+      .then(result => expect(result).to.eql(['matchme', 'match', 'me']));
   });
 
   

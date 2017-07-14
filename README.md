@@ -360,7 +360,7 @@ corresponding keys.
 let scope = chowdown.request('http://somewebpage.com');
 
 scope.object({
-  name: (document) => document.string('.author:nth-child(1) .name')
+  name: (document) => document.string('.author:nth-child(1) .name'),
   age: (document) => document.number('.author:nth-child(1) .age')
 });
 ```
@@ -414,14 +414,14 @@ perform a regex match on it using `pattern`.
   - See [`scope.string`](#string) for possible options.
 
 #### Returns
-- `Promise<string>` A promise that resolves to the matched group.
+- `Promise<string|string[]>` A promise that resolves to the matched group(s).
 
 #### Example
 
 ```js
 let scope = chowdown.request('http://somewebpage.com');
 
-scope.regex('.author:nth-child(2)', /(Stephen) (.)/);
+scope.regex('.author:nth-child(2)', /(Stephen) (.*)/);
 ```
 
 This will resolve to:
@@ -433,7 +433,7 @@ This will resolve to:
 If we want a specific group:
 
 ```js
-scope.regex('.author:nth-child(2)', /(Stephen) (.)/, 2);
+scope.regex('.author:nth-child(2)', /(Stephen) (.*)/, 2);
 ```
 
 This will resolve to:

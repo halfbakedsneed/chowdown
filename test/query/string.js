@@ -14,7 +14,9 @@ describe('string query', () => {
 
     sandbox.stub(document, 'value').returns(3);
 
-    let query = Query.factory.string('selector');
+    let query = Query.factory.string('selector', {
+      default: ''
+    });
 
     return query.on(document)
       .then(result => expect(result).to.equal('3'))

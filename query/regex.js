@@ -1,14 +1,13 @@
 const Query = require('./');
-const StringQuery = require('./string');
 
 /**
  * When executed, this query will return a promise resolving to
  * a regex match on a string retrieved from a given document.
  *
  * @class RegexQuery
- * @extends StringQuery
+ * @extends Query
  */
-class RegexQuery extends StringQuery {
+class RegexQuery extends Query {
   /**
    * Constructs a RegexQuery given a selector for the string in a document,
    * the regular expression pattern to match on and a regular expression
@@ -16,10 +15,11 @@ class RegexQuery extends StringQuery {
    * 
    * Also takes an object of additional configuration options.
    * 
-   * @param  {string} selector  The selector for the string in a document.
-   * @param  {RegExp} pattern   The regular expression pattern to match on.
-   * @param  {number} [group=1] The group number to select.
-   * @param  {object} [options] An object of additional configuration options.
+   * @param  {string} selector                      The selector for the string in a document.
+   * @param  {RegExp} pattern                       The regular expression pattern to match on.
+   * @param  {number} [group]                       The matched regex group to return.
+   * @param  {object} [options]                     An object of additional configuration options.
+   * @param  {string|string[]} [options.default=[]] The default value this query will resolve to if no string is found.
    */
   constructor(selector, pattern, group, options={}) {
     options.pattern = pattern;
@@ -29,16 +29,18 @@ class RegexQuery extends StringQuery {
 
   /**
    * Configures the RegexQuery given an object of configuration options.
-   * By default, the matched regex group to return will be the first one.
+   * By default, the the default value for this query will be an empty
+   * array (no matches).
    * 
-   * @param  {object} options           An object of configuration options.
-   * @param  {number} [options.group=1] The regex group number to select.
+   * @param  {object} options                       An object of configuration options.
+   * @param  {number} [options.group]               The matched regex group to return.
+   * @param  {string|string[]} [options.default=[]] The default value this query will resolve to if no string is found.
    */
   configure(options) {
     super.configure(options);
 
-    if (this.options.group === undefined)
-      this.options.group = 1;
+    if (!this.options.hasOwnProperty('default'))
+      this.options.default = [];
   }
 
   /**
@@ -46,7 +48,7 @@ class RegexQuery extends StringQuery {
    * query's pattern. It will take the group specified in the options.
    * 
    * @param  {Document} document The document to search for the string in.
-   * @return {string} The matched group.
+   * @return {string|string[]}   The matched group(s).
    */
   find(document) {
     let string = super.find(document);
@@ -56,10 +58,13 @@ class RegexQuery extends StringQuery {
 
     let matches = string.match(this.options.pattern);
 
-    if (!matches || matches[this.options.group] === undefined)
+    if (!matches)
       return undefined;
 
-    return matches[this.options.group];
+    if (this.options.group !== undefined)
+      return matches[this.options.group];
+
+    return matches;
   }
 }
 
