@@ -46,10 +46,10 @@ class ContextQuery extends Query {
    * @return {Promise<any>} A promise containing the resolved value of the inner query.
    */
   find(document) {
-    let scope = first(document.children(this.options.selector));
+    let context = first(document.children(this.options.selector));
 
-    if (scope !== undefined)
-      return this.options.inner.on(scope);
+    if (context !== undefined)
+      return this.options.inner.on(context);
   }
 }
 

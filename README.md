@@ -424,10 +424,10 @@ let scope = chowdown.request('http://somewebpage.com');
 scope.regex('.author:nth-child(2)', /(Stephen) (.*)/);
 ```
 
-This will resolve to:
+This will resolve to (roughly):
 
 ```js
-['Stephen', 'King']
+['Stephen King', Stephen', 'King']
 ```
 
 If we want a specific group:
@@ -462,7 +462,7 @@ executed on the child document.
 ```js
 let scope = chowdown.request('http://somewebpage.com');
 
-scope.context('.author:nth-child(1) .book:nth-child(1)', (book) =>
+scope.context('.author:nth-child(1) .book:nth-of-type(1)', (book) =>
   book.object({
     title: '.title',
     year: (book) => book.number('.year')
