@@ -241,15 +241,15 @@ or a DOM string.
 
 A Scope is an object that wraps a document (or part of a document) and allows for the querying of different types of values:
 
-- [`scope.string`](#string)
-- [`scope.number`](#number)
-- [`scope.collection`](#collection)
-- [`scope.object`](#object)
-- [`scope.raw`](#raw)
-- [`scope.regex`](#regex)
-- [`scope.context`](#context)
-- [`scope.link`](#link)
-- [`scope.follow`](#follow)
+- [scope.string](#string)
+- [scope.number](#number)
+- [scope.collection](#collection)
+- [scope.object](#object)
+- [scope.raw](#raw)
+- [scope.regex](#regex)
+- [scope.context](#context)
+- [scope.link](#link)
+- [scope.follow](#follow)
 
 __All of the following examples use the same sample uri and markup as [before](#sample-markup).__
 
