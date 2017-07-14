@@ -2,7 +2,7 @@
   "name": "chowdown",
   "version": "1.0.0",
   "description": "A library to help quickly transform DOM documents into usable formats",
-  "main": "elicit.js",
+  "main": "chowdown.js",
   "scripts": {
     "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --recursive"
   },
