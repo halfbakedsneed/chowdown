@@ -5,7 +5,8 @@
   "main": "./dist/chowdown.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc mocha --recursive",
-    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls"
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=text-lcov | coveralls",
+
     "clean": "rm -rf ./dist",
     "build": "babel ./src/ --out-dir ./dist/",
     "prepublish": "npm run build"
