@@ -1,5 +1,7 @@
 # chowdown
 
+[![Build Status](https://travis-ci.org/halfbakedsneed/chowdown.svg?branch=master)](https://travis-ci.org/halfbakedsneed/chowdown)
+
 Chowdown is a JavaScript library that allows for the quick
 transformation of DOM documents into more usable formats.
 
