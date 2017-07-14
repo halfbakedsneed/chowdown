@@ -40,6 +40,15 @@
     "proxyquire": "^1.8.0",
     "sinon": "^2.3.6"
   },
+  "keywords": [
+    "beautifulsoup",
+    "jquery",
+    "crawler",
+    "scraper",
+    "parser",
+    "html",
+    "dom"
+  ],
   "nyc": {
     "require": [
       "babel-register"
