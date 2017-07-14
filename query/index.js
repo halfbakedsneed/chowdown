@@ -152,7 +152,7 @@ let children = {
  * @param  {function} create  A default factory function.
  * @return {Query}    The constructed query.
  */
-Query.factory = function(path, create=Query.factory.base) {
+Query.factory = function(path, create=Query.factory.string) {
   if (isPlainObject(path)) 
     create = Query.factory.object; 
 
