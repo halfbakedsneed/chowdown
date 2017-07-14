@@ -201,6 +201,7 @@ The library's main function is actually an alias for `chowdown.request`; this is
 allow for the creation of [`Scope`](#using-scopes) objects:
 
 ### <a name="request"></a> chowdown.request(request, [options])
+----
 
 Issues a request using [`request-promise`](https://github.com/request/request-promise) with the given
 request object or uri string and returns a [`Scope`](#using-scopes) created from the response.
@@ -215,6 +216,7 @@ request object or uri string and returns a [`Scope`](#using-scopes) created from
 - [`Scope`](#using-scopes) A scope wrapping the response of the request.
 
 ### <a name="file"></a> chowdown.file(file)
+----
 
 Reads from the file located at `file` and returns a [`Scope`](#using-scopes)
 created from the contents of the file.
@@ -226,6 +228,7 @@ created from the contents of the file.
 - [`Scope`](#using-scopes) A scope wrapping the file's contents.
 
 ### <a name="body"></a> chowdown.body(body)
+----
 
 Load a DOM document directly from a cheerio object or string and returns
 a [`Scope`](#using-scopes) created from this document.
@@ -254,6 +257,7 @@ A Scope is an object that wraps a document (or part of a document) and allows fo
 __All of the following examples use the same sample uri and markup as [before](#sample-markup).__
 
 ### <a name="string"></a> scope.string(selector, [options])
+----
 
 Queries the document for a `string` using the given `selector`.
 Any retrieved non-string value will be coerced into a `string`.
@@ -283,6 +287,7 @@ This will resolve to:
 ```
 
 ### <a name="number"></a> scope.number(selector, [options])
+----
 
 Queries the document for a `number` using the given `selector`.
 Any retrieved non-number value will be coerced into a `number`.
@@ -311,6 +316,7 @@ This will resolve to:
 ```
 
 ### <a name="collection"></a> scope.collection(selector, inner, [options])
+-----
 
 This will query the document for an `array` of values such that each value in the array is the result of the `inner` query
 executed on a child document. The set of child documents is pointed to by the `selector` parameter.
@@ -342,6 +348,7 @@ This will resolve to:
 ```
 
 ### <a name="object"></a> scope.object(pick, [options])
+----
 
 Queries the document for an object by mapping the results of inner queries (the values in the `pick` parameter) to their
 corresponding keys.
@@ -375,6 +382,7 @@ This will resolve to:
 ```
 
 ### <a name="raw"></a> scope.raw(fn, [options])
+----
 
 This will call `fn` with the underlying cheerio function
 and a cheerio context. It will return a promise that resolves to the result of this call.
@@ -402,6 +410,7 @@ This will resolve to:
 ```
 
 ### <a name="regex"></a> scope.regex(selector, pattern, [group], [options])
+----
 
 This will query the document for a `string` using the given `selector` and 
 perform a regex match on it using `pattern`.
@@ -443,6 +452,7 @@ This will resolve to:
 ```
 
 ### <a name="context"></a> scope.context(selector, inner, [options])
+----
 
 This will query the document for a child document using the given `selector` and 
 return the result of the `inner` query executed on this child document.
@@ -480,6 +490,7 @@ This will resolve to:
 ```
 
 ### <a name="uri"></a> scope.uri(selector, [base], [options])
+----
 
 This will query the document for a uri using the given `selector` and 
 resolve it relative to the given `base` uri. Will automatically attempt to grab the `href` attribute of the
@@ -509,6 +520,7 @@ This will resolve to:
 ```
 
 ### <a name="follow"></a> scope.follow(uri, inner, [options])
+----
 
 This will follow the uri pointed to by the `uri` query and execute the `inner` query
 on the document at this uri.
