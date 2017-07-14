@@ -427,7 +427,7 @@ scope.regex('.author:nth-child(2)', /(Stephen) (.*)/);
 This will resolve to (roughly):
 
 ```js
-['Stephen King', Stephen', 'King']
+['Stephen King', 'Stephen', 'King']
 ```
 
 If we want a specific group:
