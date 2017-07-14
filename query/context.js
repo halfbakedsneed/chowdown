@@ -10,18 +10,18 @@ const { first } = require('lodash');
  */
 class ContextQuery extends Query {
   /**
-   * Constructs a ContextQuery given a path to the outer context document and
+   * Constructs a ContextQuery given a selector for the outer context document and
    * an inner query that will be resolved relative to this documentt.
    *
    * Also takes an additional object of configuration options.
    * 
-   * @param  {string} path      The path to the outer context.
+   * @param  {string} selector  The selector for the outer context.
    * @param  {Query}  inner     The inner query to execute relative to the outer context.
    * @param  {object} [options] An object of additional configuration options.
    */
-  constructor(path, inner, options={}) {
+  constructor(selector, inner, options={}) {
     options.inner = inner;
-    super(path, options);
+    super(selector, options);
   }
 
   /**
@@ -46,7 +46,7 @@ class ContextQuery extends Query {
    * @return {Promise<any>} A promise containing the resolved value of the inner query.
    */
   find(document) {
-    let scope = first(document.children(this.options.path));
+    let scope = first(document.children(this.options.selector));
 
     if (scope !== undefined)
       return this.options.inner.on(scope);

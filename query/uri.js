@@ -10,17 +10,17 @@ const StringQuery = require('./string');
  */
 class UriQuery extends StringQuery {
   /**
-   * Constructs a UriQuery given a path to the URI in a document,
+   * Constructs a UriQuery given a selector for the URI in a document,
    * a base URI to resolve this URI against and an object of
    * additional configuration options.
    * 
-   * @param  {string} path      The path to the URI in a document.
+   * @param  {string} selector  The selector for the URI in a document.
    * @param  {string} [base=''] The base URI to resolve the found URI against.
    * @param  {object} [options] An object of additional configuration options.
    */
-  constructor(path, base='', options={}) {
+  constructor(selector, base='', options={}) {
     options.base = base;
-    super(path, options);
+    super(selector, options);
   }
 
   /**
@@ -30,7 +30,7 @@ class UriQuery extends StringQuery {
    * @return {string}   The URI found in the document.
    */
   find(document) {
-    return document.uri(this.options.path);
+    return document.uri(this.options.selector);
   }
 
   /**

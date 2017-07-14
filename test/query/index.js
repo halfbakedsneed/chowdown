@@ -8,12 +8,12 @@ describe('base query', () => {
 
   beforeEach(() => sandbox.verifyAndRestore());
 
-  it('Queries the document for the path', () => {
+  it('Queries the document for the selector', () => {
     let document = new Document();
     
-    sandbox.mock(document).expects('value').once().withArgs('path');
+    sandbox.mock(document).expects('value').once().withArgs('selector');
 
-    let query = Query.factory.base('path');
+    let query = Query.factory.base('selector');
 
     return query.on(document);
   });
@@ -21,9 +21,9 @@ describe('base query', () => {
   it('Returns the correct value when executed', () => {
     let document = new Document();
     
-    sandbox.stub(document, 'value').withArgs('path').returns('value');
+    sandbox.stub(document, 'value').withArgs('selector').returns('value');
 
-    let query = Query.factory.base('path');
+    let query = Query.factory.base('selector');
 
     return query.on(document)
       .then(result => expect(result).to.equal('value'));      
@@ -32,10 +32,10 @@ describe('base query', () => {
   it('Formats the value with a single function', () => {
     let document = new Document();
     
-    sandbox.stub(document, 'value').withArgs('path').returns('value'); 
+    sandbox.stub(document, 'value').withArgs('selector').returns('value'); 
 
     let format = sandbox.mock().once().withArgs('value').returns('formatted');
-    let query = Query.factory.base('path',{
+    let query = Query.factory.base('selector',{
       format: format
     });
 
@@ -46,14 +46,14 @@ describe('base query', () => {
   it('Formats the value with multiple functions', () => {
     let document = new Document();
     
-    sandbox.stub(document, 'value').withArgs('path').returns('value'); 
+    sandbox.stub(document, 'value').withArgs('selector').returns('value'); 
 
     let format = [
       sandbox.mock().once().withArgs('value').returns('formattedOnce'),
       sandbox.mock().once().withArgs('formattedOnce').returns('formattedTwice')
     ];
 
-    let query = Query.factory.base('path',{
+    let query = Query.factory.base('selector',{
       format: format
     });
 
@@ -66,7 +66,7 @@ describe('base query', () => {
     
     sandbox.stub(document, 'value').returns(undefined);
 
-    let query = Query.factory.base('path', {
+    let query = Query.factory.base('selector', {
       default: 'default'
     });
 
@@ -79,7 +79,7 @@ describe('base query', () => {
     
     sandbox.stub(document, 'value').returns(undefined);
 
-    let query = Query.factory.base('path', {
+    let query = Query.factory.base('selector', {
       throwOnMissing: true
     });
 
@@ -110,7 +110,7 @@ describe('base query', () => {
   });
 
   it('Returns a query if one is passed', () => {
-    let query = Query.factory('path');
+    let query = Query.factory('selector');
     expect(Query.factory(query)).to.equal(query);
   });
 

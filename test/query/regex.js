@@ -11,9 +11,9 @@ describe('regex query', () => {
 
   it('Finds string in document', () => {
     let document = new Document();
-    let query = Query.factory.regex('path', /(.*)/, 1);
+    let query = Query.factory.regex('selector', /(.*)/, 1);
 
-    sandbox.mock(document).expects('value').once().withArgs('path').returns('value');
+    sandbox.mock(document).expects('value').once().withArgs('selector').returns('value');
 
     return query.on(document);
   });
@@ -21,8 +21,8 @@ describe('regex query', () => {
   it('Returns correct group from regex match', () => {
     let document = new Document();
 
-    let queryOne = Query.factory.regex('path', /(match)(me)/, 1);
-    let queryTwo = Query.factory.regex('path', /(match)(me)/, 2);
+    let queryOne = Query.factory.regex('selector', /(match)(me)/, 1);
+    let queryTwo = Query.factory.regex('selector', /(match)(me)/, 2);
 
     sandbox.stub(document, 'value').returns('matchme');
 
@@ -34,7 +34,7 @@ describe('regex query', () => {
 
   it('Returns default when group not found', () => {
     let document = new Document();
-    let query = Query.factory.regex('path', /(match)(me)/, 3, {
+    let query = Query.factory.regex('selector', /(match)(me)/, 3, {
       default: 'default'
     });
 
@@ -46,7 +46,7 @@ describe('regex query', () => {
 
   it('Returns default when group not matched', () => {
     let document = new Document();
-    let query = Query.factory.regex('path', /(match)(me)/, 1, {
+    let query = Query.factory.regex('selector', /(match)(me)/, 1, {
       default: 'default'
     });
 
@@ -58,7 +58,7 @@ describe('regex query', () => {
 
   it('Returns default if no value returned from document', () => {
     let document = new Document();
-    let query = Query.factory.regex('path', /(match)(me)/, 1, {
+    let query = Query.factory.regex('selector', /(match)(me)/, 1, {
       default: 'default'
     });
 
@@ -70,7 +70,7 @@ describe('regex query', () => {
 
   it('Defaults to the first group if none is specified', () => {
     let document = new Document();
-    let query = Query.factory.regex('path', /(match)(me)/);
+    let query = Query.factory.regex('selector', /(match)(me)/);
 
     sandbox.stub(document, 'value').returns('matchme');
 

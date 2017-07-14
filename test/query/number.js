@@ -14,7 +14,7 @@ describe('number query', () => {
 
    sandbox.stub(document, 'value').returns('3');
 
-    let query = Query.factory.number('path', {
+    let query = Query.factory.number('selector', {
       default: 0
     });
 
@@ -27,7 +27,7 @@ describe('number query', () => {
 
     sandbox.stub(document, 'value').returns(undefined);
 
-    let query = Query.factory.number('path');
+    let query = Query.factory.number('selector');
 
     return query.on(document)
       .then(result => expect(result).to.eql(Number.NaN))

@@ -42,20 +42,20 @@ class Document {
    * and returns the result.
    * 
    * @param  {function} fn The raw document function to call.
-   * @return {any}      The result of the path function.
+   * @return {any}      The result of the raw document function.
    */
   raw(fn) {
     return this.queryRaw(fn);
   }
 
   /**
-   * Given a path, it attempts to resolve an array of child documents.
+   * Given a selector, it attempts to resolve an array of child documents.
    * 
-   * @param  {string}     path The path to to the children.
+   * @param  {string}     selector The selector for to the children.
    * @return {Document[]} An array of child documents.
    */
-  children(path) {
-    let children = this.queryChildren(this.formatPath(path));
+  children(selector) {
+    let children = this.queryChildren(this.formatSelector(selector));
 
     if (children === undefined)
       return undefined;
@@ -64,33 +64,33 @@ class Document {
   }
 
   /**
-   * Given a path, this method attempts to find a leaf value in the document.
+   * Given a selector, this method attempts to find a leaf value in the document.
    * 
-   * @param  {string}  path The path to the value.
-   * @return {any}     The value of the resolved path.
+   * @param  {string}  selector The selector for the value.
+   * @return {any}     The value of the resolved selector.
    */
-  value(path) {
-    return this.queryValue(this.formatPath(path));
+  value(selector) {
+    return this.queryValue(this.formatSelector(selector));
   }
 
   /**
-   * Given a path, this method attempts to resolve a URI to another document.
+   * Given a selector, this method attempts to resolve a URI to another document.
    * 
-   * @param  {string} path The path to the URI.
+   * @param  {string} selector The selector for the URI.
    * @return {any}    The resolved URI.
    */
-  uri(path) {
-    return this.queryUri(this.formatPath(path));
+  uri(selector) {
+    return this.queryUri(this.formatSelector(selector));
   }
 
   /**
    * An abstract method that handles the querying of values within the document.
    * 
-   * @param  {string} path The path to the value.
+   * @param  {string} selector The selector for the value.
    * @return {any} The value rettrieved.
    * @abstract
    */
-  query(path) {
+  query(selector) {
     throw new Error('the query method must be implemented by the subclass');
   }
 }
@@ -107,7 +107,7 @@ for (let suffix of ['root', 'document']) {
 /**
  * Set the child format methods to the identity function by default.
  */
-for (let suffix of ['path']) {
+for (let suffix of ['selector']) {
   Document.prototype['format' + capitalize(suffix)] = identity;
 }
 
@@ -115,8 +115,8 @@ for (let suffix of ['path']) {
  * Set the child query methods to call the general query method by default.
  */
 for (let suffix of ['uri', 'value', 'children']) {
-  Document.prototype['query' + capitalize(suffix)] = function(path) {
-    return this.query(path);
+  Document.prototype['query' + capitalize(suffix)] = function(selector) {
+    return this.query(selector);
   }
 }
 

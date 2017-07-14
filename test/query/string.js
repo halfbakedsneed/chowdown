@@ -14,7 +14,7 @@ describe('string query', () => {
 
     sandbox.stub(document, 'value').returns(3);
 
-    let query = Query.factory.string('path');
+    let query = Query.factory.string('selector');
 
     return query.on(document)
       .then(result => expect(result).to.equal('3'))
@@ -25,7 +25,7 @@ describe('string query', () => {
 
     sandbox.stub(document, 'value').returns(undefined);
 
-    let query = Query.factory.string('path');
+    let query = Query.factory.string('selector');
 
     return query.on(document)
       .then(result => expect(result).to.equal(''))

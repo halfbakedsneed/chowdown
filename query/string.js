@@ -12,15 +12,15 @@ const Query = require('./');
  */
 class StringQuery extends Query {
   /**
-   * Constructs a StringQuery given a path to the string in a document
+   * Constructs a StringQuery given a selector for the string in a document
    * and an object of additional configuration options.
    * 
-   * @param  {string} path                 The path to the string in a document.
+   * @param  {string} selector             The selector for the string in a document.
    * @param  {object} [options]            An object of additional configuration options.
    * @param  {object} [options.default=''] The default value this query will resolve to.
    */
-  constructor(path, options) {
-    super(path, options);
+  constructor(selector, options) {
+    super(selector, options);
   }
 
   /**

@@ -13,7 +13,7 @@ describe('base document', () => {
     expect(document.queryValue).to.be.a('function');
     expect(document.queryRaw).to.be.equal(undefined);
     expect(document.queryUri).to.be.a('function');
-    expect(document.formatPath).to.be.a('function');
+    expect(document.formatSelector).to.be.a('function');
     expect(document.loadDocument).to.be.a('function');
     expect(document.loadRoot).to.be.a('function');
   });
@@ -24,34 +24,34 @@ describe('base document', () => {
 
     let query = sandbox.spy(document, 'query');
 
-    document.children('childPath');
-    document.value('valuePath');
-    document.uri('uriPath');
+    document.children('childSelector');
+    document.value('valueSelector');
+    document.uri('uriSelector');
 
-    assert(query.withArgs('childPath').calledOnce);
-    assert(query.withArgs('valuePath').calledOnce);
-    assert(query.withArgs('uriPath').calledOnce);
+    assert(query.withArgs('childSelector').calledOnce);
+    assert(query.withArgs('valueSelector').calledOnce);
+    assert(query.withArgs('uriSelector').calledOnce);
   });
 
-  it('Has a formatPath method that returns the given path by default', () => {
+  it('Has a formatSelector method that returns the given selector by default', () => {
     let document = new Document();
     document.query = (() => undefined);
 
-    sandbox.mock(document).expects('queryChildren').once().withArgs('childPath');
-    sandbox.mock(document).expects('queryValue').once().withArgs('valuePath');
-    sandbox.mock(document).expects('queryUri').once().withArgs('uriPath');
+    sandbox.mock(document).expects('queryChildren').once().withArgs('childSelector');
+    sandbox.mock(document).expects('queryValue').once().withArgs('valueSelector');
+    sandbox.mock(document).expects('queryUri').once().withArgs('uriSelector');
 
-    document.children('childPath');
-    document.value('valuePath');
-    document.uri('uriPath');
+    document.children('childSelector');
+    document.value('valueSelector');
+    document.uri('uriSelector');
   });
 
   it('Throws an error when queried because it\'s an abstract class', () => {
     let document = new Document();
 
-    expect(() => document.children('path')).to.throw();
-    expect(() => document.value('path')).to.throw();
-    expect(() => document.uri('path')).to.throw();
+    expect(() => document.children('selector')).to.throw();
+    expect(() => document.value('selector')).to.throw();
+    expect(() => document.uri('selector')).to.throw();
   });
 
   it('Has factory methods for all document types', () => {

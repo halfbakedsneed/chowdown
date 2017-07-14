@@ -11,20 +11,20 @@ const Query = require('./');
  */
 class CollectionQuery extends Query {
   /**
-   * Constructs a CollectionQuery given a path to a list of child documents
+   * Constructs a CollectionQuery given a selector for a list of child documents
    * and an inner query that describes a value to pick from each child document.
    * 
    * Also takes an object of additional configuration options.
    * 
-   * @param  {string}   path                 The path to the children in the document.
+   * @param  {string}   selector             The selector for the children in the document.
    * @param  {Query}    inner                A query representing what to pick from each child document.
    * @param  {object}   [options]            An object of further configuration options.
    * @param  {any}      [options.default=[]] The default value this query will resolve to if no child documents are found.
    * @param  {function} [options.filter]     A function used to filter the resulting array.
    */
-  constructor(path, inner, options={}) {
+  constructor(selector, inner, options={}) {
     options.inner = inner;
-    super(path, options);
+    super(selector, options);
   }
 
   /**
@@ -61,7 +61,7 @@ class CollectionQuery extends Query {
    * @return {Promise<any>[]} An array of promises resolving to inner querys picked from each child document.
    */
   find(document) {
-    let children = document.children(this.options.path);
+    let children = document.children(this.options.selector);
 
     if (children !== undefined)
       return children.map(child => this.options.inner.on(child));

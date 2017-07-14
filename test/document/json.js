@@ -18,7 +18,7 @@ describe('json document', () => {
     expect(document.value('a')).to.equal('b');
   });
 
-  it('Returns the root if no path is given', () => {
+  it('Returns the root if no selector is given', () => {
     let document = Document.factory.json('{"a": ["c"]}');
     expect(document.value(undefined)).to.eql({a: ["c"]});
   });

@@ -43,18 +43,18 @@ describe('dom document', () => {
     let manipulator = sandbox.stub();
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns('result');
+    manipulator.withArgs('selector').returns('result');
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
 
     let document = Document.factory.dom('body', 'root');
 
-    document.value('path');
+    document.value('selector');
 
-    assert(manipulator.withArgs('path').calledOnce);
+    assert(manipulator.withArgs('selector').calledOnce);
   });
 
-  it('Uses the root if no path is given', () => {
+  it('Uses the root if no selector is given', () => {
     let manipulator = sandbox.stub();
     manipulator.withArgs('root').returns('root');
 
@@ -70,7 +70,7 @@ describe('dom document', () => {
     let element = createElement();
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
 
@@ -78,7 +78,7 @@ describe('dom document', () => {
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.value('path')).to.equal('result');
+    expect(document.value('selector')).to.equal('result');
   });
 
   it('Returns undefined if no element is found on a value query', () => {
@@ -86,13 +86,13 @@ describe('dom document', () => {
     let element = createElement(0);
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.value('path')).to.equal(undefined);
+    expect(document.value('selector')).to.equal(undefined);
   });
 
   it('Can extract a value from the document (attr)', () => {
@@ -100,7 +100,7 @@ describe('dom document', () => {
     let element = createElement();
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
 
@@ -108,7 +108,7 @@ describe('dom document', () => {
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.value('path/attr')).to.equal('result');
+    expect(document.value('selector/attr')).to.equal('result');
   });
 
   it('Returns undefined if the attr is not found on the element', () => {
@@ -116,14 +116,14 @@ describe('dom document', () => {
     let element = createElement();
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
     sandbox.stub(element, 'attr').withArgs('attr').returns(undefined);
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.value('path/attr')).to.equal(undefined);
+    expect(document.value('selector/attr')).to.equal(undefined);
 
   });
 
@@ -146,7 +146,7 @@ describe('dom document', () => {
     let element = createElement();
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
 
@@ -154,7 +154,7 @@ describe('dom document', () => {
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.uri('path')).to.equal('result');
+    expect(document.uri('selector')).to.equal('result');
   });
 
   it('Extracts children from the document', () => {
@@ -162,7 +162,7 @@ describe('dom document', () => {
     let element = createElement();
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
     sandbox.stub(element, 'toArray').returns(['a', 'b']);
@@ -174,7 +174,7 @@ describe('dom document', () => {
     factory.withArgs(manipulator, 'a').returns('a_doc');
     factory.withArgs(manipulator, 'b').returns('b_doc');
 
-    expect(document.children('path')).to.eql(['a_doc', 'b_doc']);
+    expect(document.children('selector')).to.eql(['a_doc', 'b_doc']);
     assert(factory.withArgs(manipulator, 'a').calledOnce);
     assert(factory.withArgs(manipulator, 'b').calledOnce);
   });
@@ -184,13 +184,13 @@ describe('dom document', () => {
     let element = createElement(0);
 
     manipulator.withArgs('root').returns('root');
-    manipulator.withArgs('path').returns(element);
+    manipulator.withArgs('selector').returns(element);
 
     sandbox.stub(cheerio, 'load').returns(manipulator);
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.children('path')).to.equal(undefined);
+    expect(document.children('selector')).to.equal(undefined);
   });
 
 

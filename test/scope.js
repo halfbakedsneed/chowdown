@@ -28,7 +28,7 @@ describe('scope', () => {
 
   it('Correctly executes a given query', () => {
     let scope = Scope.factory('document');
-    let query = Query.factory.base('path');
+    let query = Query.factory.base('selector');
 
     sandbox.mock(query).expects('on').once().withArgs('document').returns('result');
     expect(scope.execute(query)).to.equal('result');
@@ -43,11 +43,11 @@ describe('scope', () => {
   });
 
   it('Correctly generates and executes all query types', () => {
-    let query = Query.factory.base('path');
+    let query = Query.factory.base('selector');
     let options = {};
 
     for (let type of queryTypes) {
-      sandbox.mock(Query.factory).expects(type).once().withArgs('path', options).returns(query);
+      sandbox.mock(Query.factory).expects(type).once().withArgs('selector', options).returns(query);
     }
 
     sandbox.mock(query).expects('on').exactly(queryTypes.length).withArgs('document').returns('result');
@@ -59,7 +59,7 @@ describe('scope', () => {
     let scope = Scope.factory('document');
     
     for (let type of queryTypes) {
-      expect(scope[type]('path', options)).to.equal('result');
+      expect(scope[type]('selector', options)).to.equal('result');
     }
   }); 
 

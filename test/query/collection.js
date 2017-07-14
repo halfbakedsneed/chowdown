@@ -11,7 +11,7 @@ describe('collection query', () => {
 
   it('Creates a subquery', () => {
     let factory = sandbox.spy(Query, 'factory');
-    let query = Query.factory.collection('path', 'a', {
+    let query = Query.factory.collection('selector', 'a', {
       default: undefined
     });
 
@@ -23,10 +23,10 @@ describe('collection query', () => {
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);
-    sandbox.mock(document).expects('children').once().withArgs('path').returns([]);
+    sandbox.mock(document).expects('children').once().withArgs('selector').returns([]);
     sandbox.stub(subQuery, 'on');
 
-    let query = Query.factory.collection('path', 'a');
+    let query = Query.factory.collection('selector', 'a');
 
     return query.on(document);
   });
@@ -43,7 +43,7 @@ describe('collection query', () => {
     onStub.withArgs(document[1]).returns('b');
     onStub.withArgs(document[2]).returns('c');
 
-    let query = Query.factory.collection('path');
+    let query = Query.factory.collection('selector');
 
     return query
       .on(document[0])
@@ -63,7 +63,7 @@ describe('collection query', () => {
     onStub.onCall(0).returns('b');
     onStub.onCall(1).returns('c');
 
-    let query = Query.factory.collection('path');
+    let query = Query.factory.collection('selector');
 
     return query
       .on(document[0])
@@ -87,7 +87,7 @@ describe('collection query', () => {
     filter.withArgs('b').returns(false);
     filter.withArgs('c').returns(true);
 
-    let query = Query.factory.collection('path', undefined, {
+    let query = Query.factory.collection('selector', undefined, {
       filter: filter
     });
 
@@ -106,7 +106,7 @@ describe('collection query', () => {
     sandbox.stub(Query, 'factory').returns(subQuery);
     sandbox.stub(document[0], 'children').returns(undefined);
 
-    let query = Query.factory.collection('path', undefined);
+    let query = Query.factory.collection('selector', undefined);
 
     return query
       .on(document[0])

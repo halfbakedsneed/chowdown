@@ -12,15 +12,15 @@ const Query = require('./');
  */
 class NumberQuery extends Query {
   /**
-   * Constructs a NumberQuery given a path to the number in a document and
+   * Constructs a NumberQuery given a selector for the number in a document and
    * an object of additional configuration options.
    * 
-   * @param  {string} path                  The path to the number in a document.
+   * @param  {string} selector              The selector for the number in a document.
    * @param  {object} [options]             An object of additional configuration options.
    * @param  {number} [options.default=NaN] The default value this query will resolve to.
    */
-  constructor(path, options) {
-    super(path, options);
+  constructor(selector, options) {
+    super(selector, options);
   }
 
   /**

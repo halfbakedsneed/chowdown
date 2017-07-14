@@ -12,9 +12,9 @@ describe('uri query', () => {
   it('Queries the document correctly', () => {
     let document = new Document();
 
-    sandbox.mock(document).expects('uri').once().withArgs('path').returns('http://uri.com');
+    sandbox.mock(document).expects('uri').once().withArgs('selector').returns('http://uri.com');
 
-    let query = Query.factory.uri('path');
+    let query = Query.factory.uri('selector');
 
     return query.on(document)
       .then(result => expect(result).to.equal('http://uri.com/'));
@@ -25,7 +25,7 @@ describe('uri query', () => {
 
     sandbox.stub(document, 'uri').returns('/uri/query');
 
-    let query = Query.factory.uri('path', 'http://test.com');
+    let query = Query.factory.uri('selector', 'http://test.com');
 
     return query.on(document)
       .then(result => expect(result).to.equal('http://test.com/uri/query'));
@@ -36,7 +36,7 @@ describe('uri query', () => {
 
     sandbox.stub(document, 'uri').returns('bad_uri');
 
-    let query = Query.factory.uri('path');
+    let query = Query.factory.uri('selector');
 
     return query.on(document)
       .catch(err => expect(err).to.be.an.instanceof(Error));

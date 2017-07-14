@@ -36,54 +36,54 @@ module.exports = {
   },
 
   /**
-   * Formats and prepares a path for querying. The method expects a string
+   * Formats and prepares a selector for querying. The method expects a string
    * in a format inspired by the XPath standard.
    * 
-   * @param  {string} path  A string path to format.
-   * @return {array}  The formatted path;
+   * @param  {string} selector  A string selector for format.
+   * @return {array}  The formatted selector;
    */
-  formatPath: function(path) {
-    if (isString(path))
-      return path.split('/');
+  formatSelector: function(selector) {
+    if (isString(selector))
+      return selector.split('/');
 
     return [''];
   },
 
   /**
-   * Queries the cheerio document given a path. If the first part of the
-   * formatted path is an empty string, the root of the document is returned.
+   * Queries the cheerio document given a selector. If the first part of the
+   * formatted selector is an empty string, the root of the document is returned.
    * 
-   * @param  {array}   path The path to query.
+   * @param  {array}   selector The selector for query.
    * @return {cheerio} The result of the query.
    */
-  query: function(path) {
-    if (path[0] === '')
+  query: function(selector) {
+    if (selector[0] === '')
       return this.options.root;      
 
-    return this.options.document(path[0], this.options.root);
+    return this.options.document(selector[0], this.options.root);
   },
 
   /**
    * Calls the given document function with the cheerio object as the first
    * parameter and the document's root as the second parameter.
    * 
-   * @param  {function} fn The path function to call.
-   * @return {any}      The result of the path function. 
+   * @param  {function} fn The document function to call.
+   * @return {any}      The result of the document function. 
    */
   queryRaw: function(fn) {
     return fn(this.options.document, this.options.root);
   },
 
   /**
-   * Queries the cheerio document for children given a path.
+   * Queries the cheerio document for children given a selector.
    * If the result of the query is either not a cheerio result set or
    * the set contains no results, then undefined is returned.
    * 
-   * @param  {array}   path The path to query.
+   * @param  {array}   selector The selector for query.
    * @return {cheerio} The children query set.
    */
-  queryChildren: function(path) {
-    let result = this.query(path);
+  queryChildren: function(selector) {
+    let result = this.query(selector);
 
     if (!(result instanceof cheerio) || result.length == 0)
       return undefined;
@@ -93,33 +93,33 @@ module.exports = {
 
   /**
    * Queries the document for a URI. Will attempt to grab the href
-   * attribute of a dom element if no other attribute was specified in the path.
+   * attribute of a dom element if no other attribute was specified in the selector.
    *   
-   * @param  {array} path  The path to the URI.
+   * @param  {array} selector  The selector for the URI.
    * @return {*}  The retrieved URI.
    */
-  queryUri: function(path) {
-    return this.queryValue(path, 'href');
+  queryUri: function(selector) {
+    return this.queryValue(selector, 'href');
   },
 
   /**
    * Queries the document for an element and attempts to get an attribute from it.
    *
    * Accepts a proritised array of attributes to return from the element if no
-   * attribute was specified in the second part of the path.
+   * attribute was specified in the second part of the selector.
    * 
    * Each attribute in this array has a higher return priority than the one succeeding it.
    *
    * If no attribute can be resolved from the retrieved element, undefined is returned instead.
    * If no attribute is specified at all, then the inner text of the element is returned.
    * 
-   * @param  {array}    path          The parts of the path. The second part corresponds to the desired attribute.
+   * @param  {array}    selector      The parts of the selector. The second part corresponds to the desired attribute.
    * @param  {string[]} defaultAttrs  The fallback array of attributes to try for.
    * @return {any}      The retrieved value.
    */
-  queryValue: function(path, defaultAttrs=[]) {
-    let value = this.query(path);
-    let attrs = castArray(path[1] || defaultAttrs);
+  queryValue: function(selector, defaultAttrs=[]) {
+    let value = this.query(selector);
+    let attrs = castArray(selector[1] || defaultAttrs);
 
     if (!(value instanceof cheerio))
       return value;

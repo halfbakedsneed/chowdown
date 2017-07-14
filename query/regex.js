@@ -10,21 +10,21 @@ const StringQuery = require('./string');
  */
 class RegexQuery extends StringQuery {
   /**
-   * Constructs a RegexQuery given a path to the string in a document,
+   * Constructs a RegexQuery given a selector for the string in a document,
    * the regular expression pattern to match on and a regular expression
    * group to choose from the match.
    * 
    * Also takes an object of additional configuration options.
    * 
-   * @param  {string} path      The path to the string in a document.
+   * @param  {string} selector  The selector for the string in a document.
    * @param  {RegExp} pattern   The regular expression pattern to match on.
    * @param  {number} [group=1] The group number to select.
    * @param  {object} [options] An object of additional configuration options.
    */
-  constructor(path, pattern, group, options={}) {
+  constructor(selector, pattern, group, options={}) {
     options.pattern = pattern;
     options.group = group;
-    super(path, options);
+    super(selector, options);
   }
 
   /**

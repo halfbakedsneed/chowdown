@@ -14,17 +14,17 @@ const {
  */
 class Query {
   /**
-   * Constructs an query given a document path and an object
+   * Constructs an query given a document selector and an object
    * containing additional configuration options.
    * 
-   * @param  {string}     path                           A path to this query's value in a document.
+   * @param  {string}     selector                       A selector for this query's value in a document.
    * @param  {object}     [options]                      An object containing additional configuration options.
    * @param  {any}        [options.default]              The default valuye to return if no value is found.
    * @param  {boolean}    [options.throwOnMissing=false] Whether or not to throw an error if no value is found.
    * @param  {function[]} [options.format=[]]            The functions used to format the value.
    */
-  constructor(path, options={}) {
-    options.path = path;
+  constructor(selector, options={}) {
+    options.selector = selector;
     this.configure(options);
   }
 
@@ -35,7 +35,7 @@ class Query {
    * be set.
    * 
    * @param  {options}    options                        The object of configuration options.
-   * @param  {string}     options.path                   A path to this query's value in a document.
+   * @param  {string}     options.selector               A selector for this query's value in a document.
    * @param  {any}        [options.default]              The default valuye to return if no value is found.
    * @param  {boolean}    [options.throwOnMissing=false] Whether or not to throw an error if no value is found.
    * @param  {function[]} [options.format=[]]            The functions used to format the value.
@@ -49,13 +49,13 @@ class Query {
   }
 
   /**
-   * Retrieves a raw value from the document using the query's path.
+   * Retrieves a raw value from the document using the query's selector.
    * 
    * @param  {Document} document  The document to retrieve the value from.
    * @return {any}      The retrieved value.
    */
   find(document) {
-    return document.value(this.options.path);
+    return document.value(this.options.selector);
   }
 
   /**
@@ -138,7 +138,7 @@ let children = {
 };
 
 /**
- * A function that when passed a "path", will determine what
+ * A function that when passed a "selector", will determine what
  * type of query to create and create it.
  *
  * If an existing Query is passed, then it will be returned.
@@ -146,18 +146,18 @@ let children = {
  * Accepts a default factory function (create) that will be called
  * if no matching type is found.
  * 
- * @param  {any}      path    The path to create a query for.
+ * @param  {any}      selector    The selector for create a query for.
  * @param  {function} create  A default factory function.
  * @return {Query}    The constructed query.
  */
-Query.factory = function(path, create=Query.factory.string) {
-  if (isPlainObject(path)) 
+Query.factory = function(selector, create=Query.factory.string) {
+  if (isPlainObject(selector)) 
     create = Query.factory.object; 
 
-  if (isFunction(path))
+  if (isFunction(selector))
     create = Query.factory.callback;
 
-  return create(path);
+  return create(selector);
 }
 
 /**

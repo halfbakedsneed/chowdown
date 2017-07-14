@@ -12,11 +12,11 @@ class RawQuery extends Query {
    * Constructs a RawQuery given a raw document function and an additional
    * object of configuration options.
    * 
-   * @param  {function} path      The path function.
+   * @param  {function} selector  The selector function.
    * @param  {object}   [options] An object of additional configuration options.
    */
-  constructor(path, options={}) {
-    super(path, options);
+  constructor(selector, options={}) {
+    super(selector, options);
   }
 
   /**
@@ -24,10 +24,10 @@ class RawQuery extends Query {
    * and have its result returned.
    * 
    * @param  {Document}     document The document to execute the document function within.
-   * @return {Promise<any>} A promise containing the result of raw path function.
+   * @return {Promise<any>} A promise containing the result of raw selector function.
    */
   find(document) {
-    return document.raw(this.options.path);
+    return document.raw(this.options.selector);
   }
 }
 

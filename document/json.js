@@ -37,16 +37,16 @@ module.exports = {
   },
 
   /**
-   * Queries the document with the path provided using the lodash get function.
+   * Queries the document with the selector provided using the lodash get function.
    * 
-   * @param  {string} path The path to use in the query.
+   * @param  {string} selector The selector for use in the query.
    * @return {any}    The result of the query.
    */
-  query: function(path) {
-    if (path === undefined || '')
+  query: function(selector) {
+    if (selector === undefined || '')
       return this.options.root;
 
-    return get(this.options.root, path);
+    return get(this.options.root, selector);
   },
 
   /**
@@ -61,15 +61,15 @@ module.exports = {
   },
 
   /**
-   * Queries the document for children with the path provided.
+   * Queries the document for children with the selector provided.
    * If the children are not an arrays or an objects then the
    * method will return undefined.
    * 
-   * @param  {string}             path The path to use in the query.
+   * @param  {string}             selector The selector for use in the query.
    * @return {(object[]|array[])} The child objects or arrays.
    */
-  queryChildren: function(path) {
-    let result = castArray(this.query(path));
+  queryChildren: function(selector) {
+    let result = castArray(this.query(selector));
 
     if (!isPlainObject(first(result)) && !isArray(first(result)))
       return undefined;

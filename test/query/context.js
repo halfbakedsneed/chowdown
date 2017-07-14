@@ -11,7 +11,7 @@ describe('context query', () => {
 
   it('Creates a subquery', () => {
     let factory = sandbox.spy(Query, 'factory');
-    let query = Query.factory.context('path', 'sub');
+    let query = Query.factory.context('selector', 'sub');
 
     assert(factory.withArgs('sub').calledOnce);
   });
@@ -23,9 +23,9 @@ describe('context query', () => {
     sandbox.stub(Query, 'factory').returns(subQuery);
     sandbox.stub(subQuery, 'on');
 
-    sandbox.mock(document).expects('children').once().withArgs('path').returns(['context']);
+    sandbox.mock(document).expects('children').once().withArgs('selector').returns(['context']);
 
-    let query = Query.factory.context('path', 'sub');
+    let query = Query.factory.context('selector', 'sub');
 
     return query.on(document);
   });
@@ -39,7 +39,7 @@ describe('context query', () => {
 
     sandbox.mock(subQuery).expects('on').once().withArgs('context').returns('inner');
 
-    let query = Query.factory.context('path', 'sub');
+    let query = Query.factory.context('selector', 'sub');
 
     return query.on(document);
   });
@@ -53,7 +53,7 @@ describe('context query', () => {
 
     sandbox.mock(subQuery).expects('on').once().withArgs('context').returns('inner');
 
-    let query = Query.factory.context('path', 'sub');
+    let query = Query.factory.context('selector', 'sub');
 
     return query
       .on(document)
@@ -65,9 +65,9 @@ describe('context query', () => {
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);
-    sandbox.stub(document, 'children').withArgs('path').returns(undefined);
+    sandbox.stub(document, 'children').withArgs('selector').returns(undefined);
 
-    let query = Query.factory.context('path', 'sub', {
+    let query = Query.factory.context('selector', 'sub', {
       default: 'default'
     });
 
