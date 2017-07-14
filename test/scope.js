@@ -6,6 +6,18 @@ const sandbox = sinon.sandbox.create();
 
 describe('scope', () => {
 
+  let queryTypes = [
+    'follow',
+    'regex',
+    'string',
+    'raw',
+    'collection',
+    'object',
+    'number',
+    'link',
+    'context'
+  ];
+
   afterEach(() => sandbox.verifyAndRestore());
 
   it('Creates a scope given a document', () => {
@@ -35,7 +47,7 @@ describe('scope', () => {
   it('Has methods to generate and execute all query types', () => {
     let scope = Scope.factory('document');
 
-    for (let type in Query.factory) {
+    for (let type of queryTypes) {
       expect(scope[type]).to.be.a('function');
     }
   });
@@ -43,14 +55,12 @@ describe('scope', () => {
   it('Correctly generates and executes all query types', () => {
     let query = Query.factory.base('path');
     let options = {};
-    let count = 0;
 
-    for (let type in Query.factory) {
-      count++;
+    for (let type of queryTypes) {
       sandbox.mock(Query.factory).expects(type).once().withArgs('path', options).returns(query);
     }
 
-    sandbox.mock(query).expects('on').exactly(count).withArgs('document').returns('result');
+    sandbox.mock(query).expects('on').exactly(queryTypes.length).withArgs('document').returns('result');
 
     let Scope = proxyquire('../scope', {
       './query': Query
@@ -58,7 +68,7 @@ describe('scope', () => {
 
     let scope = Scope.factory('document');
     
-    for (let type in Query.factory) {
+    for (let type of queryTypes) {
       expect(scope[type]('path', options)).to.equal('result');
     }
   }); 

@@ -1,4 +1,4 @@
-const { extendWith } = require('lodash');
+const { extendWith, omit } = require('lodash');
 
 /**
  * A class that wraps a document and allows for easy creation
@@ -59,9 +59,19 @@ Scope.factory = function(document) {
 const Query = require('./query');
 
 /**
+ * The query types to omit from the Scope prototype.
+ * 
+ * @type {Array}
+ */
+let hide = [
+  'base',
+  'callback'
+];
+
+/**
  * Create a method on the Scope class for each type of query that when called
  * will create and execute that query.
  */
-extendWith(Scope.prototype, Query.factory, (_, fn) => function(...args) {
+extendWith(Scope.prototype, omit(Query.factory, hide), (_, fn) => function(...args) {
   return this.execute(fn(...args));
 });
