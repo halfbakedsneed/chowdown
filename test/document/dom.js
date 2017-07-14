@@ -141,7 +141,7 @@ describe('dom document', () => {
     expect(document.raw(fn)).to.equal('result');
   });
 
-  it('Extracts a link from the document', () => {
+  it('Extracts a uri from the document', () => {
     let manipulator = sandbox.stub();
     let element = createElement();
 
@@ -154,7 +154,7 @@ describe('dom document', () => {
 
     let document = Document.factory.dom('body', 'root');
 
-    expect(document.link('path')).to.equal('result');
+    expect(document.uri('path')).to.equal('result');
   });
 
   it('Extracts children from the document', () => {

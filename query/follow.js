@@ -13,12 +13,12 @@ const { identity, set } = require('lodash');
 class FollowQuery extends Query {
 
   /**
-   * Constructs a FollowQuery given a query to find a uri withinn a document
-   * and an inner query to execute on the document resolved from the uri.
+   * Constructs a FollowQuery given a query to find a URI withinn a document
+   * and an inner query to execute on the document resolved from the URI.
    *
    * Also takes an additional object of configuration options.
    * 
-   * @param  {Query}  uri       A query pointing to a uri for a different document.
+   * @param  {Query}  uri       A query pointing to a URI for a different document.
    * @param  {Query}  inner     The query to execute on the other document.
    * @param  {object} [options] An object of additional configuration options.
    */
@@ -31,26 +31,26 @@ class FollowQuery extends Query {
   /**
    * Configures the FollowQuery given an object of configuration options.
    *
-   * If the inner query and uri query are not already Query objects,
+   * If the inner query and URI query are not already Query objects,
    * then Query objects will be created from them.
    * 
    * @param  {object} options       An object of configuration options.
-   * @param  {Query}  options.uri   A query pointing to a uri for a different document.
+   * @param  {Query}  options.uri   A query pointing to a URI for a different document.
    * @param  {Query}  options.inner The query to execute on the other document.
    */
   configure(options) {
     super.configure(options);
-    this.options.uri = Query.factory(this.options.uri, Query.factory.link);
+    this.options.uri = Query.factory(this.options.uri, Query.factory.uri);
     this.options.inner = Query.factory(this.options.inner);
     this.options.request = this.options.request || {};
   }
 
   /**
-   * Finds the uri in the given document and retrieves the document
-   * from this uri. The inner query will be executed on this retrieved
+   * Finds the URI in the given document and retrieves the document
+   * from this URI. The inner query will be executed on this retrieved
    * document and its result will be returned.
    * 
-   * @param  {Document}     document The document containing the uri linking to the other document.
+   * @param  {Document}     document The document containing the URI linking to the other document.
    * @return {Promise<any>} A promise containing the result of the inner query on the retrieved document.
    */
   find(document) {

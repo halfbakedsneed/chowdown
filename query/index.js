@@ -135,7 +135,7 @@ let children = {
   context: require('./context'),
   callback: require('./callback'),
   follow: require('./follow'),
-  link: require('./link'),
+  uri: require('./uri'),
   regex: require('./regex')
 };
 

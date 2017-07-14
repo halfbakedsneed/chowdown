@@ -15,7 +15,7 @@ describe('follow query', () => {
     Query.factory.follow('uri', 'sub');
 
     assert(factory.withArgs('sub').calledOnce);
-    assert(factory.withArgs('uri', Query.factory.link).calledOnce);
+    assert(factory.withArgs('uri', Query.factory.uri).calledOnce);
   });
 
   it('Attempts to find the uri', () => {

@@ -98,7 +98,7 @@ describe('base query', () => {
       'collection',
       'object',
       'number',
-      'link',
+      'uri',
       'context'
     ];
 

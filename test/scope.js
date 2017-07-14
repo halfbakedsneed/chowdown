@@ -1,22 +1,12 @@
 const helper = require('./helper');
-
 const Scope = require('../scope');
 const Query = require('../query');
+const { omit, functions } = require('lodash'); 
 const sandbox = sinon.sandbox.create();
 
 describe('scope', () => {
 
-  let queryTypes = [
-    'follow',
-    'regex',
-    'string',
-    'raw',
-    'collection',
-    'object',
-    'number',
-    'link',
-    'context'
-  ];
+  let queryTypes = functions(omit(Query.factory, ['callback', 'base']));
 
   afterEach(() => sandbox.verifyAndRestore());
 

@@ -74,13 +74,13 @@ class Document {
   }
 
   /**
-   * Given a path, this method attempts to resolve a link to another document.
+   * Given a path, this method attempts to resolve a URI to another document.
    * 
-   * @param  {string} path The path to the link.
-   * @return {any}    The resolved link.
+   * @param  {string} path The path to the URI.
+   * @return {any}    The resolved URI.
    */
-  link(path) {
-    return this.queryLink(this.formatPath(path));
+  uri(path) {
+    return this.queryUri(this.formatPath(path));
   }
 
   /**
@@ -114,7 +114,7 @@ for (let suffix of ['path']) {
 /**
  * Set the child query methods to call the general query method by default.
  */
-for (let suffix of ['link', 'value', 'children']) {
+for (let suffix of ['uri', 'value', 'children']) {
   Document.prototype['query' + capitalize(suffix)] = function(path) {
     return this.query(path);
   }

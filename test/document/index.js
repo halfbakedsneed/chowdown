@@ -12,7 +12,7 @@ describe('base document', () => {
     expect(document.queryChildren).to.be.a('function');
     expect(document.queryValue).to.be.a('function');
     expect(document.queryRaw).to.be.equal(undefined);
-    expect(document.queryLink).to.be.a('function');
+    expect(document.queryUri).to.be.a('function');
     expect(document.formatPath).to.be.a('function');
     expect(document.loadDocument).to.be.a('function');
     expect(document.loadRoot).to.be.a('function');
@@ -26,11 +26,11 @@ describe('base document', () => {
 
     document.children('childPath');
     document.value('valuePath');
-    document.link('linkPath');
+    document.uri('uriPath');
 
     assert(query.withArgs('childPath').calledOnce);
     assert(query.withArgs('valuePath').calledOnce);
-    assert(query.withArgs('linkPath').calledOnce);
+    assert(query.withArgs('uriPath').calledOnce);
   });
 
   it('Has a formatPath method that returns the given path by default', () => {
@@ -39,11 +39,11 @@ describe('base document', () => {
 
     sandbox.mock(document).expects('queryChildren').once().withArgs('childPath');
     sandbox.mock(document).expects('queryValue').once().withArgs('valuePath');
-    sandbox.mock(document).expects('queryLink').once().withArgs('linkPath');
+    sandbox.mock(document).expects('queryUri').once().withArgs('uriPath');
 
     document.children('childPath');
     document.value('valuePath');
-    document.link('linkPath');
+    document.uri('uriPath');
   });
 
   it('Throws an error when queried because it\'s an abstract class', () => {
@@ -51,7 +51,7 @@ describe('base document', () => {
 
     expect(() => document.children('path')).to.throw();
     expect(() => document.value('path')).to.throw();
-    expect(() => document.link('path')).to.throw();
+    expect(() => document.uri('path')).to.throw();
   });
 
   it('Has factory methods for all document types', () => {

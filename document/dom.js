@@ -92,13 +92,13 @@ module.exports = {
   },
 
   /**
-   * Queries the document for a link. Will attempt to grab the href
+   * Queries the document for a URI. Will attempt to grab the href
    * attribute of a dom element if no other attribute was specified in the path.
    *   
-   * @param  {array} path  The path to the link.
-   * @return {*}  The retrieved link.
+   * @param  {array} path  The path to the URI.
+   * @return {*}  The retrieved URI.
    */
-  queryLink: function(path) {
+  queryUri: function(path) {
     return this.queryValue(path, 'href');
   },
 
