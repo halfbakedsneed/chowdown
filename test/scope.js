@@ -6,7 +6,7 @@ const sandbox = sinon.sandbox.create();
 
 describe('scope', () => {
 
-  let queryTypes = functions(omit(Query.factory, ['callback', 'base']));
+  let queryTypes = functions(Query.factory);
 
   afterEach(() => sandbox.verifyAndRestore());
 
@@ -28,7 +28,7 @@ describe('scope', () => {
 
   it('Correctly executes a given query', () => {
     let scope = Scope.factory('document');
-    let query = Query.factory.base('selector');
+    let query = Query.factory('selector');
 
     sandbox.mock(query).expects('on').once().withArgs('document').returns('result');
     expect(scope.execute(query)).to.equal('result');
@@ -43,7 +43,7 @@ describe('scope', () => {
   });
 
   it('Correctly generates and executes all query types', () => {
-    let query = Query.factory.base('selector');
+    let query = Query.factory('selector');
     let options = {};
 
     for (let type of queryTypes) {

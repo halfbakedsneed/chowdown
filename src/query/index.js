@@ -124,7 +124,6 @@ module.exports = Query;
  * @type {object}
  */
 let children = {
-  base: Query,
   raw: require('./raw'),
   string: require('./string'),
   number: require('./number'),

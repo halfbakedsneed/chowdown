@@ -1,7 +1,7 @@
 const helper = require('./helper');
-
 const chowdown = require('../src/chowdown');
 const Scope = require('../src/scope');
+const Query = require('../src/query');
 const retrieve = require('../src/retrieve');
 const sandbox = sinon.sandbox.create();
 
@@ -38,6 +38,14 @@ describe('chowdown', () => {
     sandbox.mock(Scope).expects('factory').once().withArgs('document').returns('scope');
 
     expect(chowdown('request')).to.equal('scope');
+  });
+
+  it('Has the correct methods to create all types of queries', () => {
+
+    for (let type in Query.factory) {
+      expect(Query.factory[type]).to.eql(chowdown.query[type]);
+    }
+
   });
 
 });

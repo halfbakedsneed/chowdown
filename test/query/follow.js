@@ -19,10 +19,10 @@ describe('follow query', () => {
   });
 
   it('Attempts to find the uri', () => {
-    let factory = sandbox.stub(Query, 'factory');
+    let uriQuery = Query.factory();
+    let subQuery = Query.factory();
 
-    let uriQuery = Query.factory.base();
-    let subQuery = Query.factory.base();
+    let factory = sandbox.stub(Query, 'factory');
 
     factory.withArgs('uri').returns(uriQuery);
     factory.withArgs('sub').returns(subQuery);
@@ -38,10 +38,10 @@ describe('follow query', () => {
   });
 
   it('Passes the uri and options to the retrieve method', () => {
-    let factory = sandbox.stub(Query, 'factory');
+    let uriQuery = Query.factory();
+    let subQuery = Query.factory();
 
-    let uriQuery = Query.factory.base();
-    let subQuery = Query.factory.base();
+    let factory = sandbox.stub(Query, 'factory');
 
     factory.withArgs('uri').returns(uriQuery);
     factory.withArgs('sub').returns(subQuery);
@@ -73,10 +73,10 @@ describe('follow query', () => {
   });
 
   it('Attempts to execute and returns the subquery', () => {
-    let factory = sandbox.stub(Query, 'factory');
+    let uriQuery = Query.factory();
+    let subQuery = Query.factory();
 
-    let uriQuery = Query.factory.base();
-    let subQuery = Query.factory.base();
+    let factory = sandbox.stub(Query, 'factory');
 
     factory.withArgs('uri').returns(uriQuery);
     factory.withArgs('sub').returns(subQuery);
@@ -93,10 +93,10 @@ describe('follow query', () => {
   });
 
   it('Returns the default value if an error is thrown', () => {
-    let factory = sandbox.stub(Query, 'factory');
+    let uriQuery = Query.factory();
+    let subQuery = Query.factory();
 
-    let uriQuery = Query.factory.base();
-    let subQuery = Query.factory.base();
+    let factory = sandbox.stub(Query, 'factory');
 
     factory.withArgs('uri').returns(uriQuery);
     factory.withArgs('sub').returns(subQuery);

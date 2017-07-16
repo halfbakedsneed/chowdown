@@ -21,8 +21,8 @@ describe('object query', () => {
   });
 
   it('Executes subqueries correctly', () => {
-    let subQueryOne = Query.factory.base();
-    let subQueryTwo = Query.factory.base();
+    let subQueryOne = Query.factory();
+    let subQueryTwo = Query.factory();
 
     let factory = sandbox.stub(Query, 'factory');
 
@@ -41,8 +41,8 @@ describe('object query', () => {
   });
 
   it('Constructs an object correctly', () => {
-    let subQueryOne = Query.factory.base();
-    let subQueryTwo = Query.factory.base();
+    let subQueryOne = Query.factory();
+    let subQueryTwo = Query.factory();
 
     let factory = sandbox.stub(Query, 'factory');
 

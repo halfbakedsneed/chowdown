@@ -19,7 +19,7 @@ describe('collection query', () => {
   });
 
   it('Correctly queries the document for children', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -32,7 +32,7 @@ describe('collection query', () => {
   });
 
   it('Executes the subquery correctly', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = [new Document(), new Document(), new Document()];
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -52,7 +52,7 @@ describe('collection query', () => {
   });
 
   it('Constructs an array correctly', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = [new Document(), new Document(), new Document()];
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -71,7 +71,7 @@ describe('collection query', () => {
   });
 
   it('Can filter an array correctly', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = [new Document(), new Document(), new Document()];
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -100,7 +100,7 @@ describe('collection query', () => {
 
 
   it('Has a default value of an empty array', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = [new Document(), new Document(), new Document()];
 
     sandbox.stub(Query, 'factory').returns(subQuery);

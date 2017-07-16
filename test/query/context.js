@@ -17,7 +17,7 @@ describe('context query', () => {
   });
 
   it('Finds context in document', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -31,7 +31,7 @@ describe('context query', () => {
   });
 
   it('Executes subquery within context', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -45,7 +45,7 @@ describe('context query', () => {
   });
 
   it('Returns subquery result', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);
@@ -61,7 +61,7 @@ describe('context query', () => {
   });
 
   it('Returns default if no context found', () => {
-    let subQuery = Query.factory.base();
+    let subQuery = Query.factory();
     let document = new Document();
 
     sandbox.stub(Query, 'factory').returns(subQuery);

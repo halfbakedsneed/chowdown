@@ -13,7 +13,7 @@ describe('base query', () => {
     
     sandbox.mock(document).expects('value').once().withArgs('selector');
 
-    let query = Query.factory.base('selector');
+    let query = new Query('selector');
 
     return query.on(document);
   });
@@ -23,7 +23,7 @@ describe('base query', () => {
     
     sandbox.stub(document, 'value').withArgs('selector').returns('value');
 
-    let query = Query.factory.base('selector');
+    let query = new Query('selector');
 
     return query.on(document)
       .then(result => expect(result).to.equal('value'));      
@@ -35,7 +35,7 @@ describe('base query', () => {
     sandbox.stub(document, 'value').withArgs('selector').returns('value'); 
 
     let format = sandbox.mock().once().withArgs('value').returns('formatted');
-    let query = Query.factory.base('selector',{
+    let query = new Query('selector',{
       format: format
     });
 
@@ -53,7 +53,7 @@ describe('base query', () => {
       sandbox.mock().once().withArgs('formattedOnce').returns('formattedTwice')
     ];
 
-    let query = Query.factory.base('selector',{
+    let query = new Query('selector',{
       format: format
     });
 
@@ -66,7 +66,7 @@ describe('base query', () => {
     
     sandbox.stub(document, 'value').returns(undefined);
 
-    let query = Query.factory.base('selector', {
+    let query = new Query('selector', {
       default: 'default'
     });
 
@@ -79,7 +79,7 @@ describe('base query', () => {
     
     sandbox.stub(document, 'value').returns(undefined);
 
-    let query = Query.factory.base('selector', {
+    let query = new Query('selector', {
       throwOnMissing: true
     });
 
@@ -89,7 +89,6 @@ describe('base query', () => {
 
   it('Has methods for creating all query types', () => {
     let types = [
-      'base',
       'follow',
       'regex',
       'string',
