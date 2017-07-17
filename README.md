@@ -230,7 +230,7 @@ Manually [created queries](#creating-queries) can also be executed directly on a
 ```js
 let scope = chowdown('http://somewebpage.com');
 
-scope(chowdown.query.string('.author:nth-child(1) .name'))
+scope.execute(chowdown.query.string('.author:nth-child(1) .name'))
 // => Resolves to: 'Dennis Reynolds'
 ```
 
