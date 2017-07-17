@@ -1,4 +1,6 @@
+const { clone } = require('lodash');
 const Scope = require('./scope');
+const Query = require('./query');
 const retrieve = require('./retrieve');
 
 /**
@@ -47,3 +49,10 @@ chowdown.file = function(file, options) {
 chowdown.body = function(body, options) { 
   return Scope.factory(retrieve.body(body, options));
 };
+
+/**
+ * Allow for the creation of queries.
+ * 
+ * @type {object}
+ */
+chowdown.query = clone(Query.factory);
