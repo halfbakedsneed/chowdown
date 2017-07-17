@@ -31,6 +31,19 @@ describe('uri query', () => {
       .then(result => expect(result).to.equal('http://test.com/uri/query'));
   });
 
+  it('Doesn\'t prepend the base URI if using the default value', () => {
+    let document = new Document();
+
+    sandbox.stub(document, 'uri').returns(undefined);
+
+    let query = Query.factory.uri('selector', 'http://test.com', {
+      default: '/cool'
+    });
+
+    return query.on(document)
+      .then(result => expect(result).to.equal('/cool'));
+  });
+
   it('Throws error if bad URI is retrieved', () => {
     let document = new Document();
 
