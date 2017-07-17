@@ -598,6 +598,8 @@ Creates a query that finds a URI in a document using the given `selector` and
 resolves it relative to the given `base` URI. Will automatically attempt to grab the `href` attribute of the
 element specified by `selector`.
 
+If no URI is retrieved from the document, chowdown will not attempt to resolve the default value agsint the `base` URI.
+
 #### Parameters
 - `selector` `{string}` A selector to find the URI.
 - `[base]` `{string}` The base URI for the retrieved URI.

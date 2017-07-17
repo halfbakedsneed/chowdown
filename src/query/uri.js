@@ -24,25 +24,17 @@ class UriQuery extends StringQuery {
   }
 
   /**
-   * Finds the URI in the document.
+   * Finds the URI in the document and resolves the found URI
+   * against the query's base URI.
    * 
    * @param  {Document} document  The document to find the URI in.
    * @return {string}   The URI found in the document.
    */
   find(document) {
-    return document.uri(this.options.selector);
-  }
+    let uri = document.uri(this.options.selector);
 
-  /**
-   * Given the retrieved URI, this method resolves the found URI
-   * against the query's base URI and returns it.
-   * 
-   * @param  {string}   string    The URI retrieved from the document.
-   * @param  {Document} document  The document the URI was retrieved from.
-   * @return {string}   The resulting, URI coerced to a string.
-   */
-  build(string, document) {
-    return url.resolve(this.options.base, string);
+    if (uri !== undefined)
+      return url.resolve(this.options.base, uri);
   }
 }
 
