@@ -27,7 +27,7 @@ A JavaScript library that allows for the quick transformation of DOM documents i
   - [chowdown.query.raw](#raw)
   - [chowdown.query.regex](#regex)
   - [chowdown.query.context](#context)
-  - [chowdown.query.link](#link)
+  - [chowdown.query.uri](#uri)
   - [chowdown.query.follow](#follow)
   - [chowdown.query.callback](#callback)
 
@@ -290,7 +290,7 @@ Scope instances have methods that allow you to query directly on a document (or 
 - scope.raw: creates and executes a [raw query](#raw) within the scope.
 - scope.regex: creates and executes a [regex query](#regex) within the scope.
 - scope.context: creates and executes a [context query](#context) within the scope.
-- scope.link: creates and executes a [link query](#link) within the scope.
+- scope.uri: creates and executes a [uri query](#uri) within the scope.
 - scope.follow: creates and executes a [follow query](#follow) within the scope.
 - scope.callback: creates and executes a [callback query](#callback) within the scope.
 - [scope.execute](#execute)
@@ -334,7 +334,7 @@ for the creation of different types of queries:
 - [chowdown.query.raw](#raw)
 - [chowdown.query.regex](#regex)
 - [chowdown.query.context](#context)
-- [chowdown.query.link](#link)
+- [chowdown.query.uri](#uri)
 - [chowdown.query.follow](#follow)
 - [chowdown.query.callback](#callback)
 
