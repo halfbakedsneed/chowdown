@@ -1,6 +1,6 @@
 {
   "name": "chowdown",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A JavaScript library that allows for the quick transformation of DOM documents into useful formats.",
   "main": "./dist/chowdown.js",
   "scripts": {
