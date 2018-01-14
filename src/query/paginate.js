@@ -1,5 +1,5 @@
 const FollowQuery = require('./follow');
-const { identity, set, flatten, last, isFunction } = require('lodash');
+const { flatten, last, isFunction } = require('lodash');
 
 /**
  * When executed, this query will return a promise resolving to
@@ -43,11 +43,12 @@ class PaginateQuery extends FollowQuery {
    * @param  {object}          options         An object of configuration options.
    * @param  {Query}           options.uri     A query pointing to a URI for a different document.
    * @param  {Query}           options.inner   The query to execute on the other document.
-   * @param  {Function|Number} [options.max]   The function used to determine when to stop.
-   * @param  {Function}        [options.merge] The function used to merge the results.
+   * @param  {function|number} [options.max]   The function used to determine when to stop.
+   * @param  {function}        [options.merge] The function used to merge the results.
    */
   configure(options) {
     super.configure(options);
+
     this.options.merge = this.options.merge || flatten;
 
     if (!isFunction(this.options.max))
@@ -67,7 +68,7 @@ class PaginateQuery extends FollowQuery {
       .then(result => pages.push(result))
       .then(count => this.options.uri.on(document))
       .then(uri => (uri && this.options.max(pages.length, pages))
-        ? this.find(this.next(uri), pages)
+        ? this.next(uri).then(document => this.find(document, pages))
         : pages
       );
   }

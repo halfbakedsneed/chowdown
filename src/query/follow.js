@@ -61,11 +61,11 @@ class FollowQuery extends Query {
   }
 
   /**
-   * Retrieves the page at the given URI and returns a
+   * Retrieves the page at the given URI and returns a promise resolving to a
    * document that encapsulates it.
    * 
    * @param  {string}   uri The uri the document is located at.
-   * @return {Document} The constructed document.
+   * @return {Promise<Document>} A promise resolving to the constructed document.
    */
   next(uri) {
     return retrieve.request(set(this.options.request, 'uri', uri), this.options);
