@@ -15,7 +15,7 @@ let retrieve = module.exports = {}
  * @param  {object}            [options.client=rp] A client function used to resolve the request.
  * @return {Promise<Document>} A promise resolving to a document created from response of the request.
  */
-retrieve.request = wrap((request, options) =>
+retrieve.request = withConfig((request, options) =>
   options.client(request).then(body => retrieve.body(body, options))
 );
 
@@ -27,7 +27,7 @@ retrieve.request = wrap((request, options) =>
  * @param  {object}            [options] An object of options.
  * @return {Promise<Document>} A promise resolving to a document created from the contents of the file.
  */
-retrieve.file = wrap((file, options) =>
+retrieve.file = withConfig((file, options) =>
   readFile(file).then(body => retrieve.body(body, options))
 );
 
@@ -39,24 +39,9 @@ retrieve.file = wrap((file, options) =>
  * @param  {object}            [options] An object of options.
  * @return {Promise<Document>} A promise resolving to a document created from the given body.
  */
-retrieve.body = wrap((body, options) =>
+retrieve.body = withConfig((body, options) =>
   Promise.resolve(Document.factory[options.type](body))
 );
-
-/**
- * Configures the given options object by setting property defaults.
- * 
- * @param  {object} options              The options object to configure.
- * @param  {object} [options.type='dom'] The type of document to create.
- * @param  {object} [options.client=rp]  The client function used to resolve a request.
- * @return {object} The configured options object.
- */
-function configure(options) {
-  options.type = 'dom';
-  options.client = options.client || rp;
-
-  return options;
-}
 
 /**
  * Wraps the given function such that its
@@ -65,9 +50,11 @@ function configure(options) {
  * @param  {function} fn The function to wrap.
  * @return {function} The wrapped function.
  */
-function wrap(fn) {
-  return (...args) => {
-    args[fn.length - 1] = configure(args[fn.length - 1] || {});
-    return fn(...args);
+function withConfig(fn) {
+  return (source, options={}) => {
+    options.type = 'dom';
+    options.client = options.client || rp;
+
+    return fn(source, options);
   }
 }
