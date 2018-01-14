@@ -685,7 +685,7 @@ returns `false`.
 
 #### Parameters
 - `inner` `{Query<T>}` A query to execute on each document.
-- `uri` `{string|object|function}` A query to find the next URI on each page.
+- `uri` `{string|object|function}` A query to find the next URI in each document.
 - `[max=Infinity]` `{number|function}` The maximum number of pages to retrieve or a function that takes the current number of pages and the last page and returns false when it's desirable to stop.
 - `[options]` `{object}` An object of configuration options.
   - `[default=undefined]` `{any}` The default value to return if there's an error accessing a page.
