@@ -149,8 +149,5 @@ function add(name, methods) {
   Document.factory[name] = (document, root) => new ConcreteDocument(document, root);
 }
 
-// Add the JSON document type.
-add('json', require('./json'));
-
 // Add the DOM document type;
 add('dom', require('./dom'));
