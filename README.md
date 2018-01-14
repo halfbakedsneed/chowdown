@@ -29,8 +29,8 @@ A JavaScript library that allows for the quick transformation of DOM documents i
   - [chowdown.query.context](#context)
   - [chowdown.query.uri](#uri)
   - [chowdown.query.follow](#follow)
-  - [chowdown.query.callback](#callback)
   - [chowdown.query.paginate](#paginate)
+  - [chowdown.query.callback](#callback)
 
 ## <a name="installation"></a> Installation
 
@@ -68,6 +68,7 @@ markup:
       <span class="year">1990</span>
     </div>
   </div>
+  <a class="next" href="/search?page=2"/>
 </div>
 ```
 
@@ -674,6 +675,68 @@ This will resolve to:
 'DeVitos'
 ```
 
+### <a name="paginate"></a> chowdown.query.paginate(inner, uri, [max], [options])
+----
+
+Creates a query that executes the `inner` query on multiple pages. The link to
+the next page is pointed to by the `uri` query. Pagination will stop after
+`max` pages have been requested. If `max` is a function, pagination will stop whenever it
+returns `false`.
+
+#### Parameters
+- `inner` `{Query<T>}` A query to execute on each document.
+- `uri` `{string|object|function}` A query to find the next URI on each page.
+- `[max=Infinity]` `{number|function}` The maximum number of pages to retrieve or a function that takes the current number of pages and the last page and returns false when it's desirable to stop.
+- `[options]` `{object}` An object of configuration options.
+  - `[default=undefined]` `{any}` The default value to return if there's an error accessing a page.
+  - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
+  a request object or URI and should return a promise that resolves to a `string` or `cheerio` object.
+  - `[request]` `{object}` An object of other request options to pass to `client`.
+  - `[merge=flatten]` `{function}` The function used to merge the paginated results. Takes one argument `pages` - an array of all page results. Uses `lodash.flatten` by default.
+  - See [chowdown.query.string](#string) for other possible options.
+
+#### Returns
+- `Query<any>` The constructed paginate query.
+
+#### Example
+
+In the [sample markup](#sample-markup), there exists a link to the next page of results `http://somewebpage.com/search?page=2` at the bottom of the page.
+Let's assume the markup at this page is as follows:
+
+```html
+<div>
+  <div class="author">
+    <a href="/william" class="name">William Shakespeare</a>
+    <span class="age">453</span>
+    <img src="william.jpg"/>
+    <div class="book">
+      <span class="title">Hamlet</span>
+      <span class="year">1600</span>
+    </div>
+  </div>
+  <a class="next" href="/search?page=3"/>
+</div>
+```
+
+We can execute queries on both the first page and this page (and as many more as we'd like) with the following query:
+
+```js
+let scope = chowdown('http://somewebpage.com');
+
+let names = chowdown.query.collection('.author', '.name');
+
+// The last argument is the maximum number of pages to read.
+let pages = chowdown.query.paginate(names, '.next', 2);
+
+scope.execute(query);
+```
+
+This will resolve to:
+
+```js
+['Dennis Reynolds', 'Stephen King', 'William Shakespeare']
+```
+
 ### <a name="callback"></a> chowdown.query.callback(fn, [options])
 ----
 
@@ -684,43 +747,6 @@ a document) and returns the result of this call.
 - `fn` `{function}` A function to call with a [`Scope`](#using-scopes) for a document.
 - `[options]` `{object}` An object of configuration options.
   - See [chowdown.query.string](#string) for possible options.
-
-#### Returns
-- `Query<any>` The constructed callback query.
-
-#### Example
-
-```js
-let scope = chowdown('http://somewebpage.com');
-
-let query = chowdown.query.callback((document) => document.string('.author:nth-child(2) .name'));
-
-scope.execute(query);
-```
-
-This will resolve to:
-
-```js
-'Stephen King'
-```
-
-### <a name="paginate"></a> chowdown.query.paginate(inner, uri, max, [options])
-----
-
-Creates a query that executes the `inner` query on multiple documents. The link to
-the next document is pointed to by the `uri` query. Pagination will stop after
-`max` pages have been requested. If `max` is a function, pagination will stop whenever it
-returns `false`.
-
-#### Parameters
-- `inner` `{Query<T>}` A query to execute on the document at the URI.
-- `uri` `{string|object|function}` A query to find the URI.
-- `[options]` `{object}` An object of configuration options.
-  - `[default=undefined]` `{any}` The default value to return if there's an error accessing the page.
-  - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
-  a request object or URI and should return a promise that resolves to a `string` or `cheerio` object.
-  - `[request]` `{object}` An object of other request options to pass to `client`.
-  - See [chowdown.query.string](#string) for other possible options.
 
 #### Returns
 - `Query<any>` The constructed callback query.
