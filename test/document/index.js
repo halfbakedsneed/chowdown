@@ -56,8 +56,7 @@ describe('base document', () => {
 
   it('Has factory methods for all document types', () => {
     let types = [
-      'dom',
-      'json'
+      'dom'
     ];
 
     for (let type of types) {
@@ -67,8 +66,7 @@ describe('base document', () => {
 
   it('Correctly creates document subtypes', () => {
     let construction = {
-      dom: '',
-      json: {}
+      dom: ''
     };
 
     for (let type in Document.factory) {

@@ -133,7 +133,8 @@ let children = {
   callback: require('./callback'),
   follow: require('./follow'),
   uri: require('./uri'),
-  regex: require('./regex')
+  regex: require('./regex'),
+  paginate: require('./paginate')
 };
 
 /**

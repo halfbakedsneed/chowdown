@@ -1,9 +1,18 @@
 language: node_js
 dist: trusty
-
 node_js:
-  - '4'
-  - '6'
-  - '7'
-
+- '4'
+- '6'
+- '7'
+cache:
+  directories:
+    - node_modules
 after_success: npm run coverage
+deploy:
+  provider: npm
+  email:
+    secure: pZd4Zwx1cf5EIM0gxmyFGf6qwU7EGxM1H4VT/i30GGiQU2vRM9xeOsW+H4Bh3070DOri2d7Jw+K/GheAsScVHNK4pxWx1A8VfS0SoANB4i0mHaz4bYS0UJUHp8x72SQQfGPZDzxgKDUyslspRz7g15UQaEby2204pUeCO1dtK/yV6ePed44zTD1rCU6GgaXGZcPfyNpLFeJOj1PHXKO3cdON+sYI5XU76PV+H1pYQTihV5dPm7jlcTToVXhBoqLveGQ9ZwZYRbr/6WAFtQXry+ICR8JK/g6M2WcOuWAUpFYXtFOxySptFdQFO0R+bLerZ1RcI6dhEfEFkSOOCnos5cVkm24Hg/9W15jqjizNFGluepgysFUNAodfHnReknm2jj+AFBTioP48af2FlFA6RYU8gs/fP/vKZuP03GpK9lmL5de3JzDzv5iwf2PsSKoVudm5Ld7bWhePhtLewPf/M54C0tck5EsF2KULEvzEPPLUQvNDlGGXI7ER4tmJGw6jIQN3+gLZXprwjeKAlCZOE+YzuSNVjjvtjEQBV1X5tOPFemvUyh9iBi0JOnUt4jb5L/rNq8S3v6M2/XDG3XhpEiOIRUuySygx/CMvisf+vf0mMwpp0eddnxVZfF5ZQcjFfYxuRsiJlDz0cy2gqkC7/E2Ms42N8pCjkN0EHN9EQmw=
+  api_key:
+    secure: KbqQqdIzekemunlgnNL4POfqxRUEXHoCM06L9KrLoQNHDozlS2nXeAByvfu/FTkd1Pi8dfpT7L2FM10M7GBbzRwiT8ypUycgUxMvH4Dlaw/NzCN0SJpS2k3o3SebOvg/GG7IJ3S4pQQjL48lDBDBJ3lgIVpKyQwEfCW0L1d2JOQQfzZEWOhe7jRfnqoLcWKEcqnqcWxwJO2yR+F+kJzIEmIcCUsaJez4JmWd0ZvLawxD3Nc/zkrn82I+vOawBqz1CSgRyjA7PIoMyg6bqZVNr8q+edTJ6Vgc4H3dexn74R8hxXc1llfZg18AaJC69a1BmdJzfWfBHfsQH7tQhaC5mryxm8lwwKzhc3JTmXn6YEDSUfqZq6iNNSFbJsLwvfIr8lYaKuNH+aE6/4hdtsEz341EuS4gHC1H74lDebVW30P0tbaO5MrhFJaiyqnhpP0zx0jhHRg9yUig4K6+Yvofq7wF7u+gDNTHT0XomfIJtWwoxBxZ4xZP/228af5EiiC0qaxN1lS/wGKZfXMw8UM6RhgFtxT7RPLZxznyXLlLaM8Om2+UZ9gBBms6oc6PBtTDOYmmuRjLyG9AhehtAZKyMAzo3vFqDu5FU9+x7jdtu/F2WJyvoxO8/w18iHl65yxTdiSgYZN3M42J44fJr19Bj/3lJU70Zd4VemsI5tP2PA4=
+  on:
+    branch: master
