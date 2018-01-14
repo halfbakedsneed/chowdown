@@ -13,7 +13,7 @@ const { identity, set } = require('lodash');
 class FollowQuery extends Query {
 
   /**
-   * Constructs a FollowQuery given a query to find a URI withinn a document
+   * Constructs a FollowQuery given a query to find a URI within a document
    * and an inner query to execute on the document resolved from the URI.
    *
    * Also takes an additional object of configuration options.
@@ -55,11 +55,20 @@ class FollowQuery extends Query {
    */
   find(document) {
     return this.options.uri.on(document)
-      .then(uri =>
-        retrieve.request(set(this.options.request, 'uri', uri), this.options)
-      )
+      .then(uri => this.next(uri))
       .then(document => this.options.inner.on(document))
       .catch(err => undefined);
+  }
+
+  /**
+   * Retrieves the page at the given URI and returns a
+   * document that encapsulates it.
+   * 
+   * @param  {string}   uri The uri the document is located at.
+   * @return {Document} The constructed document.
+   */
+  next(uri) {
+    return retrieve.request(set(this.options.request, 'uri', uri), this.options);
   }
 }
 

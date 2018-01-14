@@ -30,6 +30,7 @@ A JavaScript library that allows for the quick transformation of DOM documents i
   - [chowdown.query.uri](#uri)
   - [chowdown.query.follow](#follow)
   - [chowdown.query.callback](#callback)
+  - [chowdown.query.paginate](#paginate)
 
 ## <a name="installation"></a> Installation
 
@@ -337,6 +338,7 @@ for the creation of different types of queries:
 - [chowdown.query.uri](#uri)
 - [chowdown.query.follow](#follow)
 - [chowdown.query.callback](#callback)
+- [chowdown.query.paginate](#paginate)
 
 __All of the following examples use the same sample uri and markup as [before](#sample-markup).__
 
@@ -682,6 +684,43 @@ a document) and returns the result of this call.
 - `fn` `{function}` A function to call with a [`Scope`](#using-scopes) for a document.
 - `[options]` `{object}` An object of configuration options.
   - See [chowdown.query.string](#string) for possible options.
+
+#### Returns
+- `Query<any>` The constructed callback query.
+
+#### Example
+
+```js
+let scope = chowdown('http://somewebpage.com');
+
+let query = chowdown.query.callback((document) => document.string('.author:nth-child(2) .name'));
+
+scope.execute(query);
+```
+
+This will resolve to:
+
+```js
+'Stephen King'
+```
+
+### <a name="paginate"></a> chowdown.query.paginate(inner, uri, max, [options])
+----
+
+Creates a query that executes the `inner` query on multiple documents. The link to
+the next document is pointed to by the `uri` query. Pagination will stop after
+`max` pages have been requested. If `max` is a function, pagination will stop whenever it
+returns `false`.
+
+#### Parameters
+- `inner` `{Query<T>}` A query to execute on the document at the URI.
+- `uri` `{string|object|function}` A query to find the URI.
+- `[options]` `{object}` An object of configuration options.
+  - `[default=undefined]` `{any}` The default value to return if there's an error accessing the page.
+  - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
+  a request object or URI and should return a promise that resolves to a `string` or `cheerio` object.
+  - `[request]` `{object}` An object of other request options to pass to `client`.
+  - See [chowdown.query.string](#string) for other possible options.
 
 #### Returns
 - `Query<any>` The constructed callback query.
