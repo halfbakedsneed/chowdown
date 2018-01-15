@@ -294,6 +294,7 @@ Scope instances have methods that allow you to query directly on a document (or 
 - scope.context: creates and executes a [context query](#context) within the scope.
 - scope.uri: creates and executes a [uri query](#uri) within the scope.
 - scope.follow: creates and executes a [follow query](#follow) within the scope.
+- scope.paginate: creates and executes a [paginate query](#paginate) within the scope.
 - scope.callback: creates and executes a [callback query](#callback) within the scope.
 - [scope.execute](#execute)
 
