@@ -1,6 +1,6 @@
 {
   "name": "chowdown",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A JavaScript library that allows for the quick transformation of DOM documents into useful formats.",
   "main": "./dist/chowdown.js",
   "scripts": {
@@ -23,20 +23,21 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "cheerio": "^1.0.0-rc.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "request": "^2.88.0",
     "request-promise": "^4.2.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-plugin-istanbul": "^4.1.4",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.24.1",
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/register": "^7.7.4",
+    "babel-plugin-istanbul": "^5.2.0",
     "chai": "^4.0.2",
     "coveralls": "^3.0.2",
     "cross-env": "^5.0.1",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "proxyquire": "^1.8.0",
     "sinon": "^2.3.6"
   },
@@ -51,7 +52,7 @@
   ],
   "nyc": {
     "require": [
-      "babel-register"
+      "@babel/register"
     ],
     "sourceMap": false,
     "instrument": false
