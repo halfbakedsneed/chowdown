@@ -1,6 +1,8 @@
 const helper = require('../helper');
-const Document = require('../../src/document');
-const cheerio = require('cheerio');
+const cheerio = require('cheerio').default;
+const Document = proxyquire('../src/document', {
+  './dom': proxyquire('../src/document/dom', { cheerio })
+});
 const sandbox = sinon.sandbox.create();
 
 describe('dom document', () => {
