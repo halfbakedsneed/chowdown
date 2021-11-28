@@ -121,7 +121,7 @@ module.exports = {
     let value = this.query(selector);
     let attrs = castArray(selector[1] || defaultAttrs);
 
-    if (!(value instanceof cheerio))
+    if (!(value !== undefined && value.cheerio != null))
       return value;
 
     if (value.length === 0)
