@@ -1,36 +1,36 @@
 # chowdown
 
-[![Build Status](https://travis-ci.org/halfbakedsneed/chowdown.svg?branch=master)](https://travis-ci.org/halfbakedsneed/chowdown)
-[![Dependencies](https://david-dm.org/halfbakedsneed/chowdown.svg)](https://david-dm.org/halfbakedsneed/chowdown)
+[![NPM Version](https://img.shields.io/npm/v/chowdown.svg?style=flat-square)](https://www.npmjs.org/package/chowdown)
+[![Build Status](https://travis-ci.com/halfbakedsneed/chowdown.svg?branch=master)](https://travis-ci.org/halfbakedsneed/chowdown)
 [![Coverage](https://coveralls.io/repos/github/halfbakedsneed/chowdown/badge.svg?branch=master)](https://coveralls.io/github/halfbakedsneed/chowdown?branch=master)
 
 A JavaScript library that allows for the quick transformation of DOM documents into useful formats.
 
 ## <a name="table-of-contents"></a> Table of Contents
 
-- [Installation](#installation)
-- [Basic Usage](#basic-usage)
-  - [Attributes](#attributes)
-  - [Nesting](#nesting)
-  - [Querying](#querying)
-- [Creating Scopes](#creating-scopes)
-  - [chowdown.request](#request)
-  - [chowdown.file](#file)
-  - [chowdown.body](#body)
-- [Using Scopes](#using-scopes)
-  - [scope.execute](#execute)
-- [Creating Queries](#creating-queries)
-  - [chowdown.query.string](#string)
-  - [chowdown.query.number](#number)
-  - [chowdown.query.collection](#collection)
-  - [chowdown.query.object](#object)
-  - [chowdown.query.raw](#raw)
-  - [chowdown.query.regex](#regex)
-  - [chowdown.query.context](#context)
-  - [chowdown.query.uri](#uri)
-  - [chowdown.query.follow](#follow)
-  - [chowdown.query.paginate](#paginate)
-  - [chowdown.query.callback](#callback)
+- [Installation](#user-content-installation)
+- [Basic Usage](#user-content-basic-usage)
+  - [Attributes](#user-content-attributes)
+  - [Nesting](#user-content-nesting)
+  - [Querying](#user-content-querying)
+- [Creating Scopes](#user-content-creating-scopes)
+  - [chowdown.request](#user-content-request)
+  - [chowdown.file](#user-content-file)
+  - [chowdown.body](#user-content-body)
+- [Using Scopes](#user-content-using-scopes)
+  - [scope.execute](#user-content-execute)
+- [Creating Queries](#user-content-creating-queries)
+  - [chowdown.query.string](#user-content-string)
+  - [chowdown.query.number](#user-content-number)
+  - [chowdown.query.collection](#user-content-collection)
+  - [chowdown.query.object](#user-content-object)
+  - [chowdown.query.raw](#user-content-raw)
+  - [chowdown.query.regex](#user-content-regex)
+  - [chowdown.query.context](#user-content-context)
+  - [chowdown.query.uri](#user-content-uri)
+  - [chowdown.query.follow](#user-content-follow)
+  - [chowdown.query.paginate](#user-content-paginate)
+  - [chowdown.query.callback](#user-content-callback)
 
 ## <a name="installation"></a> Installation
 
@@ -127,7 +127,7 @@ If no attribute is specified in the selector for simple types of queries (i.e `s
 ### <a name="nesting"></a> Nesting
 
 Using chowdown, we can construct much more complex queries. It's possible
-to [construct queries](#creating-queries) for use inside of other queries.
+to [construct queries](#user-content-creating-queries) for use inside of other queries.
 
 If we wanted to retrieve each of the author's books, we could do the following:
 
@@ -189,7 +189,7 @@ These will both resolve to:
 ### <a name="querying"></a> Querying
 
 As seen above, it's possible to take shortcuts to describe queries. Anywhere a
-string is found in place of a query, it will be used as the `selector` parameter in a [string query](#string):
+string is found in place of a query, it will be used as the `selector` parameter in a [string query](#user-content-string):
 
 ```js
 let scope = chowdown('http://somewebpage.com');
@@ -202,7 +202,7 @@ scope.collection('.author', chowdown.query.string('.name'))
 ```
 
 Likewise, anywhere an object is found in place of a query, it will be used as the `pick`
-parameter in an [object query](#object).
+parameter in an [object query](#user-content-object).
 
 ```js
 let scope = chowdown('http://somewebpage.com');
@@ -215,7 +215,7 @@ scope.collection('.author', chowdown.query.object({name: '.name'}))
 ```
 
 Finally, anywhere a function is found in place of a query, it will be used as the `fn`
-parameter in a [callback query](#callback).
+parameter in a [callback query](#user-content-callback).
 
 ```js
 let scope = chowdown('http://somewebpage.com');
@@ -227,7 +227,7 @@ scope.collection('.author', chowdown.query.callback((author) => author.string('.
 // => Resolves to: ['Dennis Reynolds', 'Stephen King']
 ```
 
-Manually [created queries](#creating-queries) can also be executed directly on a [`Scope`](#using-scopes) like this:
+Manually [created queries](#user-content-creating-queries) can also be executed directly on a [`Scope`](#user-content-using-scopes) like this:
 
 ```js
 let scope = chowdown('http://somewebpage.com');
@@ -239,13 +239,13 @@ scope.execute(chowdown.query.string('.author:nth-child(1) .name'))
 ## <a name="creating-scopes"></a> Creating Scopes
 
 The library's main function is actually an alias for `chowdown.request`; this is one of three functions that
-allow for the creation of [`Scope`](#using-scopes) objects:
+allow for the creation of [`Scope`](#user-content-using-scopes) objects:
 
 ### <a name="request"></a> chowdown.request(request, [options])
 ----
 
 Issues a request using [`request-promise`](https://github.com/request/request-promise) with the given
-request object or uri string and returns a [`Scope`](#using-scopes) created from the response.
+request object or uri string and returns a [`Scope`](#user-content-using-scopes) created from the response.
 
 #### Parameters
 - `request` `{string|object}` Either a uri or a request object that will be passed to `request-promise`. 
@@ -254,49 +254,49 @@ request object or uri string and returns a [`Scope`](#using-scopes) created from
   a request object or uri and should return a promise that resolves to a `string` or `cheerio` object.
 
 #### Returns
-- [`Scope`](#using-scopes) A scope wrapping the response of the request.
+- [`Scope`](#user-content-using-scopes) A scope wrapping the response of the request.
 
 ### <a name="file"></a> chowdown.file(file)
 ----
 
-Reads from the file located at `file` and returns a [`Scope`](#using-scopes)
+Reads from the file located at `file` and returns a [`Scope`](#user-content-using-scopes)
 created from the contents of the file.
 
 #### Parameters
 - `file` `{string}` The filename. 
 
 #### Returns
-- [`Scope`](#using-scopes) A scope wrapping the file's contents.
+- [`Scope`](#user-content-using-scopes) A scope wrapping the file's contents.
 
 ### <a name="body"></a> chowdown.body(body)
 ----
 
 Load a DOM document directly from a cheerio object or string and returns
-a [`Scope`](#using-scopes) created from this document.
+a [`Scope`](#user-content-using-scopes) created from this document.
 
 #### Parameters
 - `body` `{cheerio|string}` Either an existing cheerio object
 or a DOM string. 
 
 #### Returns
-- [`Scope`](#using-scopes) A scope wrapping the body.
+- [`Scope`](#user-content-using-scopes) A scope wrapping the body.
 
 ## <a name="using-scopes"></a> Using Scopes
 
 Scope instances have methods that allow you to query directly on a document (or part of a document):
 
-- scope.string: creates and executes a [string query](#string) within the scope.
-- scope.number: creates and executes a [number query](#number) within the scope.
-- scope.collection: creates and executes a [collection query](#collection) within the scope.
-- scope.object: creates and executes a [object query](#object) within the scope.
-- scope.raw: creates and executes a [raw query](#raw) within the scope.
-- scope.regex: creates and executes a [regex query](#regex) within the scope.
-- scope.context: creates and executes a [context query](#context) within the scope.
-- scope.uri: creates and executes a [uri query](#uri) within the scope.
-- scope.follow: creates and executes a [follow query](#follow) within the scope.
-- scope.paginate: creates and executes a [paginate query](#paginate) within the scope.
-- scope.callback: creates and executes a [callback query](#callback) within the scope.
-- [scope.execute](#execute)
+- scope.string: creates and executes a [string query](#user-content-string) within the scope.
+- scope.number: creates and executes a [number query](#user-content-number) within the scope.
+- scope.collection: creates and executes a [collection query](#user-content-collection) within the scope.
+- scope.object: creates and executes a [object query](#user-content-object) within the scope.
+- scope.raw: creates and executes a [raw query](#user-content-raw) within the scope.
+- scope.regex: creates and executes a [regex query](#user-content-regex) within the scope.
+- scope.context: creates and executes a [context query](#user-content-context) within the scope.
+- scope.uri: creates and executes a [uri query](#user-content-uri) within the scope.
+- scope.follow: creates and executes a [follow query](#user-content-follow) within the scope.
+- scope.paginate: creates and executes a [paginate query](#user-content-paginate) within the scope.
+- scope.callback: creates and executes a [callback query](#user-content-callback) within the scope.
+- [scope.execute](#user-content-execute)
 
 ### <a name="execute"></a> scope.execute(query)
 ----
@@ -330,19 +330,19 @@ This will resolve to:
 The main `chowdown` function has a `query` property containing methods that allow
 for the creation of different types of queries:
 
-- [chowdown.query.string](#string)
-- [chowdown.query.number](#number)
-- [chowdown.query.collection](#collection)
-- [chowdown.query.object](#object)
-- [chowdown.query.raw](#raw)
-- [chowdown.query.regex](#regex)
-- [chowdown.query.context](#context)
-- [chowdown.query.uri](#uri)
-- [chowdown.query.follow](#follow)
-- [chowdown.query.callback](#callback)
-- [chowdown.query.paginate](#paginate)
+- [chowdown.query.string](#user-content-string)
+- [chowdown.query.number](#user-content-number)
+- [chowdown.query.collection](#user-content-collection)
+- [chowdown.query.object](#user-content-object)
+- [chowdown.query.raw](#user-content-raw)
+- [chowdown.query.regex](#user-content-regex)
+- [chowdown.query.context](#user-content-context)
+- [chowdown.query.uri](#user-content-uri)
+- [chowdown.query.follow](#user-content-follow)
+- [chowdown.query.callback](#user-content-callback)
+- [chowdown.query.paginate](#user-content-paginate)
 
-__All of the following examples use the same sample uri and markup as [before](#sample-markup).__
+__All of the following examples use the same sample uri and markup as [before](#user-content-sample-markup).__
 
 ### <a name="string"></a> chowdown.query.string(selector, [options])
 ----
@@ -386,7 +386,7 @@ Any retrieved non-number value will be coerced into a `number`.
 - `selector` `{string}` A selector to find the number in a document.
 - `[options]` `{object}` An object of configuration options.
   - `[default=NaN]` `{number}` The default value to return if no number is found.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<number>` The constructed number query.
@@ -420,7 +420,7 @@ executed on a child document. The set of child documents is pointed to by the `s
   - `[default=[]]` `{any[]}` The default value to return if no child documents are found.
   - `[filter]` `{function}` A function used to filter the resulting array. Every item in the array
   is passed through this function and the values for which the function is truthy are kept.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<T[]>` The constructed collection query.
@@ -449,7 +449,7 @@ Creates a query that will find an object in a document such that each value in t
 #### Parameters
 - `pick` `{object}` The object of queries to map.
 - `[options]` `{object}` An object of configuration options.
-  - See [chowdown.query.string](#string) for possible options.
+  - See [chowdown.query.string](#user-content-string) for possible options.
 
 #### Returns
 - `Query<object>` The constructed object query.
@@ -486,7 +486,7 @@ and cheerio context. The result of this query will be the result of this call.
 - `fn` `{function}` The raw function to be called with the cheerio instance.
 - `[options]` `{object}` An object of configuration options.
   - `[default=undefined]` `{any}` The default value to return if undefined is returned from the function.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<any>` A promise that resolves to the result of the raw function.
@@ -519,7 +519,7 @@ perform a regex match on it using `pattern`.
 - `[group]` `{number}` The index of a matched group to return.
 - `[options]` `{object}` An object of configuration options.
   - `[default=[]]` `{any[]}` The default value to return if no matches are made.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<string|string[]>` The constructed regex query.
@@ -566,7 +566,7 @@ Creates a query that executes the `inner` query within the context of a child do
 - `inner` `{Query<T>}` The inner query to execute on the child document.
 - `[options]` `{object}` An object of configuration options.
   - `[default=undefined]` `{any}` The default value to return if the context can't be found.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<T>` The constructed context query.
@@ -608,7 +608,7 @@ If no URI is retrieved from the document, chowdown will not attempt to resolve t
 - `selector` `{string}` A selector to find the URI.
 - `[base]` `{string}` The base URI for the retrieved URI.
 - `[options]` `{object}` An object of configuration options.
-  - See [chowdown.query.string](#string) for possible options.
+  - See [chowdown.query.string](#user-content-string) for possible options.
 
 #### Returns
 - `Query<string>` The constructed URI query.
@@ -643,14 +643,14 @@ on the document at this URI.
   - `[client=rp]` `{function}` A client function to use in place of `request-promise`. It will be passed
   a request object or URI and should return a promise that resolves to a `string` or `cheerio` object.
   - `[request]` `{object}` An object of other request options to pass to `client`.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<T>` The constructed follow query.
 
 #### Example
 
-In the [sample markup](#sample-markup) (for the uri `http://somewebpage.com`), we can see the first author's `div` contains a link to `http://somewebpage.com/dennis`.
+In the [sample markup](#user-content-sample-markup) (for the uri `http://somewebpage.com`), we can see the first author's `div` contains a link to `http://somewebpage.com/dennis`.
 Let's assume the markup at this uri is as follows:
 
 ```html
@@ -694,14 +694,14 @@ returns `false`.
   a request object or URI and should return a promise that resolves to a `string` or `cheerio` object.
   - `[request]` `{object}` An object of other request options to pass to `client`.
   - `[merge=flatten]` `{function}` The function used to merge the paginated results. Takes one argument `pages` - an array of all page results. Uses `lodash.flatten` by default.
-  - See [chowdown.query.string](#string) for other possible options.
+  - See [chowdown.query.string](#user-content-string) for other possible options.
 
 #### Returns
 - `Query<any>` The constructed paginate query.
 
 #### Example
 
-In the [sample markup](#sample-markup), there exists a link to the next page of results `http://somewebpage.com/search?page=2` at the bottom of the page.
+In the [sample markup](#user-content-sample-markup), there exists a link to the next page of results `http://somewebpage.com/search?page=2` at the bottom of the page.
 Let's assume the markup at this page is as follows:
 
 ```html
@@ -741,13 +741,13 @@ This will resolve to:
 ### <a name="callback"></a> chowdown.query.callback(fn, [options])
 ----
 
-Creates a query that calls `fn` with a [`Scope`](#using-scopes) that wraps a document (or part of
+Creates a query that calls `fn` with a [`Scope`](#user-content-using-scopes) that wraps a document (or part of
 a document) and returns the result of this call.
 
 #### Parameters
-- `fn` `{function}` A function to call with a [`Scope`](#using-scopes) for a document.
+- `fn` `{function}` A function to call with a [`Scope`](#user-content-using-scopes) for a document.
 - `[options]` `{object}` An object of configuration options.
-  - See [chowdown.query.string](#string) for possible options.
+  - See [chowdown.query.string](#user-content-string) for possible options.
 
 #### Returns
 - `Query<any>` The constructed callback query.
